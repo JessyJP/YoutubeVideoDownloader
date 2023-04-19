@@ -1,0 +1,85 @@
+{
+    "theme_name": "Standard",
+    "language": "Svenska",
+    "global": {
+        "colors": {
+            "background": "#FFFFFF",
+            "button_text": "#000000"
+        },
+        "fonts": {
+            "button": "Arial 12"
+        },
+        "directories": {
+            "themes": "themes/",
+            "icons": "images/"
+        },
+        "window": {
+            "width": 1200,
+            "height": 300,
+            "padding": 3
+        },
+        "window_title": "YouTube Video-nedladdare"
+    },
+    "tree_view": {
+        "colors": {
+            "background": "rgba(0,0,0,0)",
+            "selected": "#3399ff",
+            "selected_text": "black"
+        },
+        "heading": {
+            "download_status": "Nerladdningsstatus",
+            "url": "URL",
+            "title": "Titel",
+            "author": "Författare",
+            "length": "Längd",
+            "description": "Beskrivning",
+            "publish_date": "Publiceringsdatum",
+            "views": "Visningar",
+            "thumbnail_url": "Thumbnail URL",
+            "rating": "Betyg",
+            "video_id": "Video-ID",
+            "quality": "Kvalitet"
+        },
+        "column_width": {
+            "download_status": 60,
+            "url": 100,
+            "title": 100,
+            "author": 50,
+            "length": 50,
+            "description": 50,
+            "publish_date": 50,
+            "views": 50,
+            "thumbnail_url": 50,
+            "rating": 50,
+            "video_id": 50,
+            "quality": 50
+        },
+        "column_visibility": {
+            "download_status": true,
+            "url": true,
+            "title": true,
+            "author": true,
+            "length": true,
+            "description": false,
+            "publish_date": false,
+            "views": false,
+            "thumbnail_url": false,
+            "rating": false,
+            "video_id": false,
+            "quality": false
+        }
+    },
+    "texts": {
+        "url_label": "YouTube URL(s):",
+        "analyse_button": "Analysera URL(s)",
+        "select_location_button": "Välj nedladdningsplats",
+        "download_location_label": "Vald nedladdningsplats",
+        "download_button": "Ladda ner alla"
+    },
+    "icons": {
+        "application_window": "window_icon.ico",
+        "settings_button": "configuration_gear_icon_normal.png",
+        "settings_button_hover": "configuration_gear_icon_hover.png",
+        "settings_button_click": "configuration_gear_icon_click.png"
+    }
+}

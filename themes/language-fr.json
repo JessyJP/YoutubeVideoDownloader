@@ -1,0 +1,85 @@
+{
+    "theme_name": "Par défaut",
+    "language": "Français",
+    "global": {
+        "colors": {
+            "background": "#FFFFFF",
+            "button_text": "#000000"
+        },
+        "fonts": {
+            "button": "Arial 12"
+        },
+        "directories": {
+            "themes": "themes/",
+            "icons": "images/"
+        },
+        "window": {
+            "width": 1200,
+            "height": 300,
+            "padding": 3
+        },
+        "window_title": "Téléchargeur de vidéos YouTube"
+    },
+    "tree_view": {
+        "colors": {
+            "background": "rgba(0,0,0,0)",
+            "selected": "#3399ff",
+            "selected_text": "black"
+        },
+        "heading": {
+            "download_status": "Statut de téléchargement",
+            "url": "URL",
+            "title": "Titre",
+            "author": "Auteur",
+            "length": "Durée",
+            "description": "Description",
+            "publish_date": "Date de publication",
+            "views": "Vues",
+            "thumbnail_url": "URL de la miniature",
+            "rating": "Note",
+            "video_id": "ID de la vidéo",
+            "quality": "Qualité"
+        },
+        "column_width": {
+            "download_status": 60,
+            "url": 100,
+            "title": 100,
+            "author": 50,
+            "length": 50,
+            "description": 50,
+            "publish_date": 50,
+            "views": 50,
+            "thumbnail_url": 50,
+            "rating": 50,
+            "video_id": 50,
+            "quality": 50
+        },
+        "column_visibility": {
+            "download_status": true,
+            "url": true,
+            "title": true,
+            "author": true,
+            "length": true,
+            "description": false,
+            "publish_date": false,
+            "views": false,
+            "thumbnail_url": false,
+            "rating": false,
+            "video_id": false,
+            "quality": false
+        }
+    },
+    "texts": {
+        "url_label": "URL(s) de YouTube :",
+        "analyse_button": "Analyser URL(s)",
+        "select_location_button": "Sélectionner un emplacement de téléchargement",
+        "download_location_label": "Emplacement de téléchargement sélectionné",
+        "download_button": "Tout télécharger"
+    },
+    "icons": {
+        "application_window": "window_icon.ico",
+        "settings_button": "configuration_gear_icon_normal.png",
+        "settings_button_hover": "configuration_gear_icon_hover.png",
+        "settings_button_click": "configuration_gear_icon_click.png"
+    }
+}
