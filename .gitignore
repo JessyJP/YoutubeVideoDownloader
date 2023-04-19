@@ -1,0 +1,17 @@
+.vscode/
+*.pyc
+
+build/
+dist/
+test/
+
+*.mp4
+*.mp3
+
+gui_main.spec
+gui_main.cp310-win_amd64.pyd
+gui_main.c
+
+YouTubeDownloader.exe
+YouTubeDownloader.zip
+YouTubeDownloader.spec
