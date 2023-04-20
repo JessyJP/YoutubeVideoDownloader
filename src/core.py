@@ -63,7 +63,7 @@ from tqdm import tqdm
 # Text and URL string data handling
 import logging
 from typing import List, Set
-import urlextract
+from urlextract import URLExtract
 import requests
 import re
 
@@ -491,11 +491,29 @@ def extract_URL_list_from_text(text: str) -> List[str]:
     Returns:
         List[str]: A list of URLs extracted from the input text string.
     """
-    # Create an instance of the urlextract library
-    url_extractor = urlextract.URLExtract()
+    url_list = []
 
-    # Extract URLs from the input text string
-    url_list = list(set(url_extractor.find_urls(text)))
+    try:
+        # Create an instance of the urlextract library
+        custom_cache_path = "./data/tlds-alpha-by-domain.txt"
+        url_extractor = URLExtract()
+        url_extractor.cache_file = custom_cache_path
+        url_extractor.update()
+
+        # Extract URLs from the input text string
+        url_list = list(set(url_extractor.find_urls(text)))
+
+    except Exception as e:
+        print(f"Error using URLExtract: {e}")
+        print("Using fallback method (regular expression) for URL extraction.")
+
+        # Fallback method: use a regular expression for URL extraction
+        url_pattern = re.compile(
+            r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+        )
+        url_list = list(set(url_pattern.findall(text)))
+    #end
+
     return url_list
 #end
 
