@@ -227,7 +227,7 @@ class YouTubeDownloaderGUI(tk.Tk):
         #end
 
         # Add the right-click binding
-        self.tree.bind("<Button-3>", self.show_popup_menu_callback)
+        self.tree.bind("<Button-3>", self.show_tree_popup_menu_callback)
 
         # Create the column visibility variables
         self.column_visible = {col: tk.BooleanVar(value=self.theme["tree_view"]["column_visibility"][col]) for col in self.columns}
@@ -259,6 +259,7 @@ class YouTubeDownloaderGUI(tk.Tk):
         # Create an input text field
         self.url_entry = ttk.Entry(frame)
         self.url_entry.grid(column=1, row=1,columnspan=TC-2, sticky=(tk.W, tk.E), padx=(0, 0), pady=10)
+        self.url_entry.bind("<Button-3>", self.show_context_menu)
 
 
         # Create buttons
@@ -302,7 +303,8 @@ class YouTubeDownloaderGUI(tk.Tk):
         # Create the "Selected Download Location" text field
         self.download_location_entry = ttk.Entry(frame)
         self.download_location_entry.grid(column=5, row=2,columnspan=TC-6, sticky=(tk.W, tk.E), padx=(0, 0))
-        self.download_location_entry.insert(0,self.config.get("General", "last_download_location"))
+        self.download_location_entry.insert(0, self.config.get("General", "last_download_location"))
+        self.download_location_entry.bind("<Button-3>", self.show_context_menu)
 
         # Bind the events to the button
         self.settings_button.bind("<Enter>", self.on_settings_button_hover)
@@ -376,7 +378,7 @@ class YouTubeDownloaderGUI(tk.Tk):
 # === Application Stage 4: Youtube Video table Info user manipulation ===
     # ------ Callbacks and companion functions for the tree view columns Context menu -------
     # Add a show popup menu method callback
-    def show_popup_menu_callback(self, event):
+    def show_tree_popup_menu_callback(self, event):
         # Get the height of the header
         header_height = abs(self.tree.winfo_height() - self.tree.winfo_reqheight())
         header_height = 25  # TODO: will be hardcoded for now!
@@ -411,9 +413,11 @@ class YouTubeDownloaderGUI(tk.Tk):
             popup.add_separator()
             popup.add_command(label="Keep Audio Only: Toggle Add/Remove "+AUDIO_ONLY_SYMBOL,  command=lambda: self.change_download_status(AUDIO_ONLY_SYMBOL), state=_state)
             popup.add_command(label="Keep Video Only: Toggle Add/Remove "+VIDEO_ONLY_SYMBOL,  command=lambda: self.change_download_status(VIDEO_ONLY_SYMBOL), state=_state)
+            popup.add_command(label="Keep Video Only: Toggle Add/Remove "+SUBTITLES_ONLY_SYMBOL,  command=lambda: self.change_download_status(SUBTITLES_ONLY_SYMBOL), state=_state)
             popup.add_command(label="Keep Thumbnail:   Toggle Add/Remove "+THUMBNAIL_SYMBOL,   command=lambda: self.change_download_status(THUMBNAIL_SYMBOL), state=_state)
             popup.add_command(label="Keep Info:       Toggle Add/Remove "+INFO_SYMBOL,        command=lambda: self.change_download_status(INFO_SYMBOL), state=_state)
             popup.add_command(label="Keep Comments:   Toggle Add/Remove "+COMMENTS_SYMBOL,    command=lambda: self.change_download_status(COMMENTS_SYMBOL), state=_state)
+            popup.add_command(label="Clear All Keeps",   command=lambda: self.change_download_status_clearall())
 
             # Add a separator and the copy_selected_entries section
             popup.add_separator()
@@ -423,6 +427,14 @@ class YouTubeDownloaderGUI(tk.Tk):
         #end
 
         popup.tk_popup(event.x_root, event.y_root)
+    #end
+
+    def show_context_menu(self, event):
+        context_menu = tk.Menu(self, tearoff=0)
+        context_menu.add_command(label="Cut", command=lambda: self.master.focus_get().event_generate("<<Cut>>"))
+        context_menu.add_command(label="Copy", command=lambda: self.master.focus_get().event_generate("<<Copy>>"))
+        context_menu.add_command(label="Paste", command=lambda: self.master.focus_get().event_generate("<<Paste>>"))
+        context_menu.tk.call("tk_popup", context_menu, event.x_root, event.y_root)
     #end
 
     # A method to toggle the column visibility
@@ -723,6 +735,30 @@ class YouTubeDownloaderGUI(tk.Tk):
                 print(f"Error: VideoInfo object not found for item '{item}'")
             #end
         #end
+    #end
+
+    def change_download_status_clearall(self):
+        selected_items = self.tree.selection()
+        symbol_list = [COMBINED_SYMBOL, VIDEO_ONLY_SYMBOL, AUDIO_ONLY_SYMBOL, THUMBNAIL_SYMBOL, INFO_SYMBOL, COMMENTS_SYMBOL]
+        state = "off"
+
+        for item in selected_items:
+            for symbol in symbol_list:
+                new_status = updateOutputKeepsStr(self.tree.set(item, 'download_status'), symbol, state)
+
+                # Update the download status of the selected item in the tree view
+                self.tree.set(item, 'download_status', new_status)
+
+                # Find the corresponding VideoInfo object and update its download state
+                video_info = self.get_video_info_by_entry(item)
+                if video_info is not None:
+                    video_info.download_status = new_status
+                else:
+                    print(f"Error: VideoInfo object not found for item '{item}'")
+                #end
+            #end
+        #end
+
     #end
 
     def copy_selected_entries(self, event=None):
@@ -1082,7 +1118,7 @@ class YouTubeDownloaderGUI(tk.Tk):
                 # Start 
                 setItemStatus(item,_IN_PROGRESS_)
                 try:
-                    self.infoList[n].download_and_combine(outputdir, limits, outputExt)                
+                    self.infoList[n].process_downloads_combine_keep(outputdir, limits, outputExt)                
                     self.infoList[n].download_status = _DONE_
                 except Exception as e:
                     print(f"File not finished. Error: {e}")
@@ -1094,7 +1130,7 @@ class YouTubeDownloaderGUI(tk.Tk):
                 # Global Update GUI
                 setItemStatus(item, self.infoList[n].download_status)
                 count_done          = sum(1 for video_info in self.infoList if video_info.download_status == _DONE_)
-                count_in_progress  = sum(1 for video_info in self.infoList if video_info.download_status == _IN_PROGRESS_)
+                count_in_progress   = sum(1 for video_info in self.infoList if video_info.download_status == _IN_PROGRESS_)
                 count_error         = sum(1 for video_info in self.infoList if video_info.download_status == _ERROR_)
                 self.update_progress(count_done+count_error,N,0)
                 self.dispStatus(f"Processing {N} item(s): Completed downloads {count_done} of {N}      Still in progress = {count_in_progress}, Errors = {count_error}!")

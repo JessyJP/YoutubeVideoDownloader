@@ -94,13 +94,15 @@ logger = logging.getLogger(__name__)
 
 ## ================================= Download Keep Options =================================
 COMBINED_SYMBOL = "☑"
-VIDEO_ONLY_SYMBOL = "Ⓥ"
 AUDIO_ONLY_SYMBOL = "Ⓐ"
+VIDEO_ONLY_SYMBOL = "Ⓥ"
+SUBTITLES_ONLY_SYMBOL = "Ⓢ"
 THUMBNAIL_SYMBOL = "Ⓣ"
 INFO_SYMBOL = "ⓘ"
 COMMENTS_SYMBOL = "ⓒ"
 
-def setOutputKeepsStr(combined: bool = False, spacing: int = 3, video_only: bool = False, audio_only: bool = False, thumbnail: bool = False, info: bool = False, comments: bool = False) -> str:
+def setOutputKeepsStr(combined: bool = False, spacing: int = 2, audio_only: bool = False, video_only: bool = False,  
+                      subtitles_only: bool = False, thumbnail: bool = False, info: bool = False, comments: bool = False) -> str:
     """
     Converts boolean flags for output types to a string representation.
 
@@ -108,19 +110,32 @@ def setOutputKeepsStr(combined: bool = False, spacing: int = 3, video_only: bool
     :param spacing: The number of spaces between each output type in the resulting string.
     :param video_only: Flag to include video-only output.
     :param audio_only: Flag to include audio-only output.
+    :param subtitles_only: Flag to include subtitles-only output.
     :param thumbnail: Flag to include thumbnail output.
     :param info: Flag to include info output.
+    :param comments: Flag to include comments output.
 
     :return: A string representation of the output types to keep.
     """
     output_types = []
 
-    if combined:   output_types.append(COMBINED_SYMBOL)
-    if video_only: output_types.append(VIDEO_ONLY_SYMBOL)
-    if audio_only: output_types.append(AUDIO_ONLY_SYMBOL)
-    if thumbnail:  output_types.append(THUMBNAIL_SYMBOL)
-    if info:       output_types.append(INFO_SYMBOL)
-    if comments:   output_types.append(COMMENTS_SYMBOL)
+    # version 1
+    # if combined:       output_types.append(COMBINED_SYMBOL)
+    # if audio_only:     output_types.append(AUDIO_ONLY_SYMBOL)
+    # if video_only:     output_types.append(VIDEO_ONLY_SYMBOL)
+    # if subtitles_only: output_types.append(SUBTITLES_ONLY_SYMBOL)
+    # if thumbnail:      output_types.append(THUMBNAIL_SYMBOL)
+    # if info:           output_types.append(INFO_SYMBOL)
+    # if comments:       output_types.append(COMMENTS_SYMBOL)
+
+    # version 2
+    output_types.append(COMBINED_SYMBOL if combined else " ")
+    output_types.append(AUDIO_ONLY_SYMBOL if audio_only else " ")
+    output_types.append(VIDEO_ONLY_SYMBOL if video_only else " ")
+    output_types.append(SUBTITLES_ONLY_SYMBOL if subtitles_only else " ")
+    output_types.append(THUMBNAIL_SYMBOL if thumbnail else " ")
+    output_types.append(INFO_SYMBOL if info else " ")
+    output_types.append(COMMENTS_SYMBOL if comments else " ")
 
     return (" " * spacing).join(output_types)
 #end
@@ -128,8 +143,9 @@ def setOutputKeepsStr(combined: bool = False, spacing: int = 3, video_only: bool
 def updateOutputKeepsStr(current_str: str, symbol: str, action: str) -> str:
     symbol_flags = {
         COMBINED_SYMBOL: "combined",
-        VIDEO_ONLY_SYMBOL: "video_only",
         AUDIO_ONLY_SYMBOL: "audio_only",
+        VIDEO_ONLY_SYMBOL: "video_only",
+        SUBTITLES_ONLY_SYMBOL: "subtitles_only",
         THUMBNAIL_SYMBOL: "thumbnail",
         INFO_SYMBOL: "info",
         COMMENTS_SYMBOL: "comments"
@@ -143,8 +159,9 @@ def updateOutputKeepsStr(current_str: str, symbol: str, action: str) -> str:
 
     current_flags = {
         "combined": COMBINED_SYMBOL in current_str,
-        "video_only": VIDEO_ONLY_SYMBOL in current_str,
         "audio_only": AUDIO_ONLY_SYMBOL in current_str,
+        "video_only": VIDEO_ONLY_SYMBOL in current_str,
+        "subtitles_only": SUBTITLES_ONLY_SYMBOL in current_str,
         "thumbnail": THUMBNAIL_SYMBOL in current_str,
         "info": INFO_SYMBOL in current_str,
         "comments": COMMENTS_SYMBOL in current_str,
@@ -289,7 +306,7 @@ class VideoInfo(YouTube):
         return video_file
     #end
 
-    def download_and_combine(self, output_dir, limits, outputExt=".mkv"):
+    def process_downloads_combine_keep(self, output_dir, limits, outputExt=".mkv"):
         strOut = f"Process Entry Download: ";
         temp_path = self.make_tmp_dir(output_dir)
         self.log("Create temporary directory: "+temp_path)

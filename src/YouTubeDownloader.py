@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
         for url in args.urls:
             info = get_url_info_entry(url)
-            info.download_and_combine(args.output, limits)
+            info.process_downloads_combine_keep(args.output, limits)
         #end
     #end
 #end

@@ -28,7 +28,7 @@
 
 [//]: # (Add the current state of things section here when content is provided)
 - [ ] There are various TODO notes in the coded related to implementation of features and bugfixes.
-- [ ] First and foremost stable packaging and release mechanism.
+- [x] First and foremost stable packaging and release mechanism.
 The program can work just fine portable but it's good to have a type of installer.
 - [ ] URL scraping from YouTube Channel URLs
 - [ ] Per video quality stream selection no yet implemented. (only global limiters available at the moment)
@@ -48,6 +48,7 @@ The program can work just fine portable but it's good to have a type of installe
 - [ ] Better error handling, proper cancellation (and cleanup) and abrupt exit thread handling and cleanup should be implemented (especially for the windowed GUI mode).
 - [ ] Speed and GUI responsiveness should also be improved.
 - [ ] Bugfix: Sometimes not all videos are properly extracted from a playlist
+- [ ] Add a playlist column in the main window
 
 ## Potential Features
 - [ ] Webpage/Forum or some kind of marketing strategy for outreach to more users
