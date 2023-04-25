@@ -122,7 +122,7 @@ class YouTubeDownloaderGUI(tk.Tk):
         # Check if config has been loaded, otherwise create a new one with defaults
         if not hasattr(self, "config"):
             raise ValueError(f"Configuration file has not been loaded yet of there is a problem with the {self.config_file}!")
-        #end    
+        #end
 
         # Save theme
         section = "General"
@@ -159,19 +159,46 @@ class YouTubeDownloaderGUI(tk.Tk):
     def load_theme(self):
         theme_directory = self.config.get('General', 'theme_directory')
         theme_file = self.config.get('General', 'theme')
+        language_file = self.config.get('General', 'language')
+        
+        # Load theme file
         with open(f"{theme_directory}/{theme_file}", "r") as file:
-            self.theme = json.load(file)
+            theme = json.load(file)
+        #end
+        
+        # Load language file
+        with open(f"{theme_directory}/{language_file}", "r") as file:
+            language = json.load(file)
         #end
 
+        def merge_dict(d1, d2):
+            for k, v in d1.items():
+                if k in d2:
+                    if isinstance(v, dict) and isinstance(d2[k], dict):
+                        merge_dict(v, d2[k])
+                    else:
+                        d2[k] = v
+                    #end
+                #end
+                else:
+                    d2[k] = v
+                #end
+            #end
+            return d2
+        #end
+        
+        # Merge theme and language dictionaries
+        self.theme = merge_dict(theme, language)
+        
         # Add the filename to the theme dictionary
         self.theme["filename"] = theme_file
 
         application_window_icon_path = f"{self.theme['global']['directories']['icons']}{self.theme['icons']['application_window']}"
         self.iconbitmap(application_window_icon_path)
 
-        self.title(self.theme["global"]["window_title"])
+        self.title(self.theme["window_title"])
         self.configure(bg=self.theme["global"]["colors"]["background"])
-        self.geometry(f"{self.theme['global']['window']['width']}x{self.theme['global']['window']['height']}")
+        self.geometry(f"{self.theme['global']['window']['width']}x{self.theme['global']['window']['height']}")  
     #end
 
     # Bind keys according to the configuration file
@@ -190,6 +217,7 @@ class YouTubeDownloaderGUI(tk.Tk):
                 # Check if callbackName is a valid function name
                 if not hasattr(self, callbackName.strip()):
                     raise AttributeError(f"{callbackName.strip()} is not a valid callback function name in {self.config_file}.")
+                #end
                 # Add key binding to application
                 self.bind(keybindingCombo, getattr(self, callbackName))
             #end
@@ -257,7 +285,7 @@ class YouTubeDownloaderGUI(tk.Tk):
         url_label.grid(column=0, row=1, sticky=tk.W, pady=10)
 
         # Create an input text field
-        self.url_entry = ttk.Entry(frame)
+        self.url_entry = tk.Entry(frame)
         self.url_entry.grid(column=1, row=1,columnspan=TC-2, sticky=(tk.W, tk.E), padx=(0, 0), pady=10)
         self.url_entry.bind("<Button-3>", self.show_context_menu)
 
@@ -301,7 +329,7 @@ class YouTubeDownloaderGUI(tk.Tk):
         self.select_location_button.grid(column=4, row=2, sticky=tk.W, padx=(0, 0))
 
         # Create the "Selected Download Location" text field
-        self.download_location_entry = ttk.Entry(frame)
+        self.download_location_entry = tk.Entry(frame)
         self.download_location_entry.grid(column=5, row=2,columnspan=TC-6, sticky=(tk.W, tk.E), padx=(0, 0))
         self.download_location_entry.insert(0, self.config.get("General", "last_download_location"))
         self.download_location_entry.bind("<Button-3>", self.show_context_menu)
@@ -328,6 +356,7 @@ class YouTubeDownloaderGUI(tk.Tk):
         # Configure column and row weights
         for i in range(TC):
             frame.columnconfigure(i, weight=1)
+        #end
         frame.rowconfigure(0, weight=1)
     #end
 
@@ -340,12 +369,14 @@ class YouTubeDownloaderGUI(tk.Tk):
         hover_icon = tk.PhotoImage(file=icon_path)
         self.settings_button.config(image=hover_icon)
         self.settings_button.image = hover_icon
+    #end
 
     def on_settings_button_leave(self, event):
         icon_path = f"{self.theme['global']['directories']['icons']}{self.theme['icons']['settings_button']}"
         normal_icon = tk.PhotoImage(file=icon_path)
         self.settings_button.config(image=normal_icon)
         self.settings_button.image = normal_icon
+    #end
 
     def on_settings_button_click(self, event):
         icon_path = f"{self.theme['global']['directories']['icons']}{self.theme['icons']['settings_button_click']}"
@@ -354,6 +385,7 @@ class YouTubeDownloaderGUI(tk.Tk):
         self.settings_button.image = click_icon
         self.open_settings_window()
         self.save_config()  # Add this line to save the config when the settings button is clicked
+    #end
 
     # Settings window behavior companion function for the callback
     def open_settings_window(self):
@@ -430,10 +462,16 @@ class YouTubeDownloaderGUI(tk.Tk):
     #end
 
     def show_context_menu(self, event):
+        widget = event.widget
         context_menu = tk.Menu(self, tearoff=0)
-        context_menu.add_command(label="Cut", command=lambda: self.master.focus_get().event_generate("<<Cut>>"))
-        context_menu.add_command(label="Copy", command=lambda: self.master.focus_get().event_generate("<<Copy>>"))
-        context_menu.add_command(label="Paste", command=lambda: self.master.focus_get().event_generate("<<Paste>>"))
+        context_menu.add_command(label="Undo", command=lambda: widget.event_generate("<<Undo>>"))
+        context_menu.add_command(label="Redo", command=lambda: widget.event_generate("<<Redo>>"))
+        context_menu.add_separator()
+        context_menu.add_command(label="Cut", command=lambda: widget.event_generate("<<Cut>>"))
+        context_menu.add_command(label="Copy", command=lambda: widget.event_generate("<<Copy>>"))
+        context_menu.add_command(label="Paste", command=lambda: widget.event_generate("<<Paste>>"))
+        context_menu.add_separator()
+        context_menu.add_command(label="Select All", command=lambda: widget.select_range(0, tk.END))
         context_menu.tk.call("tk_popup", context_menu, event.x_root, event.y_root)
     #end
 
@@ -586,9 +624,11 @@ class YouTubeDownloaderGUI(tk.Tk):
     def set_selection_anchor(self, event=None):
         if not hasattr(self, 'selection_anchor'):
             self.selection_anchor = None
+        #end
 
         if not hasattr(self, 'selection_direction'):
             self.selection_direction = None
+        #end
 
         cur_selection = self.tree.selection()
         if cur_selection:
@@ -713,6 +753,7 @@ class YouTubeDownloaderGUI(tk.Tk):
                 self.infoList.pop(index_to_remove)
             else:
                 raise ValueError("VideoInfo not found for the selected tree view item")
+            #end
 
             self.tree.delete(item)
         #end
@@ -758,8 +799,8 @@ class YouTubeDownloaderGUI(tk.Tk):
                 #end
             #end
         #end
-
     #end
+
 
     def copy_selected_entries(self, event=None):
         selected_items = self.tree.selection()
@@ -880,7 +921,7 @@ class YouTubeDownloaderGUI(tk.Tk):
             topLevelAnalyzeRunning = True  # Could be used to regulate how many simultaneous Analyse operations there can be
             dispPrefix = "Import Youtube URLs : Currently Processing URL(s)"
             URLs_toCheck = extract_URL_list_from_text(text)
-        # end
+        #end
 
         # Remove duplicates by converting to set and back to list
         URLs_toCheck = set(URLs_toCheck)
@@ -923,8 +964,8 @@ class YouTubeDownloaderGUI(tk.Tk):
 
             # Make sure to clean up the download list and simplify it from duplicates
             self.remove_duplicate_entries()
-        # end
-    # end
+        #end
+    #end
 
     def process_url(self, url, recursiveCheckOfURLcontent_mode):
         if self.cancel_flag:
@@ -949,12 +990,13 @@ class YouTubeDownloaderGUI(tk.Tk):
                             recursiveCheckOfURLcontent_mode = 2  # This controls the recursion depth
                             web_page_html = get_html_content(url)
                             self.importValidYoutubeVideosFromTextOrURL_list(web_page_html, recursiveCheckOfURLcontent_mode)
-                        # end
+                        #end
+                    #end
                     except Exception as e:
                         print(f"Error: {e}")
                     finally:
                         recursiveCheckOfURLcontent_mode = 0  # This controls the recursion depth
-                    # end
+                    #end
                 #end
                 return
             #end
@@ -985,6 +1027,7 @@ class YouTubeDownloaderGUI(tk.Tk):
                 current_video_ids.remove(video_id)
             else:
                 self.tree.delete(item)
+            #end
         #end
     #end
 
@@ -1155,7 +1198,7 @@ class YouTubeDownloaderGUI(tk.Tk):
 
         # Re-enable relevant UI elements after download
         self.enableUIelementsAfterDownload()
-    # end
+    #end
 
 # === Application Stage ANY: Functions to handle long operation states, status and diagnostic information ===
     # ------ Procedural Functions & Callbacks for extended processes  -------
