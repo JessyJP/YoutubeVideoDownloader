@@ -1,6 +1,5 @@
 {
     "theme_name": "Default",
-	"language":"English",
     "global": {
         "colors": {
             "background": "#FFFFFF",
@@ -17,29 +16,13 @@
             "width": 1200,
             "height": 300,
             "padding": 3
-        },
-        "window_title": "YouTube Video Downloader"
+        }
     },
     "tree_view": {
         "colors": {
             "background": "rgba(0,0,0,0)",
             "selected": "#3399ff",
             "selected_text": "black"
-        },
-        "heading": {
-            "download_status": "Download Status",
-            "url": "URL",
-            "title": "Title",
-            "author": "Author/Channel",
-            "length": "Length",
-            "description": "Description",
-            "publish_date": "Publish Date",
-            "views": "Views",
-            "thumbnail_url": "Thumbnail URL",
-            "rating": "Rating",
-            "video_id": "Video ID",
-            "quality": "Quality",
-            "download_size": "Download Size"
         },
         "column_width": {
             "download_status": 60,
@@ -54,9 +37,9 @@
             "rating": 50,
             "video_id": 50,
             "quality": 50,
-			"download_size": 50
+            "download_size": 50
         },
-		"alignment": {
+        "alignment": {
             "download_status": "w",
             "url": "w",
             "title": "w",
@@ -69,7 +52,7 @@
             "rating": "e",
             "video_id": "w",
             "quality": "w",
-			"download_size": "e"
+            "download_size": "e"
         },
         "column_visibility": {
             "download_status": true,
@@ -84,16 +67,8 @@
             "rating": false,
             "video_id": false,
             "quality": true,
-			"download_size": true
+            "download_size": true
         }
-    },
-    "texts": {
-        "url_label":"YouTube URL(s):",
-        "analyse_button": "Analyse URL(s)",
-        "select_location_button": "Select Download Location",
-        "download_location_label": "Selected Download Location",
-        "download_button": "Download All",
-        "download_cancel_button": "Cancel Download"
     },
     "icons": {
         "application_window": "window_icon.ico",
