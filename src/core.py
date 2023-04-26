@@ -89,6 +89,8 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
 
+install_missing_modules(["youtube_dl"])
+from core_alternative import *
 
 logger = logging.getLogger(__name__)
 
@@ -311,28 +313,56 @@ class VideoInfo(YouTube):
         temp_path = self.make_tmp_dir(output_dir)
         self.log("Create temporary directory: "+temp_path)
 
-        # Download the audio files with the relevant quality settings
-        audioStream = self.select_audio_stream(limits.bitrate, limits.audio_format_priority)
-        audio_filename = self.download_audio(audioStream,temp_path)
-        self.log(strOut+"Audio: "+audio_filename+" ...")
+        if COMBINED_SYMBOL in self.download_status or  AUDIO_ONLY_SYMBOL in self.download_status:  
+            # Download the audio files with the relevant quality settings
+            audioStream = self.select_audio_stream(limits.bitrate, limits.audio_format_priority)
+            audio_filename = self.download_audio(audioStream,temp_path)
+            self.log(strOut+"Audio: "+audio_filename+" ...")
+        #end
 
-        # Download the video file with the relevant quality settings
-        videoStream = self.select_video_stream(limits.resolution,limits.fps,limits.video_format_priority)
-        video_filename = self.download_video(videoStream,temp_path)
-        self.log(strOut+"Video: "+video_filename+" ...")
+        if COMBINED_SYMBOL in self.download_status or  VIDEO_ONLY_SYMBOL in self.download_status:
+            # Download the video file with the relevant quality settings
+            videoStream = self.select_video_stream(limits.resolution,limits.fps,limits.video_format_priority)
+            video_filename = self.download_video(videoStream,temp_path)
+            self.log(strOut+"Video: "+video_filename+" ...")
+        #end
 
-        # Call the combine function
-        outputFilename = os.path.join(output_dir,check_for_disallowed_filename_chars(self.title)+outputExt)
-        audio_filenames = [audio_filename]
-        subtitle_filenames = []  # Assuming no subtitles for now
-        self.log(strOut+"Combining Audio and Video: "+outputFilename)
-        combine_via_auto_selection(outputFilename,video_filename, audio_filenames, subtitle_filenames)
+        #TODO: download all subtitles and integrate them
 
-        # TODO: There are multiple options for merging
-        # TODO: FFMPEG
-        # TODO: mkvmerge
-        # TODO: VLC
-        # TODO:
+        if COMBINED_SYMBOL in self.download_status:
+            # Call the combine function
+            outputFilename = os.path.join(output_dir,check_for_disallowed_filename_chars(self.title)+outputExt)
+            audio_filenames = [audio_filename]
+            subtitle_filenames = []  # Assuming no subtitles for now
+            self.log(strOut+"Combining Audio and Video: "+outputFilename)
+            combine_via_auto_selection(outputFilename,video_filename, audio_filenames, subtitle_filenames)
+
+            # There are multiple options for merging
+            # NOTE: FFMPEG    (implemented)
+            # NOTE: mkvmerge  (implemented)
+            # TODO: VLC
+        #end
+
+        if AUDIO_ONLY_SYMBOL in self.download_status:
+            shutil.move(audio_filename,output_dir)
+        #end        
+        if VIDEO_ONLY_SYMBOL in self.download_status:
+            shutil.move(video_filename,output_dir)
+        #end
+        if SUBTITLES_ONLY_SYMBOL in self.download_status:
+            self.download_subtitles(output_dir,any)# TODO: will have to download them in advance and move them later
+        #end
+        if THUMBNAIL_SYMBOL in self.download_status:
+            self.download_thumbnail(output_dir)
+        #end
+
+        if INFO_SYMBOL in self.download_status:
+            self.download_video_info(output_dir)
+        #end
+
+        if COMMENTS_SYMBOL in self.download_status:
+            self.download_comments(output_dir)
+        #end
 
         # Clean up the temporary directory and delete it
         self.log("Clean :"+temp_path)
@@ -345,31 +375,30 @@ class VideoInfo(YouTube):
     #end
 
     # Function to download thumbnail
-    def download_thumbnail(self, output_dir: str) -> str:
-        yt = self.yt
-        thumbnail_url = yt.thumbnail_url
-        thumbnail_filename = os.path.join(output_dir, f"{yt.title}_thumbnail.jpg")
+    def download_thumbnail(self, output_dir: str, format="jpg") -> str:
+        thumbnail_url = self.thumbnail_url
+        thumbnail_filename = os.path.join(output_dir, f"{self.title}_thumbnail.{format}")
         thumbnail_data = requests.get(thumbnail_url).content
         with open(thumbnail_filename, 'wb') as f:
             f.write(thumbnail_data)
         return thumbnail_filename
+    #end
 
     # Function to download video info in a text file
     def download_video_info(self, output_dir: str) -> str:
-        yt = self.yt
-        video_info_filename = os.path.join(output_dir, f"{yt.title}_info.txt")
+        video_info_filename = os.path.join(output_dir, f"{self.title}_info.txt")
         with open(video_info_filename, 'w') as f:
-            f.write(f"Title: {yt.title}\n")
-            f.write(f"Author: {yt.author}\n")
-            f.write(f"Length: {yt.length}\n")
-            f.write(f"Description: {yt.description}\n")
-            f.write(f"Publish Date: {yt.publish_date}\n")
-            f.write(f"Views: {yt.views}\n")
-            f.write(f"Thumbnail URL: {yt.thumbnail_url}\n")
-            f.write(f"Rating: {yt.rating}\n")
-            f.write(f"Video ID: {yt.video_id}\n")
-            audio_stream = yt.streams.filter(type="audio").order_by("abr").last()
-            video_stream = yt.streams.filter(type="video").order_by("resolution").last()
+            f.write(f"Title: {self.title}\n")
+            f.write(f"Author: {self.author}\n")
+            f.write(f"Length: {self.length}\n")
+            f.write(f"Description: {self.description}\n")
+            f.write(f"Publish Date: {self.publish_date}\n")
+            f.write(f"Views: {self.views}\n")
+            f.write(f"Thumbnail URL: {self.thumbnail_url}\n")
+            f.write(f"Rating: {self.rating}\n")
+            f.write(f"Video ID: {self.video_id}\n")
+            audio_stream = self.streams.filter(type="audio").order_by("abr").last()
+            video_stream = self.streams.filter(type="video").order_by("resolution").last()
             fps = max(video_stream.fps, 0)
             quality_str = f"{video_stream.resolution}@{fps}fps/{audio_stream.abr}kbps"
             f.write(f"Quality: {quality_str}\n")
@@ -637,13 +666,19 @@ def get_channel_videos(channel_id): #TODO not tested
 #end
 
 # -------- Get the video info from the URL --------
-def get_url_info_entry(url: str) -> Union[VideoInfo, None]:
+def get_url_info_entry(url: str) -> Union[VideoInfo, VideoInfo_alternative, None]:
     try:
         video_info = VideoInfo(url=url)
         return video_info
     except Exception as e:
-        print(f"An error occurred while fetching the video information for {url}: {e}")
-        return None
+        print(f"An error occurred while fetching the video information using VideoInfo for {url}: {e}")
+        try:
+            video_info_alt = VideoInfo_alternative(url)
+            return video_info_alt
+        except Exception as e_alt:
+            print(f"An error occurred while fetching the video information using VideoInfo_alternative for {url}: {e_alt}")
+            return None
+        #end
     #end
 #end
 
@@ -719,27 +754,6 @@ def on_progress(stream, chunk, bytes_remaining):
     progress_bar.update(progress_bar.total - bytes_remaining)
 
 ## ================================= Combine audio-video functions =================================
-
-def download_audio(url, output, bitrate_limit):# TODO : TO be removed
-    # global progress_bar
-    yt = YouTube(url)
-    # yt.register_on_progress_callback(on_progress)
-
-    # Download the highest quality audio
-    audio_stream = yt.streams.filter(only_audio=True).order_by('abr').desc().first()
-    audio_filename = f"{yt.title}_audio.mp3"
-    audio_filename = check_for_disallowed_filename_chars(audio_filename)
-    print(f"Downloading audio for {yt.title}...")
-    # progress_bar = tqdm(total=audio_stream.filesize, unit='B', unit_scale=True, unit_divisor=1024)
-    audio_stream.download(output, filename=audio_filename)
-    # progress_bar.close()
-    audio_file = os.path.join(output, audio_filename)
-
-    print(f"Download complete: {audio_file}")
-
-    return audio_file
-#end
-
 
 def combine_via_mkvmerge(output_file, video_filename, audio_filenames, subtitle_filenames):
     executable = r"./mkvtoolnix/mkvmerge.exe"#TODO: this has to be edited, maybe add the c\program files\-path
