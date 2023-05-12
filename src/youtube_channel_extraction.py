@@ -86,7 +86,7 @@ url = "https://www.youtube.com/@rjpbooks"
 answer = is_youtube_url(url)
 answer = checkForValidYoutubeURLs(url)
 answer = is_valid_youtube_playlist(url)
-answer = is_youtube_channel(url)
+answer = is_valid_youtube_channel(url)
 
 
 links = find_watch_in_html(url)
