@@ -27,9 +27,12 @@ import platform
 import subprocess
 import threading
 
+isDeployed = False
+
 # Ensure all required modules are installed.
 def install_missing_modules(modules):
     if getattr(sys, "frozen", False):# This ensures that this functions is not called once an executable is made
+        isDeployed= True
         return
     #end
     try:
@@ -56,7 +59,7 @@ install_missing_modules(["pytube","pytchat","tqdm","ffmpeg-python"])
 
 ## Add the core functionality  modules
 import pandas as pd
-from pytube import YouTube, Playlist # Youtube Module
+from pytube import YouTube, Playlist, Channel # py/Youtube Classes
 import ffmpeg as ffmpeg # Video Editing Module
 from tqdm import tqdm
 
@@ -390,13 +393,17 @@ class VideoInfo(YouTube):
         with open(video_info_filename, 'w') as f:
             f.write(f"Title: {self.title}\n")
             f.write(f"Author: {self.author}\n")
-            f.write(f"Length: {self.length}\n")
+            f.write(f"Video Length: {self.length}\n") # Adding video length in seconds
             f.write(f"Description: {self.description}\n")
             f.write(f"Publish Date: {self.publish_date}\n")
             f.write(f"Views: {self.views}\n")
             f.write(f"Thumbnail URL: {self.thumbnail_url}\n")
             f.write(f"Rating: {self.rating}\n")
             f.write(f"Video ID: {self.video_id}\n")
+            f.write(f"Video URL: {self.watch_url}\n") # Adding video URL
+            f.write(f"Video Embed URL: {self.embed_url}\n") # Adding embed URL
+            f.write(f"Video Age Restricted: {self.age_restricted}\n") # Adding age restriction info
+            f.write(f"Video Keywords: {', '.join(self.keywords)}\n") # Adding video keywords
             audio_stream = self.streams.filter(type="audio").order_by("abr").last()
             video_stream = self.streams.filter(type="video").order_by("resolution").last()
             fps = max(video_stream.fps, 0)
@@ -587,6 +594,11 @@ def get_video_urls_from_playlist(playlist_url: str) -> Set[str]:
     return video_urls
 #end
 
+def get_videos_and_playlists_from_Channel(channel_url: str) -> Set[str]:
+    channel = Channel(channel_url)
+    return set(channel.video_urls + channel.playlist_urls)
+#end
+
 def get_html_content(url: str, timeout: int = 10) -> Optional[Union[str, Exception]]:
     """
     Fetches the HTML content from the specified URL.
@@ -630,7 +642,7 @@ def extract_video_urls_from_page(youtube_url):#TODO doesn't work
     return video_urls
 
 
-def get_channel_videos(channel_id): #TODO not tested
+def get_channel_videos(channel_id): #TODO not tested THIS is alternative channel video extraction
     # Set up the YouTube Data API client
     api_service_name = "youtube"
     api_version = "v3"
@@ -666,19 +678,21 @@ def get_channel_videos(channel_id): #TODO not tested
 #end
 
 # -------- Get the video info from the URL --------
-def get_url_info_entry(url: str) -> Union[VideoInfo, VideoInfo_alternative, None]:
+def get_url_info_entry(url: str, use_alternative=False) -> Union[VideoInfo, VideoInfo_alternative, None]:
     try:
         video_info = VideoInfo(url=url)
         return video_info
     except Exception as e:
         print(f"An error occurred while fetching the video information using VideoInfo for {url}: {e}")
-        try:
-            video_info_alt = VideoInfo_alternative(url)
-            return video_info_alt
-        except Exception as e_alt:
-            print(f"An error occurred while fetching the video information using VideoInfo_alternative for {url}: {e_alt}")
-            return None
+        if use_alternative:
+            try:
+                video_info_alt = VideoInfo_alternative(url)
+                return video_info_alt
+            except Exception as e_alt:
+                print(f"An error occurred while fetching the video information using VideoInfo_alternative for {url}: {e_alt}")
+            #end
         #end
+        return None
     #end
 #end
 
@@ -736,7 +750,7 @@ def check_for_disallowed_filename_chars(filepath):
     return sanitized_filepath
 #end
 
-def is_youtube_channel(url: str) -> bool:
+def is_valid_youtube_channel(url: str) -> bool:
     # Check for all YouTube channel URL formats:
     # https://www.youtube.com/channel/UCXXXXXXXXXXXXXXXXXXXXX
     # https://www.youtube.com/c/ChannelName
@@ -754,6 +768,27 @@ def on_progress(stream, chunk, bytes_remaining):
     progress_bar.update(progress_bar.total - bytes_remaining)
 
 ## ================================= Combine audio-video functions =================================
+def combine_via_auto_selection(output_file, video_filename, audio_filenames, subtitle_filenames):
+    os_name = platform.system()
+    os_arch = platform.architecture()[0]
+
+    # if os_name == 'Windows' and os_arch == '64bit':
+    #     combine_via_mkvmerge(output_file, video_filename, audio_filenames, subtitle_filenames)
+    # else:
+    combine_via_ffmpeg(output_file, video_filename, audio_filenames, subtitle_filenames)
+    #end
+#end
+
+def combine_via_ffmpeg(output_file, video_filename, audio_filenames, subtitle_filenames):
+    video = ffmpeg.input(video_filename)
+    audio = ffmpeg.input(audio_filenames[0])
+
+    # Combine video and audio streams using the 'copy' codec to avoid transcoding
+    output = ffmpeg.output(video, audio, output_file, format='matroska', vcodec='copy', acodec='copy')
+
+    # Run the ffmpeg command
+    output.run(overwrite_output=True)
+#end
 
 def combine_via_mkvmerge(output_file, video_filename, audio_filenames, subtitle_filenames):
     executable = r"./mkvtoolnix/mkvmerge.exe"#TODO: this has to be edited, maybe add the c\program files\-path
@@ -768,30 +803,6 @@ def combine_via_mkvmerge(output_file, video_filename, audio_filenames, subtitle_
 
     # Call mkvmerge via the command line
     subprocess.run(args, check=True)
-#end
-
-
-def combine_via_ffmpeg(output_file, video_filename, audio_filenames, subtitle_filenames):
-    video = ffmpeg.input(video_filename)
-    audio = ffmpeg.input(audio_filenames[0])
-
-    # Combine video and audio streams using the 'copy' codec to avoid transcoding
-    output = ffmpeg.output(video, audio, output_file, format='matroska', vcodec='copy', acodec='copy')
-
-    # Run the ffmpeg command
-    output.run(overwrite_output=True)
-#end
-
-
-def combine_via_auto_selection(output_file, video_filename, audio_filenames, subtitle_filenames):
-    os_name = platform.system()
-    os_arch = platform.architecture()[0]
-
-    # if os_name == 'Windows' and os_arch == '64bit':
-    #     combine_via_mkvmerge(output_file, video_filename, audio_filenames, subtitle_filenames)
-    # else:
-    combine_via_ffmpeg(output_file, video_filename, audio_filenames, subtitle_filenames)
-    #end
 #end
 
 ## ================================= Multithreading functions =================================
