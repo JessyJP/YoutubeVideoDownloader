@@ -30,9 +30,12 @@
 - [ ] There are various TODO notes in the coded related to implementation of features and bugfixes.
 - [x] First and foremost stable packaging and release mechanism.
 The program can work just fine portable but it's good to have a type of installer.
-- [ ] URL scraping from YouTube Channel URLs
+- [x] URL scraping from YouTube Channel URLs
+  - [ ] Testing is needed 
 - [ ] Per video quality stream selection no yet implemented. (only global limiters available at the moment)
-- [ ] Finish the "keep file" functionality for separate audio,video, subtitle,etc. data(Easy to implement)
+- [x] Finish the "keep file" functionality for separate audio,video, subtitle,etc. data(Easy to implement)
+  - [ ] Subtitles download and integration still to be implemented.
+  - [ ] Comments download still to be implemented 
 - [ ] Better progress reporting and percentage for download progress implementation
 
 - [ ] Improve multithreading and parallel downloads
@@ -49,6 +52,7 @@ The program can work just fine portable but it's good to have a type of installe
 - [ ] Speed and GUI responsiveness should also be improved.
 - [ ] Bugfix: Sometimes not all videos are properly extracted from a playlist
 - [ ] Add a playlist column in the main window
+- [ ] There should be a LOG file option in the settings menu
 
 ## Potential Features
 - [ ] Webpage/Forum or some kind of marketing strategy for outreach to more users
