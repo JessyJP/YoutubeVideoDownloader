@@ -912,7 +912,7 @@ class YouTubeDownloaderGUI(tk.Tk):
         if recursiveCheckOfURLcontent_mode == 1:
             dispPrefix = self.status_bar_label.cget("text").split(numYT_vidMSG)[0] + " - playlist videos"
             URLs_toCheck = text
-        elif recursiveCheckOfURLcontent_mode == 2:
+        elif recursiveCheckOfURLcontent_mode == 3:
             dispPrefix = self.status_bar_label.cget("text").split(numYT_vidMSG)[0] + " - sub-links"
             URLs_toCheck = extract_URL_list_from_text(text)
             URLs_toCheck = checkForValidYoutubeURLs(URLs_toCheck)  # TODO: needs to be improved
@@ -956,7 +956,7 @@ class YouTubeDownloaderGUI(tk.Tk):
         #end
 
         # To finish up the analysis
-        if recursiveCheckOfURLcontent_mode == 0:  # This checks the recursion depth
+        if recursiveCheckOfURLcontent_mode == 0:  # This checks the recursion mode
             self.dispStatus("URL import and Analysis is Complete!")  # Clear the diagnostic output
             # self.dispStatus("");# Clear the diagnostic output #TODO: select one
             self.update_progress(N, N, recursiveCheckOfURLcontent_mode)
@@ -980,14 +980,18 @@ class YouTubeDownloaderGUI(tk.Tk):
             info = get_url_info_entry(url)
 
             if info is None:
-                if recursiveCheckOfURLcontent_mode == 0:  # This checks the recursion depth
+                if recursiveCheckOfURLcontent_mode == 0 or recursiveCheckOfURLcontent_mode == 2:  # This checks the recursion mode
                     try:
                         if is_valid_youtube_playlist(url):
-                            recursiveCheckOfURLcontent_mode = 1  # This controls the recursion depth
+                            recursiveCheckOfURLcontent_mode = 1  # This controls the recursion mode for playlists
                             urlsFromPlaylist = get_video_urls_from_playlist(url)
                             self.importValidYoutubeVideosFromTextOrURL_list(urlsFromPlaylist, recursiveCheckOfURLcontent_mode)
+                        elif is_valid_youtube_channel(url):
+                            recursiveCheckOfURLcontent_mode = 2  # This controls the recursion mode for channels
+                            urlsFromChannel = get_videos_and_playlists_from_Channel(url)
+                            self.importValidYoutubeVideosFromTextOrURL_list(urlsFromChannel, recursiveCheckOfURLcontent_mode)
                         else:
-                            recursiveCheckOfURLcontent_mode = 2  # This controls the recursion depth
+                            recursiveCheckOfURLcontent_mode = 3  # This controls the recursion mode for other urls
                             web_page_html = get_html_content(url)
                             self.importValidYoutubeVideosFromTextOrURL_list(web_page_html, recursiveCheckOfURLcontent_mode)
                         #end
@@ -995,7 +999,7 @@ class YouTubeDownloaderGUI(tk.Tk):
                     except Exception as e:
                         print(f"Error: {e}")
                     finally:
-                        recursiveCheckOfURLcontent_mode = 0  # This controls the recursion depth
+                        recursiveCheckOfURLcontent_mode = 0  # This controls the recursion mode
                     #end
                 #end
                 return
