@@ -5,8 +5,9 @@ echo ==========================================================================
 echo Preparing to package the Python script as a standalone executable file...
 echo ==========================================================================
 pyinstaller "./src/YouTubeDownloader.py" --onefile ^
-			--icon "./images/window_icon.ico" ^
-			--noconsole
+			--icon "./images/window_icon.ico" 
+			::^
+			REM --noconsole
 			:: --splash "./images/IconProjects/pngaaa.com-4933843.png"
 
 echo ==========================================================================
