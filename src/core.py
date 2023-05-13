@@ -27,12 +27,11 @@ import platform
 import subprocess
 import threading
 
-isDeployed = False
+isDeployed = getattr(sys, "frozen", False)
 
 # Ensure all required modules are installed.
 def install_missing_modules(modules):
-    if getattr(sys, "frozen", False):# This ensures that this functions is not called once an executable is made
-        isDeployed= True
+    if isDeployed:# This ensures that this functions is not called once an executable is made
         return
     #end
     try:
@@ -786,8 +785,20 @@ def combine_via_ffmpeg(output_file, video_filename, audio_filenames, subtitle_fi
     # Combine video and audio streams using the 'copy' codec to avoid transcoding
     output = ffmpeg.output(video, audio, output_file, format='matroska', vcodec='copy', acodec='copy')
 
-    # Run the ffmpeg command
-    output.run(overwrite_output=True)
+    if isDeployed:
+        # Run the ffmpeg command
+        process = output.run_async(pipe_stdout=True, pipe_stderr=True, overwrite_output=True)
+        stdout, stderr = process.communicate()
+
+        # stdout and stderr are bytes, decode them to strings if needed
+        stdout = stdout.decode('utf-8')
+        stderr = stderr.decode('utf-8')
+        # do something with stdout and stderr
+        print(stdout, stderr)
+    else:
+        # Run the ffmpeg command
+         output.run(overwrite_output=True)
+    #end
 #end
 
 def combine_via_mkvmerge(output_file, video_filename, audio_filenames, subtitle_filenames):
