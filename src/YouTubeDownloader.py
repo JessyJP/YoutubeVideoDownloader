@@ -22,10 +22,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import splashscreen
 ## Import Modules
 import os
+os.system("title Don't mind the LOG window")
 import argparse
 from core import *
 from gui_main import *
 
+
+import ctypes
+
+def hide_console():
+    kernel32 = ctypes.WinDLL('kernel32')
+    user32 = ctypes.WinDLL('user32')
+    HWND = user32.GetForegroundWindow()
+    SW_HIDE = 0
+    kernel32.FreeConsole()
+    user32.ShowWindow(HWND, SW_HIDE)
 
 ## Command line parsing tool
 if __name__ == "__main__":
@@ -35,7 +46,11 @@ if __name__ == "__main__":
     parser.add_argument("--gui", action="store_true", help="Run GUI")
     
     args = parser.parse_args()
-    if args.gui or (len(sys.argv)-1) == 0:        
+    if args.gui or (len(sys.argv)-1) == 0:    
+        if isDeployed and platform.system() == 'Windows':
+            # hide_console()
+            pass
+        #end    
         main_runGUI()
     else:
         parser.add_argument("-c", action="store_true", help="Combine audio and video (default)")
