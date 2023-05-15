@@ -65,4 +65,4 @@ The program can work just fine portable but it's good to have a type of installe
 - [ ] Implement automatic updates and version checking
 - [ ] Resilience for errors/corruption in Theme and config file on startup
 - [ ] Error & Bug reporting
-
+- [ ] Use sub-directory for the channels and playlists
