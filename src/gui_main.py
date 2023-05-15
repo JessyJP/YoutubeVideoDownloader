@@ -302,6 +302,8 @@ class YouTubeDownloaderGUI(tk.Tk):
         self.settings_button.grid(column=0, row=2, sticky=tk.W)
 
         #TODO: implement a help button here.
+        self.playSelectionlocal_button = ttk.Button(frame, text="   Play Preview \n Selection Locally",command=self.play_selected_watch_urls_locally)
+        self.playSelectionlocal_button.grid(column=0, row=2, sticky=tk.W, padx=(45, 0))
 
         # Add dropdown boxes for quality limiters
 
