@@ -471,6 +471,10 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         self.status_bar_label = ttk.Label(frame, text="")
         self.status_bar_label.grid(column=0, row=3, columnspan=TC, sticky=(tk.W, tk.E))
 
+        # self.view_button = ttk.Button(self, text="Switch View", command=self.toggle_view)
+        # self.view_button.grid(column=1, row=2, sticky=tk.E, padx=(0, 0))
+        # TODO: experimental option to change the viewing table to a card based or alternative
+
         # Configure column and row weights
         for i in range(TC):
             frame.columnconfigure(i, weight=1)
