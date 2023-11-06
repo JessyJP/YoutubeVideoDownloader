@@ -33,6 +33,7 @@ The program can work just fine portable but it's good to have a type of installe
 - [x] URL scraping from YouTube Channel URLs
   - [ ] Testing is needed 
 - [ ] Per video quality stream selection no yet implemented. (only global limiters available at the moment)
+This could be with a selection and a button to transfer the limits.
 - [x] Finish the "keep file" functionality for separate audio,video, subtitle,etc. data(Easy to implement)
   - [ ] Subtitles download and integration still to be implemented.
   - [ ] Comments download still to be implemented 
