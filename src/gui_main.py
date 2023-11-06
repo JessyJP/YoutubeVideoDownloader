@@ -1132,6 +1132,9 @@ class YouTubeDownloaderGUI(tk.Tk):
         # Get valid download location
         outputdir = self.get_download_location()
         if outputdir is None:
+            # TODO: check if the path is valid and if exists. Could be created if it doesn't. THis is done in the get download location function.
+            # Re-enable relevant UI elements after download
+            self.enableUIelementsAfterDownload()
             return
         #end
 
@@ -1164,6 +1167,8 @@ class YouTubeDownloaderGUI(tk.Tk):
                     self.tree.set(item, 'download_status', new_status)
                 #end
                 
+                # TODO: get local limits here maybe. And if they exists apply them here. If not use globla
+
                 # Start 
                 setItemStatus(item,_IN_PROGRESS_)
                 try:
