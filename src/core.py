@@ -52,10 +52,6 @@ def install_missing_modules(modules):
     #end
 #end
 
-## Check & Install packages
-install_missing_modules(["urlextract","pandas","requests"])
-install_missing_modules(["pytube","pytchat","tqdm","ffmpeg-python"])
-
 ## Add the core functionality  modules
 import pandas as pd
 from pytube import YouTube, Playlist, Channel # py/Youtube Classes
@@ -84,14 +80,12 @@ import pytz
 import pytchat
 
 
-install_missing_modules(["beautifulsoup4"])
-install_missing_modules(["google-api-python-client","google_auth_oauthlib"])
+
 from bs4 import BeautifulSoup
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
 
-install_missing_modules(["youtube_dl"])
 from core_alternative import *
 
 logger = logging.getLogger(__name__)
