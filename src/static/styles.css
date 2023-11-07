@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.app-window {
+    max-width: 1300px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#video-list {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#video-list th, #video-list td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    word-wrap: break-word; /* allow long content to wrap */
+}
+
+#video-list th {
+    background-color: #f2f2f2;
+}
+
+.controls, .settings-row {
+    display: flex;
+    flex-wrap: wrap; /* allows items to wrap to the next line */
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.controls input {
+    flex: 1;
+    min-width: 250px; /* minimum width for the input box */
+}
+
+#url-entry, #download-location {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#settings-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
