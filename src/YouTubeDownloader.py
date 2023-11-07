@@ -52,6 +52,9 @@ if __name__ == "__main__":
             pass
         #end    
         main_runGUI()
+
+    # elif arg.service:
+    # TODO: make a provision for service mode with database/manager and web api   
     else:
         parser.add_argument("-c", action="store_true", help="Combine audio and video (default)")
         parser.add_argument("-a", action="store_true", help="Download audio only")
