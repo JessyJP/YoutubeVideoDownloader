@@ -48,14 +48,24 @@ from time import sleep
 import configparser
 import pyperclip
 
+
+class DownloadManager():
+    def __init__(self):        
+        # Video Info list
+        self.infoList = [];
+
 ## Main Application window
-class YouTubeDownloaderGUI(tk.Tk):
+class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
 # === Application Stage 1: Initialization functions ===
 
     # Class Constructor: Creates the application, loads theme and configuration also adds global keybindings
     def __init__(self):
         # Call parent constructor
-        super().__init__()
+        # super().__init__()
+        # print(YouTubeDownloaderGUI.__mro__)
+
+        tk.Tk.__init__(self)
+        DownloadManager.__init__(self)
 
         # First Load configuration file 
         self.config_file = 'config.ini'
