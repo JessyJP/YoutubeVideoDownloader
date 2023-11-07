@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Downloader GUI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="app-window">
+        <table id="video-list">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>URL</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Views</th>
+                    <th>Likes</th>
+                    <th>Dislikes</th>
+                    <th>Thumbnail URL</th>
+                    <th>Audio Streams</th>
+                    <th>Video Streams</th>
+                    <th>Video FPS</th>
+                    <th>Video Format</th>
+                    <th>Audio Bitrate</th>
+                    <th>File Size</th>
+                    <th>Download Path</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <!-- Rows of data will go here -->
+            </tbody>
+        </table>
+        <div class="controls">
+            <label for="url-entry">URL:</label>
+            <input type="text" id="url-entry" placeholder="Enter video URL">
+            <button type="button" id="analyze-btn">Analyze</button>
+        </div>
+        <div class="settings-row">
+            <button type="button" id="settings-btn"><img src="{{ url_for('static', filename='configuration_gear_icon_normal.png') }}" alt="Settings Icon"></button>
+            <button type="button" id="play-btn">Play Preview Selection Locally</button>
+            
+            <select id="audio-limiter">
+                <!-- Add options based on audio_bitrate_list -->
+                <option value="max">max kbps</option>
+                <!-- ... -->
+            </select>
+
+            <select id="video-limiter">
+                <!-- Add options based on video_resolution_list -->
+                <option value="max">max p</option>
+                <!-- ... -->
+            </select>
+
+            <select id="fps-limiter">
+                <!-- Add options based on fps_value_list -->
+                <option value="max">max fps</option>
+                <!-- ... -->
+            </select>
+
+            <button type="button" id="location-btn">Select Download Location</button>
+            <input type="text" id="download-location" placeholder="Download location">
+        </div>
+    </div>
+
+    <!-- Optionally, add scripts for interactive functionality -->
+    <!-- At the bottom of your HTML before closing </body> tag -->
+    <script type="module" src="{{ url_for('static', filename='events.js') }}"></script>
+    <!-- <script type="module" src="{{ url_for('static', filename='api.js') }}"></script> -->
+</body>
+</html>
