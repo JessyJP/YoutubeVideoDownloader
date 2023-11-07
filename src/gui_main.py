@@ -194,8 +194,7 @@ class YouTubeDownloaderGUI(tk.Tk):
         self.theme["filename"] = theme_file
 
         application_window_icon_path = f"{self.theme['global']['directories']['icons']}{self.theme['icons']['application_window']}"
-        print(os.getcwd())
-        # self.iconbitmap(os.path.join(os.getcwd(),application_window_icon_path))
+        self.iconbitmap(application_window_icon_path)
 
         self.title(self.theme["window_title"])
         self.configure(bg=self.theme["global"]["colors"]["background"])

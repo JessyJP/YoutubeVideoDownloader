@@ -71,7 +71,7 @@
         }
     },
     "icons": {
-        "application_window": "window_icon.png",
+        "application_window": "window_icon.ico",
         "settings_button": "configuration_gear_icon_normal.png",
         "settings_button_hover": "configuration_gear_icon_hover.png",
         "settings_button_click": "configuration_gear_icon_click.png"
