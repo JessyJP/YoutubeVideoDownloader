@@ -42,8 +42,7 @@ import shlex
 
 from time import sleep
 
-required_modules = ["configparser","pillow","pyperclip"]
-install_missing_modules(required_modules)
+
 
 # Further Import required modules checked in runtime
 import configparser
