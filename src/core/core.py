@@ -1,25 +1,5 @@
-"""
-YouTube Video Downloader
-Copyright (C) 2023 JessyJP
 
-Author: JessyJP
-Date: April 7, 2023
-Description: This script downloads YouTube videos in the specified quality or allows the user to select a quality from the available streams.
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
-"""
-## ================================= Module management functions =================================
 # Main imports
 import os
 import sys
@@ -86,7 +66,7 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
 
-from core_alternative import *
+
 
 logger = logging.getLogger(__name__)
 
@@ -178,46 +158,7 @@ def updateOutputKeepsStr(current_str: str, symbol: str, action: str) -> str:
 #end
 
 
-class LimitsAndPriority:
-    def __init__(self):
-        self.bitrate = None
-        self.audio_format_priority = None
-        self.resolution = None
-        self.fps = None
-        self.video_format_priority = None
-    #end
 
-    def setLimitsToMax(self):
-        self.bitrate = "max kbps"
-        self.resolution = "max p"
-        self.fps = propToInt(self.fps,"max fps")
-    #end
-
-    def to_numeric(self):
-        self.bitrate = propToInt(self.bitrate,"kbps")
-        self.resolution = propToInt(self.resolution,"p")
-        self.fps = propToInt(self.fps,"fps")
-    #end
-#end
-
-def propToInt(prop,str):
-    intProp = prop.split(str)[0].strip()
-    try:
-        intProp = int(intProp)
-        return intProp
-    except (TypeError, ValueError):
-        pass
-    #end
-    return prop
-#end
-
-def get_variable_names(cls):
-    return list(cls.__annotations__.keys())
-#end
-
-def get_variable_types(cls):
-    return list(cls.__annotations__.values())
-#end
 
 ## ================================= Input Pre-Download get/select functions =================================
 

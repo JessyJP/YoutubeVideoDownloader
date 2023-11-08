@@ -1,6 +1,5 @@
 import youtube_dl
 import os
-import shutil
 import requests
 from typing import Tuple
 

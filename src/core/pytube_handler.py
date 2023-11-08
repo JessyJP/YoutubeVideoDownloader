@@ -21,7 +21,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 ## Imports
-from pytube import YouTube
+import os
+from pytube import YouTube # py/Youtube Classes
+from typing import Tuple
+
+import requests
+import shutil
+import json
+import csv
+import pytchat
+
+from core.url_text_processor import check_for_disallowed_filename_chars
+from core.download_manager import combine_via_auto_selection
+from core.download_options import setOutputKeepsStr
+from core.download_options import * # TODO: list them one by one
 
 ## ================================= Video Info class =================================
 class VideoInfo(YouTube):
@@ -328,4 +341,49 @@ class VideoInfo(YouTube):
         """
         return "☑" in self.download_status
     #end
+#end
+
+## ================================= Limit and Priority class =================================
+class LimitsAndPriority:
+    def __init__(self):
+        self.bitrate = None
+        self.audio_format_priority = None
+        self.resolution = None
+        self.fps = None
+        self.video_format_priority = None
+    #end
+
+    def setLimitsToMax(self):
+        self.bitrate = "max kbps"
+        self.resolution = "max p"
+        self.fps = propToInt(self.fps,"max fps")
+    #end
+
+    def to_numeric(self):
+        self.bitrate = propToInt(self.bitrate,"kbps")
+        self.resolution = propToInt(self.resolution,"p")
+        self.fps = propToInt(self.fps,"fps")
+    #end
+#end
+
+
+## ================================= Helper functions =================================
+
+def propToInt(prop,str):
+    intProp = prop.split(str)[0].strip()
+    try:
+        intProp = int(intProp)
+        return intProp
+    except (TypeError, ValueError):
+        pass
+    #end
+    return prop
+#end
+
+def get_variable_names(cls):
+    return list(cls.__annotations__.keys())
+#end
+
+def get_variable_types(cls):
+    return list(cls.__annotations__.values())
 #end
