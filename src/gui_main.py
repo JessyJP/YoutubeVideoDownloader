@@ -1175,6 +1175,9 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         # Get output extension
         outputExt = self.config.get("General", "output_file_ext")
 
+        # Get the process threading run configuration
+        process_via_multithreading = self.config.getboolean("General", "multithread_download_procedure")
+
         # Create a list to hold thread objects
         threads = []
         # Get lengths
@@ -1222,7 +1225,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
             #end
 
             # Run in Single thread or multithread mode
-            if self.config.getboolean("General", "multithread_download_procedure"):
+            if process_via_multithreading:
                 t = threading.Thread(target=download_by_info, args=(n, outputdir, limits, outputExt))
                 t.start()
                 threads.append(t)            
@@ -1231,7 +1234,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
             #end
         #end
 
-        if self.config.getboolean("General", "multithread_download_procedure"):
+        if process_via_multithreading:
             # Wait for all threads to complete
             for t in threads:
                 t.join()
