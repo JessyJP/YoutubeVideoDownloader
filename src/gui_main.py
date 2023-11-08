@@ -765,12 +765,12 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
 
 
     # ------ Callbacks and companion functions for the tree view rows operations Context menu or Key Bindings -------
-    def updateTreeViewFromInfoList(self):
+    def updateTreeViewFromVideoInfoTable(self):
         # Clear the tree view
         self.tree.delete(*self.tree.get_children())
 
-        # Re-insert all entries from the infoList
-        for info in self.infoList:
+        # Re-insert all entries from the table
+        for info in self.getTBL():
             self.tree.insert("", "end", values=info.as_tuple())
         #end
     #end
