@@ -459,7 +459,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         #end
     #end
 
-# === Application Stage 3: Youtube Video table Info user manipulation ===
+# === Application Stage 4: Youtube Video table Info user manipulation ===
     # ------ Callbacks and companion functions for the tree view columns Context menu -------
     # Add a show popup menu method callback
     def show_tree_popup_menu_callback(self, event):
@@ -785,7 +785,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
             if video_info is not None:
                 self.removeRow(video_info)
             else:
-                raise ValueError("VideoInfo not found for the selected tree view item")
+                raise ValueError("VideoInfo not found for the selected tree view item!")
             #end
 
             self.tree.delete(item)
