@@ -57,6 +57,12 @@ class DownloadManager():
     def getTBL(self):
         return self.infoList;
 
+    def getRow(self,rowIndex):
+        return self.infoList[index]
+    
+    def getRowIndex(self, video_info):
+        index = self.infoList.index(video_info)
+
     # This method is used to locate a video info from a list
     def get_video_info_by_index_or_video_id(self, video_id: str, index: int = -1) -> Union[VideoInfo, None]:
         # Check if the input index is valid and if the video_id at that index matches the input video_id
@@ -577,11 +583,11 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
             data.sort(key=sort_key, reverse=True)
         #end
 
-        # Create a mapping between tree view children IDs and their indices in self.InfoList
-        id_to_index = {info.video_id: index for index, info in enumerate(self.infoList)}
+        # Create a mapping between tree view children IDs and their indices in the info table
+        # id_to_index = {info.video_id: index for index, info in enumerate(self.getTBL())}
 
-        # Sort self.infoList based on the sorted order of tree view data #TODO: fix error here
-        # self.infoList = [x[1] for x in sorted(zip(data, self.infoList), key=lambda x: id_to_index[x[0][1]])]
+        # Sort  the info table based on the sorted order of tree view data #TODO: fix error here
+        # self.infoList = [x[1] for x in sorted(zip(data, self.getTBL()), key=lambda x: id_to_index[x[0][1]])]
 
         # Move the sorted data to the correct position in the treeview
         for indx, item in enumerate(data):
@@ -730,7 +736,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         #end
 
         # Try to find the tree view item by index first
-        index = self.infoList.index(video_info)
+        index = self.getRowIndex(video_info)
         if index != -1:
             item = self.tree.get_children()[index]
             # Check if the video_id matches
