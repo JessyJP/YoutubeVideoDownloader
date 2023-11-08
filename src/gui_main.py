@@ -62,6 +62,13 @@ class DownloadManager():
     
     def getRowIndex(self, video_info):
         index = self.infoList.index(video_info)
+        return index
+    
+    def removeRow(self, video_info):        
+        if video_info is not None:
+            # Remove the VideoInfo object from the infoList
+            index_to_remove = self.infoList.index(video_info)
+            self.infoList.pop(index_to_remove)
 
     # This method is used to locate a video info from a list
     def get_video_info_by_index_or_video_id(self, video_id: str, index: int = -1) -> Union[VideoInfo, None]:
@@ -776,10 +783,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
             video_info = self.get_video_info_by_entry(item)
 
             if video_info is not None:
-                # Remove the VideoInfo object from the infoList
-                index_to_remove = self.infoList.index(video_info)
-                self.infoList.pop(index_to_remove)
-                # TODO: make a remove method from the manager
+                self.removeRow(video_info)
             else:
                 raise ValueError("VideoInfo not found for the selected tree view item")
             #end
