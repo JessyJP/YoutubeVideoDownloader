@@ -864,16 +864,17 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         for item in selected_items:
             new_status = updateOutputKeepsStr(self.tree.set(item, 'download_status'), symbol, state)
 
-            # Update the download status of the selected item in the tree view
-            self.tree.set(item, 'download_status', new_status)
-
             # Find the corresponding VideoInfo object (handle) and update its download state
             video_info = self.get_video_info_by_entry(item)
-            if video_info is not None:
-                video_info.download_status = new_status
-            else:
-                print(f"Error: VideoInfo object not found for item '{item}'")
+            if video_info is None:
+                raise(f"Error: VideoInfo object not found for item '{item}'")
             #end
+
+            # Update download state of the video info in the handle table entry 
+            video_info.download_status = new_status
+
+            # Update the download status of the selected item in the tree view
+            self.tree.set(item, 'download_status', new_status)
         #end
     #end
 
@@ -886,16 +887,17 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
             for symbol in symbol_list:
                 new_status = updateOutputKeepsStr(self.tree.set(item, 'download_status'), symbol, state)
 
-                # Update the download status of the selected item in the tree view
-                self.tree.set(item, 'download_status', new_status)
-
                 # Find the corresponding VideoInfo object (handle) and update its download state
                 video_info = self.get_video_info_by_entry(item)
-                if video_info is not None:
-                    video_info.download_status = new_status
-                else:
-                    print(f"Error: VideoInfo object not found for item '{item}'")
+                if video_info is None:
+                    raise(f"Error: VideoInfo object not found for item '{item}'")
                 #end
+
+                # Update download state of the video info in the handle table entry 
+                video_info.download_status = new_status
+
+                # Update the download status of the selected item in the tree view
+                self.tree.set(item, 'download_status', new_status)
             #end
         #end
     #end
