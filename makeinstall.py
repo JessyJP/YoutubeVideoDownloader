@@ -31,13 +31,20 @@ def run_command(cmd):
 def clean_build_files():
     """Remove the build artifacts: 'dist' and 'build' directories and .spec file."""
     print("="*73)
+    
     shutil.rmtree(DIST_DIR, ignore_errors=True)
-    print("Dist directory removed.")
+    print(f'Dist directory [{DIST_DIR}] removed.')
+    
     shutil.rmtree(BUILD_DIR, ignore_errors=True)
-    print("Build directory removed.")
+    print(f'Build directory [{BUILD_DIR}] removed.')
+
     if os.path.exists(SPEC_NAME):
         os.remove(SPEC_NAME)
-    print(".spec file removed.")
+        print(f'.spec [{SPEC_NAME}] file removed.')    
+        
+    if os.path.exists(ZIP_NAME):
+        os.remove(ZIP_NAME)
+        print(f'Zip archive [{ZIP_NAME}] file removed.')  
 
 def create_zip(archive_name, files):
     """Create a zip archive from the list of files and directories."""
