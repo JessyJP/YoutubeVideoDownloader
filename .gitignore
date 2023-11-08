@@ -1,18 +1,23 @@
+# General IDE & environment ignores
 .vscode/
 *.pyc
 .venv/
 
+# Ignore build directories
 build/
 dist/
-test/
 
+# Ignore file extentions
 *.mp4
 *.mp3
 
+# Other ignores
 gui_main.spec
 gui_main.cp310-win_amd64.pyd
 gui_main.c
 
+
+# Specific ignores
 YouTubeDownloader.exe
 YouTubeDownloader.zip
 YouTubeDownloader.spec
