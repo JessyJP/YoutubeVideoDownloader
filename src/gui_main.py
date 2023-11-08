@@ -392,7 +392,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         self.settings_button.bind("<Button-1>", self.on_settings_button_click)
 
         # Create the "Download" button
-        self.download_button = ttk.Button(frame, text=self.theme["texts"]["download_button"], command=self.download_all_entries_callback)
+        self.download_button = ttk.Button(frame, text=self.theme["texts"]["download_button"], command=self.download_all_entries_UI_callback)
         self.download_button.grid(column=TC-1, row=2, sticky=tk.E, padx=(0, 0))
 
         # Forth row -----------------
@@ -1123,7 +1123,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         return outputdir
     #end
 
-    def getLimitsAndPriority(self):
+    def getLimitsAndPriorityFromUI(self):
         limits_and_priority = LimitsAndPriority()
 
         # Get the audio bitrate
@@ -1144,7 +1144,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         return limits_and_priority
     #end
 
-    def download_all_entries_callback(self):
+    def download_all_entries_UI_callback(self):
         if self.download_in_progress_flag == False:
             t = threading.Thread(target=self.download_all_entries, args=())
             t.start()
@@ -1170,13 +1170,13 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         #end
 
         # Get Limits
-        limits = self.getLimitsAndPriority()
+        limits = self.getLimitsAndPriorityFromUI()
 
         # Get output extension
         outputExt = self.config.get("General", "output_file_ext")
+
         # Create a list to hold thread objects
         threads = []
-
         # Get lengths
         n = 0; N = len(self.infoList);
         # Loop over all entries in the tree view
