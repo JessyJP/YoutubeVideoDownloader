@@ -458,7 +458,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         self.settings_button.bind("<Button-1>", self.on_settings_button_click)
 
         # Create the "Download" button
-        self.download_button = ttk.Button(frame, text=self.theme["texts"]["download_button"], command=self.download_all_entries_UI_callback)
+        self.download_button = ttk.Button(frame, text=self.theme["texts"]["download_button"], command=self.download_all_entries_callback)
         self.download_button.grid(column=TC-1, row=2, sticky=tk.E, padx=(0, 0))
 
         # Forth row -----------------
@@ -867,7 +867,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
             # Update the download status of the selected item in the tree view
             self.tree.set(item, 'download_status', new_status)
 
-            # Find the corresponding VideoInfo object and update its download state
+            # Find the corresponding VideoInfo object (handle) and update its download state
             video_info = self.get_video_info_by_entry(item)
             if video_info is not None:
                 video_info.download_status = new_status
@@ -889,7 +889,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
                 # Update the download status of the selected item in the tree view
                 self.tree.set(item, 'download_status', new_status)
 
-                # Find the corresponding VideoInfo object and update its download state
+                # Find the corresponding VideoInfo object (handle) and update its download state
                 video_info = self.get_video_info_by_entry(item)
                 if video_info is not None:
                     video_info.download_status = new_status
@@ -1210,7 +1210,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         return limits_and_priority
     #end
 
-    def download_all_entries_UI_callback(self):
+    def download_all_entries_callback(self):
         if self.download_in_progress_flag == False:
             t = threading.Thread(target=self.download_all_entries_thread, args=())
             t.start()
@@ -1227,8 +1227,8 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         self.disableUIelementsDuringDownload()
 
         # Get valid download location
-        outputdir = self.get_download_location()
-        if outputdir is None:
+        outputDir = self.get_download_location()
+        if outputDir is None:
             # TODO: check if the path is valid and if exists. Could be created if it doesn't. THis is done in the get download location function.
             # Re-enable relevant UI elements after download
             self.enableUIelementsAfterDownload()
@@ -1244,7 +1244,8 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         # Get the process threading run configuration
         process_via_multithreading = self.config.getboolean("General", "multithread_download_procedure")
 
-
+        # Call the download manager processing function with all arguments
+        self.download_all_entries( process_via_multithreading, limits, outputDir, outputExt)
 
         # Re-enable relevant UI elements after download
         self.enableUIelementsAfterDownload()
