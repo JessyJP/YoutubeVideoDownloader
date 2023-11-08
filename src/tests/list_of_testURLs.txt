@@ -1,0 +1,121 @@
+https://www.youtube.com/watch?v=7n16Yw51xkI&list=PLLgJJsrdwhPxa6-02-CeHW8ocwSwl2jnu
+https://www.youtube.com/watch?v=OPSKfPWdr90&list=PLLgJJsrdwhPxa6-02-CeHW8ocwSwl2jnu&index=2
+https://www.youtube.com/watch?v=rguyzHWbFwU&list=PLLgJJsrdwhPxa6-02-CeHW8ocwSwl2jnu&index=4
+https://youtu.be/QiHMkiPGlv4
+https://youtu.be/P7X4s7RhMXA
+https://youtu.be/P7X4s7RhMXA
+https://youtu.be/P7X4s7RhMXA
+https://youtu.be/KSc9TCFuuJM
+https://www.youtube.com/watch?v=nqPLhgy4yLc&list=PLH1Lcfz9gT7itRPi6_WvUnM85Is8_bgTt&index=8
+https://github.com/BtbN/FFmpeg-Builds/releases
+https://www.youtube.com/results?search_query=bluethooth+midi+lights+for+home
+https://www.youtube.com/watch?v=ZC35bP9aJ5c
+
+https://www.youtube.com/playlist?list=PLLgJJsrdwhPxa6-02-CeHW8ocwSwl2jnu
+
+    youtube_url_pattern = re.compile(
+        r"(https?://)?(www\.)?(m\.)?(youtube\.com/watch\?v=|youtube\.com/watch\?.+&v=|youtube\.com/playlist\?list=|youtube\.com/embed/|youtu\.be/)[a-zA-Z0-9_-]+(\S+)?"
+    )
+	
+	https://www.youtube.com/playlist?list=PLLgJJsrdwhPxa6-02-CeHW8ocwSwl2jnu
+	https://www.youtube.com/watch?v=u6eoPzwdR9Q&list=PLH1Lcfz9gT7itRPi6_WvUnM85Is8_bgTt&index=4https://www.youtube.com/watch?v=u6eoPzwdR9Q&list=PLH1Lcfz9gT7itRPi6_WvUnM85Is8_bgTt&index=4https://www.youtube.com/watch?v=u6eoPzwdR9Q&list=PLH1Lcfz9gT7itRPi6_WvUnM85Is8_bgTt&index=4https://www.youtube.com/watch?v=u6eoPzwdR9Q&list=PLH1Lcfz9gT7itRPi6_WvUnM85Is8_bgTt&index=4
+	
+	https://www.youtube.com/watch?v=u6eoPzwdR9Q&list=PLH1Lcfz9gT7itRPi6_WvUnM85Is8_bgTt&index=4
+	
+	
+https://youtu.be/QiHMkiPGlv4
+https://youtu.be/P7X4s7RhMXA
+
+
+https://www.youtube.com/watch?v=L2k8Xta4rEo
+https://www.youtube.com/watch?v=ZnVd7sLNi6s
+https://www.youtube.com/watch?v=X75Qy-GiW4Y
+https://www.youtube.com/watch?v=gzdw20zxG6M
+
+
+
+
+☑	https://www.youtube.com/watch?v=ZC35bP9aJ5c	KINGDOM LIVE from LA - Maverick City Music & Kirk Franklin	TRIBL	14047	2022-07-24 00:00:00	2456045	https://i.ytimg.com/vi/ZC35bP9aJ5c/sddefault.jpg?v=62d8b59c	None	ZC35bP9aJ5c	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=L2k8Xta4rEo	Aimer 「escalate」 MUSIC VIDEO&CROSSFADE（アニメ「NieR:Automata Ver1.1a」OPテーマ）	Aimer Official YouTube Channel	315	2023-02-25 00:00:00	2773662	https://i.ytimg.com/vi/L2k8Xta4rEo/sddefault.jpg?v=63ee1536	None	L2k8Xta4rEo	1080p@24fps/160kbpskbps
+☑	https://m.youtube.comwatch?v=7n16Yw51xkIwatch?v=7n16Yw51xkI&amp	Juce Framework Tutorial 00- Intro & Building Your First Project	The Audio Programmer	899	2017-05-18 00:00:00	142846	https://i.ytimg.com/vi/7n16Yw51xkI/sddefault.jpg	None	7n16Yw51xkI	2160p@59fps/384kbpskbps
+☑	https://www.youtube.comembed/QiHMkiPGlv4embed/QiHMkiPGlv4	Shania Twain - You're Still The One (Lyrics)	Young Pilgrim Music	223	2020-10-20 00:00:00	17354711	https://i.ytimg.com/vi/QiHMkiPGlv4/sddefault.jpg	None	QiHMkiPGlv4	1080p@25fps/160kbpskbps
+☑	https://youtu.be/P7X4s7RhMXA	The Jets- You Got It  All (LYRICS)🎧🎵	Music LEArics	252	2021-09-13 00:00:00	3397245	https://i.ytimg.com/vi/P7X4s7RhMXA/sddefault.jpg	None	P7X4s7RhMXA	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=OPSKfPWdr90&list=PLLgJJsrdwhPxa6-02-CeHW8ocwSwl2jnu&index=2	Juce Tutorial 01-  The Document Window Class	The Audio Programmer	1063	2017-05-25 00:00:00	38455	https://i.ytimg.com/vi/OPSKfPWdr90/sddefault.jpg	None	OPSKfPWdr90	1080p@60fps/384kbpskbps
+☑	https://youtu.be/KSc9TCFuuJM	Dolly Parton & Kenny Rogers - Islands In the Stream (Lyrics)	3starz	257	2022-04-06 00:00:00	13747146	https://i.ytimg.com/vi/KSc9TCFuuJM/sddefault.jpg	None	KSc9TCFuuJM	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=nqPLhgy4yLc&list=PLH1Lcfz9gT7itRPi6_WvUnM85Is8_bgTt&index=8	Never Would Have Made It	Marvin Sapp - Topic	415	2017-04-08 00:00:00	34532752	https://i.ytimg.com/vi/nqPLhgy4yLc/sddefault.jpg	None	nqPLhgy4yLc	720p@25fps/160kbpskbps
+☑	https://www.youtube.comembed/X75Qy-GiW4Yembed/X75Qy-GiW4Y	Aimer 「Deep down」MUSIC VIDEO（TVアニメ「チェンソーマン」エンディング・テーマ）	Aimer Official YouTube Channel	236	2022-12-13 00:00:00	6005594	https://i.ytimg.com/vi/X75Qy-GiW4Y/sddefault.jpg?v=638d8104	None	X75Qy-GiW4Y	1080p@24fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=rguyzHWbFwU&list=PLLgJJsrdwhPxa6-02-CeHW8ocwSwl2jnu&index=4	Juce Tutorial 03-  The Graphics Class, Parent & Child Components	The Audio Programmer	2742	2017-06-15 00:00:00	19344	https://i.ytimg.com/vi/rguyzHWbFwU/sddefault.jpg	None	rguyzHWbFwU	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=NE8d91yYBJ8	Juce Tutorial 44- Audio Processor Value Tree State Update 2018 (Creating Plug-in Parameters)	The Audio Programmer	1842	2019-01-02 00:00:00	7440	https://i.ytimg.com/vi/NE8d91yYBJ8/sddefault.jpg	None	NE8d91yYBJ8	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=Y_MHh0z1to8	Juce Tutorial 55 - Graphics Pt 2 (Drawing)	The Audio Programmer	2523	2019-05-28 00:00:00	3028	https://i.ytimg.com/vi/Y_MHh0z1to8/sddefault.jpg	None	Y_MHh0z1to8	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=Bbg3gLM8L3Q	Juce Tutorial 54- Graphics Pt 1 (The Basics)	The Audio Programmer	2441	2019-05-17 00:00:00	5185	https://i.ytimg.com/vi/Bbg3gLM8L3Q/sddefault.jpg	None	Bbg3gLM8L3Q	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=B2NYnNTnk0s	Joshua Hodge (Founder, The Audio Programmer) - JUCE 6 DSP Module  - A Brief Introduction	The Audio Programmer	1417	2020-09-28 00:00:00	2960	https://i.ytimg.com/vi/B2NYnNTnk0s/sddefault.jpg	None	B2NYnNTnk0s	1080p@24fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=Haojfv7SkRE	Aaron Leese - Introduction to Audio Plug-in Registration	The Audio Programmer	2298	2020-03-25 00:00:00	866	https://i.ytimg.com/vi/Haojfv7SkRE/sddefault.jpg	None	Haojfv7SkRE	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=tgf6J8foCiw	Juce Tutorial 60 - Create your first MIDI Plug-in with Eyal Amir (Xfer Records)	The Audio Programmer	2273	2019-12-11 00:00:00	13936	https://i.ytimg.com/vi/tgf6J8foCiw/sddefault.jpg?v=5df0c5a8	None	tgf6J8foCiw	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=ddqwAJilnes	Juce Tutorial 22-  Building a Synthesizer Part 2 (Midi Functionality)	The Audio Programmer	1193	2017-10-29 00:00:00	11949	https://i.ytimg.com/vi/ddqwAJilnes/sddefault.jpg	None	ddqwAJilnes	2160p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=vWAJo30fizQ	Juce Tutorial 49- The Audio Visualiser Component	The Audio Programmer	768	2019-03-24 00:00:00	6120	https://i.ytimg.com/vi/vWAJo30fizQ/sddefault.jpg	None	vWAJo30fizQ	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=MwtJCG_o6W8	Juce Tutorial 18-  Using a Gain Ramp to Eliminate Sound Artifacts	The Audio Programmer	947	2017-09-15 00:00:00	4807	https://i.ytimg.com/vi/MwtJCG_o6W8/sddefault.jpg	None	MwtJCG_o6W8	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=z3XDvYmTarE	Juce Tutorial 50- Creating a Metronome Pt 1 (Concept of Playing and Stopping)	The Audio Programmer	2265	2019-04-13 00:00:00	4264	https://i.ytimg.com/vi/z3XDvYmTarE/sddefault.jpg	None	z3XDvYmTarE	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=g_6UKygCp-0	TAP Tip #3: Adding Images to an Audio Plugin	The Audio Programmer	122	2022-03-29 00:00:00	1868	https://i.ytimg.com/vi/g_6UKygCp-0/sddefault.jpg	None	g_6UKygCp-0	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=ggJRCQK27B8	Juce Tutorial 47- The TextButton & Button Listener Classes	The Audio Programmer	1091	2019-02-07 00:00:00	5180	https://i.ytimg.com/vi/ggJRCQK27B8/sddefault.jpg	None	ggJRCQK27B8	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=vVnu-L712ho	Juce Tutorial 37-  Building a Simple Audio Player	The Audio Programmer	2475	2018-05-27 00:00:00	7905	https://i.ytimg.com/vi/vVnu-L712ho/sddefault.jpg	None	vVnu-L712ho	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=D5xT06oZAyo	Juce Tutorial 38- Creating a Menu to Change Audio Inputs/Outputs & SampleRate	The Audio Programmer	1012	2018-06-10 00:00:00	3930	https://i.ytimg.com/vi/D5xT06oZAyo/sddefault.jpg	None	D5xT06oZAyo	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=3GyQhLwb3J8	JUCE 6 Tutorial 00 - How to Explore the JUCE Repository and New Features	The Audio Programmer	832	2020-06-14 00:00:00	12120	https://i.ytimg.com/vi/3GyQhLwb3J8/sddefault.jpg?v=5ee5f8c5	None	3GyQhLwb3J8	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=viR1Z7byTYw	Juce Tutorial 04-  The Slider & Rectangle Class	The Audio Programmer	2139	2017-07-06 00:00:00	12611	https://i.ytimg.com/vi/viR1Z7byTYw/sddefault.jpg	None	viR1Z7byTYw	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=EKI0iB1hh6M	Juce Tutorial 57- Graphics Pt 3 (Intro to Lock Free Queues and FIFO's)	The Audio Programmer	2805	2019-08-05 00:00:00	2359	https://i.ytimg.com/vi/EKI0iB1hh6M/sddefault.jpg	None	EKI0iB1hh6M	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=VC4GCpvIIOE	Build a Sampler VST Plug-in with JUCE Part 3 - Drawing Waveforms	The Audio Programmer	2552	2020-03-09 00:00:00	5446	https://i.ytimg.com/vi/VC4GCpvIIOE/sddefault.jpg?v=5e89bef4	None	VC4GCpvIIOE	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=Cm49E9kDwSc	Juce Tutorial 15-  Building Your First Plugin Pt 2	The Audio Programmer	1007	2017-09-06 00:00:00	9553	https://i.ytimg.com/vi/Cm49E9kDwSc/sddefault.jpg	None	Cm49E9kDwSc	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=M9NhoEs3Jzg	Juce Tutorial 51- Creating a Metronome Pt 2 (Calculating BPM)	The Audio Programmer	1379	2019-04-14 00:00:00	2732	https://i.ytimg.com/vi/M9NhoEs3Jzg/sddefault.jpg	None	M9NhoEs3Jzg	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=Gsd7ESq827c	Juce Tutorial 23-  Building a Synthesizer Pt 3 (Oscillator, Envelope, & Filter)	The Audio Programmer	1721	2017-11-07 00:00:00	10573	https://i.ytimg.com/vi/Gsd7ESq827c/sddefault.jpg	None	Gsd7ESq827c	2160p@60fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=tPF748enDYM	Juce Tutorial 42-  Building a Delay Plugin Pt 3 (Creating Delay Feedback)	The Audio Programmer	1117	2018-09-03 00:00:00	4675	https://i.ytimg.com/vi/tPF748enDYM/sddefault.jpg	None	tPF748enDYM	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=FmkWanSCU9U	JUCE Tutorial 19: Change Broadcasters and Listeners	The Audio Programmer	1737	2022-10-13 00:00:00	939	https://i.ytimg.com/vi/FmkWanSCU9U/sddefault.jpg	None	FmkWanSCU9U	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=Bw_OkHNpj1M	Juce Tutorial 64 - Building Your First Plug-In (2020 Update)	The Audio Programmer	2790	2020-02-10 00:00:00	50781	https://i.ytimg.com/vi/Bw_OkHNpj1M/sddefault.jpg?v=5e418078	None	Bw_OkHNpj1M	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=RzfUS_xnUnw	Juce Tutorial 45- Creating a Dynamic UI using FlexBox	The Audio Programmer	1852	2019-01-07 00:00:00	4150	https://i.ytimg.com/vi/RzfUS_xnUnw/sddefault.jpg	None	RzfUS_xnUnw	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=NB_FVBg9WOs	JUCE Tutorial: Types of Plugin State	The Audio Programmer	843	2022-11-10 00:00:00	1181	https://i.ytimg.com/vi/NB_FVBg9WOs/sddefault.jpg	None	NB_FVBg9WOs	1080p@60fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=brqr63QA_Ig	Juce Tutorial 35- Common Misleading Errors I've Encountered in Juce/C++ and How I Fix Them	The Audio Programmer	906	2018-03-21 00:00:00	1318	https://i.ytimg.com/vi/brqr63QA_Ig/sddefault.jpg	None	brqr63QA_Ig	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=F-EkwKFftPY	Build a Sampler VST Plug-in with JUCE Part 1 - Loading and Playing	The Audio Programmer	1790	2020-02-25 00:00:00	25627	https://i.ytimg.com/vi/F-EkwKFftPY/sddefault.jpg?v=5e89be2b	None	F-EkwKFftPY	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=8NBVqRm_SIc	Juce Tutorial 58-  Component Mouse Events Pt 1 (Mouse Enter and Exit)	The Audio Programmer	511	2019-08-20 00:00:00	1823	https://i.ytimg.com/vi/8NBVqRm_SIc/sddefault.jpg	None	8NBVqRm_SIc	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=1PLn8IAKEb4	Juce Tutorial 39- Bitcrusher Plugin Walkthrough with Aaron Leese (Stagecraft Software)	The Audio Programmer	2880	2018-06-28 00:00:00	3357	https://i.ytimg.com/vi/1PLn8IAKEb4/sddefault.jpg	None	1PLn8IAKEb4	1080p@25fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=TXUvRJWBY7E	Juce Tutorial 41-  Building a Delay Plug in Pt 2 (Creating a Delayed Signal)	The Audio Programmer	1825	2018-08-27 00:00:00	5672	https://i.ytimg.com/vi/TXUvRJWBY7E/sddefault.jpg	None	TXUvRJWBY7E	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=nTVXy35rG4Q	Juce Tutorial 32- Building a Filter Plugin Using the DSP Module (FIR Filter)	The Audio Programmer	888	2018-03-05 00:00:00	4009	https://i.ytimg.com/vi/nTVXy35rG4Q/sddefault.jpg	None	nTVXy35rG4Q	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=eiYMRpwc33A	Build a Sampler VST Plug-in with JUCE Part 4 - Making Sliders and Labels	The Audio Programmer	2011	2020-03-16 00:00:00	3574	https://i.ytimg.com/vi/eiYMRpwc33A/sddefault.jpg?v=5e89bf2d	None	eiYMRpwc33A	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=rPa_HCAMtFI	Juce Tutorial 34- Animating Components Pt 1 w/ guest MatkatMusic	The Audio Programmer	1731	2018-03-16 00:00:00	3523	https://i.ytimg.com/vi/rPa_HCAMtFI/sddefault.jpg	None	rPa_HCAMtFI	1440p@60fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=S0i7RizW0Sk	Juce Tutorial 17-  Saving and Recalling Plugin Info Using XML	The Audio Programmer	1054	2017-09-14 00:00:00	6979	https://i.ytimg.com/vi/S0i7RizW0Sk/sddefault.jpg	None	S0i7RizW0Sk	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=2FkxKz37kHs	JUCE Tutorial 18 - Smoothing Parameters With The Linear Smoothed Value Class	The Audio Programmer	650	2021-12-03 00:00:00	1906	https://i.ytimg.com/vi/2FkxKz37kHs/sddefault.jpg	None	2FkxKz37kHs	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=_IocXoXUWdQ	Juce Tutorial 08-  Customizing Dials & Slider Using the Look and Feel Class (Pt 2 of 2)	The Audio Programmer	2593	2017-08-08 00:00:00	11736	https://i.ytimg.com/vi/_IocXoXUWdQ/sddefault.jpg	None	_IocXoXUWdQ	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=2gFpCfFHibc	Juce Tutorial 53- Creating a Metronome Pt 4 (Sample Accuracy)	The Audio Programmer	961	2019-05-12 00:00:00	1579	https://i.ytimg.com/vi/2gFpCfFHibc/sddefault.jpg	None	2gFpCfFHibc	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=Y5MhjRxfNvA	Juce Tutorial 62 - The Audio Process Block	The Audio Programmer	1036	2019-12-19 00:00:00	3963	https://i.ytimg.com/vi/Y5MhjRxfNvA/sddefault.jpg?v=5dfa7058	None	Y5MhjRxfNvA	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=Zz-gDMo_E8c	Juce Tutorial 11- Basic Wavetable Synthesis in Juce	The Audio Programmer	1399	2017-08-22 00:00:00	12971	https://i.ytimg.com/vi/Zz-gDMo_E8c/sddefault.jpg	None	Zz-gDMo_E8c	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=YwAtWuGA4Cg	Preset Manager in JUCE || Akash Murthy	The Audio Programmer	4178	2022-06-23 00:00:00	3946	https://i.ytimg.com/vi/YwAtWuGA4Cg/sddefault.jpg?sqp=-oaymwEmCIAFEOAD8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGH8gNCg7MA8=&rs=AOn4CLDwMSsfP-zTARD5SA0NNsUfnNdXIw	None	YwAtWuGA4Cg	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=enPC7mxmmCc	Juce Tutorial 52- Creating a Metronome Pt 3 (Loading a Sound)	The Audio Programmer	1609	2019-05-06 00:00:00	1314	https://i.ytimg.com/vi/enPC7mxmmCc/sddefault.jpg	None	enPC7mxmmCc	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=6t-Pp6tiIv4	Juce Tutorial 30- Juce DSP Module Basics	The Audio Programmer	728	2018-02-28 00:00:00	7345	https://i.ytimg.com/vi/6t-Pp6tiIv4/sddefault.jpg	None	6t-Pp6tiIv4	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=BGl2_Wi3j-c	Juce Tutorial 35- Building a Synthesizer Part 5 (Implementing a More Stable Filter)	The Audio Programmer	743	2018-04-29 00:00:00	1902	https://i.ytimg.com/vi/BGl2_Wi3j-c/sddefault.jpg	None	BGl2_Wi3j-c	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=Ht19bCK-bLo	Juce Tutorial 33- Juce 5.3 Release Overview	The Audio Programmer	212	2018-03-15 00:00:00	832	https://i.ytimg.com/vi/Ht19bCK-bLo/sddefault.jpg	None	Ht19bCK-bLo	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=10dkMCtmSpY	Juce Tutorial 46- Creating a Transport using the Tracktion Engine	The Audio Programmer	3121	2019-02-03 00:00:00	3075	https://i.ytimg.com/vi/10dkMCtmSpY/sddefault.jpg	None	10dkMCtmSpY	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=pTJYowGub6o	Juce Tutorial 05-  The Slider, Slider Listener & Label Classes	The Audio Programmer	2070	2017-07-13 00:00:00	13746	https://i.ytimg.com/vi/pTJYowGub6o/sddefault.jpg	None	pTJYowGub6o	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=EaDt99vonM8	Juce Tutorial 13- Audio Plugin Basics...What You Need to Know (Pt 1 of 2)	The Audio Programmer	1076	2017-08-28 00:00:00	12697	https://i.ytimg.com/vi/EaDt99vonM8/sddefault.jpg	None	EaDt99vonM8	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=U5eHees1qTE	Juce Tutorial 56 - Graphics and the Timer Class	The Audio Programmer	2482	2019-07-30 00:00:00	2607	https://i.ytimg.com/vi/U5eHees1qTE/sddefault.jpg	None	U5eHees1qTE	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=PaKXRm6RZF4	Juce Tutorial 24-  Building a Synthesizer Part 4 (Controlling Parameters & UI)	The Audio Programmer	3383	2017-12-05 00:00:00	6325	https://i.ytimg.com/vi/PaKXRm6RZF4/sddefault.jpg	None	PaKXRm6RZF4	1080p@60fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=WJYlJkLafFc	Juce Tutorial 02-  The Main Content Component Window	The Audio Programmer	736	2017-05-31 00:00:00	17453	https://i.ytimg.com/vi/WJYlJkLafFc/sddefault.jpg	None	WJYlJkLafFc	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=Ko9RWpjUHPc	Juce Tutorial 43- Tracktion Engine Intro (Create your own DAW!)	The Audio Programmer	661	2018-11-18 00:00:00	15632	https://i.ytimg.com/vi/Ko9RWpjUHPc/sddefault.jpg	None	Ko9RWpjUHPc	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=sn9DoNwKK7M	Juce Tutorial 27- The Most Important Thing to Know When Creating An Audio Effect Plugin	The Audio Programmer	1107	2018-01-18 00:00:00	4798	https://i.ytimg.com/vi/sn9DoNwKK7M/sddefault.jpg	None	sn9DoNwKK7M	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=IRFUYGkMV8w	Juce Tutorial 40-  Building a Delay Plugin Pt 1 (Creating a Circular Buffer)	The Audio Programmer	1902	2018-08-19 00:00:00	12529	https://i.ytimg.com/vi/IRFUYGkMV8w/sddefault.jpg	None	IRFUYGkMV8w	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=klv1O_1wuio	Juce Tutorial 29- Receiving OSC Messages in Juce	The Audio Programmer	1178	2018-02-02 00:00:00	2101	https://i.ytimg.com/vi/klv1O_1wuio/sddefault.jpg	None	klv1O_1wuio	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=YJ4YbV6TDo0	Juce Tutorial 31- Building a Filter Plugin Using the DSP Module IIR Filter	The Audio Programmer	1153	2018-03-02 00:00:00	11418	https://i.ytimg.com/vi/YJ4YbV6TDo0/sddefault.jpg	None	YJ4YbV6TDo0	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=vjHsg2YU4v4	JUCE 6 Tutorial 12 - Converting Math Theory to Code (SineWave)	The Audio Programmer	1817	2021-06-03 00:00:00	1422	https://i.ytimg.com/vi/vjHsg2YU4v4/sddefault.jpg	None	vjHsg2YU4v4	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=kxKEFTQRZPI	Juce Tutorial 20-  Building a Synthesizer Part 1 (The Synthesiser Class)	The Audio Programmer	1301	2017-10-03 00:00:00	21129	https://i.ytimg.com/vi/kxKEFTQRZPI/sddefault.jpg	None	kxKEFTQRZPI	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=xTZQJ6i-zp0	Juce Tutorial 12-  Basic GUI to Control a Wavetable Oscillator	The Audio Programmer	1394	2017-08-23 00:00:00	9425	https://i.ytimg.com/vi/xTZQJ6i-zp0/sddefault.jpg	None	xTZQJ6i-zp0	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=eAJnILOzJco	Juce Tutorial 26-  Build a Synth Part 6 (Filter and UI)	The Audio Programmer	3222	2018-01-14 00:00:00	4942	https://i.ytimg.com/vi/eAJnILOzJco/sddefault.jpg	None	eAJnILOzJco	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=2OErY-qhGyw	Build a Sampler VST Plug-in with JUCE Part 2 - Drag and Drop Samples	The Audio Programmer	1365	2020-03-01 00:00:00	6458	https://i.ytimg.com/vi/2OErY-qhGyw/sddefault.jpg?v=5e89beb9	None	2OErY-qhGyw	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=YwSonmLAAzI	Juce Tutorial 19-  Setting Up and Using the Juce Plugin Host	The Audio Programmer	600	2017-09-16 00:00:00	11456	https://i.ytimg.com/vi/YwSonmLAAzI/sddefault.jpg	None	YwSonmLAAzI	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=SYgAiFe8B4o	Juce Tutorial 61 - Audio Plug in Basics: Things You Need to Know (2019 Update)	The Audio Programmer	921	2019-12-15 00:00:00	4713	https://i.ytimg.com/vi/SYgAiFe8B4o/sddefault.jpg	None	SYgAiFe8B4o	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=QCsQTYPwnEI	Juce Tutorial 59- Drawing Curves with the Path Class	The Audio Programmer	2879	2019-09-27 00:00:00	2603	https://i.ytimg.com/vi/QCsQTYPwnEI/sddefault.jpg	None	QCsQTYPwnEI	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=wEDr-gJxc_I	Juce Tutorial 21- Using External Libraries in Juce (Maximilian Etc)	The Audio Programmer	841	2017-10-15 00:00:00	8516	https://i.ytimg.com/vi/wEDr-gJxc_I/sddefault.jpg	None	wEDr-gJxc_I	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=b1fRxyxCHEg	Joshua Hodge - A 5 Minute Introduction to JUCE	The Audio Programmer	333	2020-03-11 00:00:00	6872	https://i.ytimg.com/vi/b1fRxyxCHEg/sddefault.jpg	None	b1fRxyxCHEg	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=JCNyd1KGjMk	Dave Rowland - Real-time Tradeoffs in Audio Programming	The Audio Programmer	2044	2020-03-11 00:00:00	1658	https://i.ytimg.com/vi/JCNyd1KGjMk/sddefault.jpg	None	JCNyd1KGjMk	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=d05WKGwxlD0	Florian Mrugalla - Drawing Light Sources with JUCE	The Audio Programmer	1752	2020-03-02 00:00:00	1630	https://i.ytimg.com/vi/d05WKGwxlD0/sddefault.jpg?v=5e5ce3cd	None	d05WKGwxlD0	1080p@30fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=fLmaRloLyhY	MatKatMusic - Submodules and JUCE Modules	The Audio Programmer	2496	2020-04-28 00:00:00	996	https://i.ytimg.com/vi/fLmaRloLyhY/sddefault.jpg	None	fLmaRloLyhY	1440p@60fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=eB6S8iWvx2k	Juce Tutorial 36- Opening Audio Files using the File Chooser Class	The Audio Programmer	2214	2018-05-21 00:00:00	5993	https://i.ytimg.com/vi/eB6S8iWvx2k/sddefault.jpg	None	eB6S8iWvx2k	1080p@60fps/384kbpskbps
+☑	https://www.youtube.com/watch?v=7JUvVnRZrjg	Juce Tutorial 14- Creating Your First Plugin (Pt 1)	The Audio Programmer	1774	2017-09-04 00:00:00	76899	https://i.ytimg.com/vi/7JUvVnRZrjg/sddefault.jpg	None	7JUvVnRZrjg	1080p@60fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=u6eoPzwdR9Q&list=PLH1Lcfz9gT7itRPi6_WvUnM85Is8_bgTt&index=4	My Life Is in Your Hands	God's Property - Topic	333	2014-12-25 00:00:00	19009309	https://i.ytimg.com/vi/u6eoPzwdR9Q/sddefault.jpg	None	u6eoPzwdR9Q	1080p@25fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=gzdw20zxG6M	Aimer 「Deep down」teaser（TVアニメ「チェンソーマン」エンディング・テーマ）	Aimer Official YouTube Channel	37	2022-12-06 00:00:00	222807	https://i.ytimg.com/vi/gzdw20zxG6M/sddefault.jpg	None	gzdw20zxG6M	1080p@24fps/160kbpskbps
+☑	https://www.youtube.com/watch?v=ZnVd7sLNi6s	Aimer 「escalate」 teaser（アニメ「NieR:Automata Ver1.1a」OPテーマ）	Aimer Official YouTube Channel	15	2023-02-23 00:00:00	73421	https://i.ytimg.com/vi/ZnVd7sLNi6s/sddefault.jpg	None	ZnVd7sLNi6s	1080p@30fps/160kbpskbps
