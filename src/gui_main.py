@@ -94,6 +94,72 @@ class DownloadManager():
     def setRowProp(index,property):
         pass
 
+
+    ## Process methods
+    def download_all_entries(self, process_via_multithreading, limits, outputDir, outputExt):
+        # Create a list to hold thread objects
+        download_threads = []
+        # Get lengths
+        n = 0; N = len(self.infoList);
+        # Loop over all entries in the tree view
+        # for info in self.infoList:
+        for n in range(N):
+
+            def download_by_info(n, limits, outputdir, outputExt):
+                # Define variables
+                N = len(self.infoList)
+                self.infoList[n].log(f"Process Entry Download {n+1} of {N}: ");
+                _DONE_ = "Done!"
+                _ERROR_ = "Error!"
+                _IN_PROGRESS_ = "Downloading Now..."
+
+                # Get the associated item
+                item = self.get_tree_view_item_by_video_info(self.infoList[n])
+                # initial_download_keep_str = self.tree.set(item, 'download_status')
+                def setItemStatus(item,new_status=None):
+                    self.tree.set(item, 'download_status', new_status)
+                #end
+                
+                # TODO: get local limits here maybe. And if they exists apply them here. If not use global
+
+                # Start 
+                setItemStatus(item,_IN_PROGRESS_)
+                try:
+                    self.infoList[n].process_downloads_combine_keep(outputdir, limits, outputExt)                
+                    self.infoList[n].download_status = _DONE_
+                except Exception as e:
+                    print(f"File not finished. Error: {e}")
+                    self.infoList[n].download_status = _ERROR_
+                    temp_path = self.infoList[n].make_tmp_dir(outputdir)
+                    shutil.rmtree(temp_path)
+                #end
+
+                # Global Update GUI
+                setItemStatus(item, self.infoList[n].download_status)
+                count_done          = sum(1 for video_info in self.infoList if video_info.download_status == _DONE_)
+                count_in_progress   = sum(1 for video_info in self.infoList if video_info.download_status == _IN_PROGRESS_)
+                count_error         = sum(1 for video_info in self.infoList if video_info.download_status == _ERROR_)
+                self.update_progress(count_done+count_error,N,0)
+                self.dispStatus(f"Processing {N} item(s): Completed downloads {count_done} of {N}      Still in progress = {count_in_progress}, Errors = {count_error}!")
+            #end
+
+            # Run in Single thread or multithread mode
+            if process_via_multithreading:
+                t = threading.Thread(target=download_by_info, args=(n, limits, outputDir, outputExt))
+                t.start()
+                download_threads.append(t)            
+            else:
+                download_by_info(n, limits, outputDir, outputExt)
+            #end
+        #end
+
+        if process_via_multithreading:
+            # Wait for all threads to complete
+            for t in download_threads:
+                t.join()
+            #end
+        #end
+
 ## Main Application window
 class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
 # === Application Stage 1: Initialization functions ===
@@ -1178,68 +1244,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         # Get the process threading run configuration
         process_via_multithreading = self.config.getboolean("General", "multithread_download_procedure")
 
-        # Create a list to hold thread objects
-        threads = []
-        # Get lengths
-        n = 0; N = len(self.infoList);
-        # Loop over all entries in the tree view
-        # for info in self.infoList:
-        for n in range(N):
 
-            def download_by_info(n, outputdir, limits, outputExt):
-                # Define variables
-                N = len(self.infoList)
-                self.infoList[n].log(f"Process Entry Download {n+1} of {N}: ");
-                _DONE_ = "Done!"
-                _ERROR_ = "Error!"
-                _IN_PROGRESS_ = "Downloading Now..."
-
-                # Get the associated item
-                item = self.get_tree_view_item_by_video_info(self.infoList[n])
-                # initial_download_keep_str = self.tree.set(item, 'download_status')
-                def setItemStatus(item,new_status=None):
-                    self.tree.set(item, 'download_status', new_status)
-                #end
-                
-                # TODO: get local limits here maybe. And if they exists apply them here. If not use globla
-
-                # Start 
-                setItemStatus(item,_IN_PROGRESS_)
-                try:
-                    self.infoList[n].process_downloads_combine_keep(outputdir, limits, outputExt)                
-                    self.infoList[n].download_status = _DONE_
-                except Exception as e:
-                    print(f"File not finished. Error: {e}")
-                    self.infoList[n].download_status = _ERROR_
-                    temp_path = self.infoList[n].make_tmp_dir(outputdir)
-                    shutil.rmtree(temp_path)
-                #end
-
-                # Global Update GUI
-                setItemStatus(item, self.infoList[n].download_status)
-                count_done          = sum(1 for video_info in self.infoList if video_info.download_status == _DONE_)
-                count_in_progress   = sum(1 for video_info in self.infoList if video_info.download_status == _IN_PROGRESS_)
-                count_error         = sum(1 for video_info in self.infoList if video_info.download_status == _ERROR_)
-                self.update_progress(count_done+count_error,N,0)
-                self.dispStatus(f"Processing {N} item(s): Completed downloads {count_done} of {N}      Still in progress = {count_in_progress}, Errors = {count_error}!")
-            #end
-
-            # Run in Single thread or multithread mode
-            if process_via_multithreading:
-                t = threading.Thread(target=download_by_info, args=(n, outputdir, limits, outputExt))
-                t.start()
-                threads.append(t)            
-            else:
-                download_by_info(n, outputdir, limits, outputExt)
-            #end
-        #end
-
-        if process_via_multithreading:
-            # Wait for all threads to complete
-            for t in threads:
-                t.join()
-            #end
-        #end
 
         # Re-enable relevant UI elements after download
         self.enableUIelementsAfterDownload()
