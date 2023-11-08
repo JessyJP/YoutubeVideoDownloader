@@ -54,6 +54,33 @@ class DownloadManager():
         # Video Info list
         self.infoList = [];
 
+    def getTBL(self):
+        return self.infoList;
+
+    # This method is used to locate a video info from a list
+    def get_video_info_by_index_or_video_id(self, video_id: str, index: int = -1) -> Union[VideoInfo, None]:
+        # Check if the input index is valid and if the video_id at that index matches the input video_id
+        if 0 <= index < len(self.infoList) and self.infoList[index].video_id == video_id:
+            return self.infoList[index]
+        #end
+
+        # If the index is not valid or the video_id doesn't match, search exhaustively
+        for video_info in self.infoList:
+            if video_info.video_id == video_id:
+                return video_info
+            #end
+        #end
+
+        # If no match is found, return None
+        return None
+    #end
+
+    def getRowProp(index,property):
+        pass
+
+    def setRowProp(index,property):
+        pass
+
 ## Main Application window
 class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
 # === Application Stage 1: Initialization functions ===
@@ -86,11 +113,8 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         # At the end also add main window closing callback
         self.protocol("WM_DELETE_WINDOW", self.close_application_window)
 
-        # Video Info list
-        self.infoList = [];
-
         # Flagging variable
-        self.cancel_flag = False
+        self.cancel_flag = False #TODO: check if this is needed in the download manager
         self.download_in_progress_flag = False
 
         # Some settings
@@ -422,7 +446,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         #end
     #end
 
-# === Application Stage 4: Youtube Video table Info user manipulation ===
+# === Application Stage 3: Youtube Video table Info user manipulation ===
     # ------ Callbacks and companion functions for the tree view columns Context menu -------
     # Add a show popup menu method callback
     def show_tree_popup_menu_callback(self, event):
@@ -686,23 +710,6 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
     #end
 
     # --- get methods for the association between the GUI table and the info list
-    # This method is used to locate a video info from a list
-    def get_video_info_by_index_or_video_id(self, video_id: str, index: int = -1) -> Union[VideoInfo, None]:
-        # Check if the input index is valid and if the video_id at that index matches the input video_id
-        if 0 <= index < len(self.infoList) and self.infoList[index].video_id == video_id:
-            return self.infoList[index]
-        #end
-
-        # If the index is not valid or the video_id doesn't match, search exhaustively
-        for video_info in self.infoList:
-            if video_info.video_id == video_id:
-                return video_info
-            #end
-        #end
-
-        # If no match is found, return None
-        return None
-    #end
 
     def get_video_info_by_entry(self, item) -> Union[VideoInfo, None]:
         # Get the video_id associated with the selected tree view item
@@ -766,6 +773,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
                 # Remove the VideoInfo object from the infoList
                 index_to_remove = self.infoList.index(video_info)
                 self.infoList.pop(index_to_remove)
+                # TODO: make a remove method from the manager
             else:
                 raise ValueError("VideoInfo not found for the selected tree view item")
             #end
