@@ -1146,7 +1146,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
 
     def download_all_entries_UI_callback(self):
         if self.download_in_progress_flag == False:
-            t = threading.Thread(target=self.download_all_entries, args=())
+            t = threading.Thread(target=self.download_all_entries_thread, args=())
             t.start()
         else:
             # If a second time is pressed the cancel flag should be called 
@@ -1156,7 +1156,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
     #end
 
 
-    def download_all_entries(self):
+    def download_all_entries_thread(self):
         # Disable relevant UI elements during download
         self.disableUIelementsDuringDownload()
 
