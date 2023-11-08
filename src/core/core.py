@@ -7,30 +7,7 @@ import platform
 import subprocess
 import threading
 
-isDeployed = getattr(sys, "frozen", False)
 
-# Ensure all required modules are installed.
-def install_missing_modules(modules):
-    if isDeployed:# This ensures that this functions is not called once an executable is made
-        return
-    #end
-    try:
-        import pkg_resources
-    except ImportError:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "setuptools"])
-        import pkg_resources
-    #end
-
-    installed_packages = {pkg.key for pkg in pkg_resources.working_set}
-    missing_modules = [module for module in modules if module not in installed_packages]
-
-    if missing_modules:
-        for module in missing_modules:
-            print(f"Installing missing module: {module}")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", module])
-        #end
-    #end
-#end
 
 ## Add the core functionality  modules
 import pandas as pd
