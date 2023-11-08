@@ -1289,8 +1289,8 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
 
     def disableUIelementsDuringDownload(self):
         self.download_in_progress_flag = True
-        self.update_progress(0,len(self.infoList),0)
-        self.dispStatus(f"Starting Download of {len(self.infoList)} item(s) now!")
+        self.update_progress(0,len(self.getTBL()),0)
+        self.dispStatus(f"Starting Download of {len(self.getTBL())} item(s) now!")
 
         # Disable the input URL text field
         self.url_entry.config(state='disabled')
