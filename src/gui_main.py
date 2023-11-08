@@ -125,7 +125,7 @@ class DownloadManager():
                 # Start 
                 setItemStatus(item,_IN_PROGRESS_)
                 try:
-                    self.infoList[n].process_downloads_combine_keep(outputdir, limits, outputExt)                
+                    self.infoList[n].process_downloads_combine_keep(limits, outputdir, outputExt)                
                     self.infoList[n].download_status = _DONE_
                 except Exception as e:
                     print(f"File not finished. Error: {e}")

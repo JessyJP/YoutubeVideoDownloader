@@ -304,7 +304,7 @@ class VideoInfo(YouTube):
         return video_file
     #end
 
-    def process_downloads_combine_keep(self, output_dir, limits, outputExt=".mkv"):
+    def process_downloads_combine_keep(self, limits, output_dir, outputExt=".mkv"):
         strOut = f"Process Entry Download: ";
         temp_path = self.make_tmp_dir(output_dir)
         self.log("Create temporary directory: "+temp_path)
