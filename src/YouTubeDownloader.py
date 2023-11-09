@@ -19,16 +19,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import splashscreen
-## Import Modules
+## Imports
 import os
 os.system("title Don't mind the LOG window")
 import argparse
-from core import *
-from gui_main import *
-
-
+import gui.splashscreen
+from core.pytube_handler import LimitsAndPriority
 import ctypes
+from core.common import *
+from gui.main_window import get_url_info_entry, main_runGUI
+
+
 
 def hide_console():
     kernel32 = ctypes.WinDLL('kernel32')

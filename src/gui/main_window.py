@@ -26,32 +26,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 ## Import modules
-import tkinter as tk
-from tkinter import ttk, filedialog
-from core import *
-import json
+import os
+import sys
+from time import sleep
 import threading
-import inspect
-from gui_settings import SettingsWindow
-import shutil
-import time
-from typing import Union
-
 import subprocess
 import shlex
-
-from time import sleep
-
-
-
-# Further Import required modules checked in runtime
-import configparser
-import pyperclip
-
-
-from typing import Union
-from core.pytube_handler import VideoInfo
+# Core imports
+from core.custom_thread import MyThread as DownloadThread
+from core.validation_methods import checkForValidYoutubeURLs, is_valid_youtube_channel, is_valid_youtube_playlist
+from core.url_text_processor import extract_URL_list_from_text, get_html_content, get_video_urls_from_playlist, get_videos_and_playlists_from_Channel
+from core.download_options import *
+from core.pytube_handler import LimitsAndPriority, VideoInfo
 from core.youtube_dl_handler import VideoInfo_alternative
+# GUI imports
+import tkinter as tk
+from tkinter import ttk, filedialog
+from gui.settings_window import SettingsWindow
+# Other imports
+from typing import Union
+import json
+import shutil
+import pyperclip
+import configparser
+import inspect
 
 
 # -------- Get the video info from the URL --------
@@ -442,8 +440,8 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         self.settings_button.grid(column=0, row=2, sticky=tk.W)
 
         #TODO: implement a help button here.
-        self.playSelectionlocal_button = ttk.Button(frame, text="   Play Preview \n Selection Locally",command=self.play_selected_watch_urls_locally)
-        self.playSelectionlocal_button.grid(column=0, row=2, sticky=tk.W, padx=(45, 0))
+        self.playSelectionLocal_button = ttk.Button(frame, text="   Play Preview \n Selection Locally",command=self.play_selected_watch_urls_locally)
+        self.playSelectionLocal_button.grid(column=0, row=2, sticky=tk.W, padx=(45, 0))
 
         # Add dropdown boxes for quality limiters
 
@@ -1065,7 +1063,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
             # Run in Single thread or multithread mode
             if self.config.getboolean("General", "multithread_analyse_procedure"): 
                 self.disp_diagnostic_info_in_multithread();               
-                t = MyThread(target=self.process_url, args=(url, recursiveCheckOfURLcontent_mode))
+                t = DownloadThread(target=self.process_url, args=(url, recursiveCheckOfURLcontent_mode))
                 t.start()
                 threads.append(t)                
             else:
@@ -1179,22 +1177,22 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
             #end
             def display_diagnostics(interval):
                 while True:
-                    stats = MyThread.get_multithread_stats()
+                    stats = DownloadThread.get_multithread_stats()
                     self.dispStatus(diagnostic_message(stats))
                     sleep(interval)
 
-                    # Break condition: All threads from MyThread are finished
-                    if len(MyThread.get_active_threads(MyThread.threads)) == 0:
+                    # Break condition: All threads from DownloadThread are finished
+                    if len(DownloadThread.get_active_threads(DownloadThread.threads)) == 0:
                         break
                     #end
                 #end
 
                 # Set self.diagnostics_thread to None when it's done
                 self.diagnostics_thread = None
-                MyThread.reset_threads()
+                DownloadThread.reset_threads()
             #end
 
-            self.diagnostics_thread = MyThread(target=display_diagnostics, args=(interval,), daemon=True)
+            self.diagnostics_thread = DownloadThread(target=display_diagnostics, args=(interval,), daemon=True)
             self.diagnostics_thread.start()
         #end
     #end

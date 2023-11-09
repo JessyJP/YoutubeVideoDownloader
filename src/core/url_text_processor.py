@@ -32,11 +32,8 @@ import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
 
+# from core.common import logger
 import logging
-
-from core.pytube_handler import VideoInfo
-from core.youtube_dl_handler import VideoInfo_alternative
-
 # Logging
 logger = logging.getLogger(__name__)
 
@@ -149,6 +146,7 @@ def extract_video_urls_from_page(youtube_url):#TODO doesn't work
     video_urls = ['https://www.youtube.com' + url for url in video_urls]
 
     return video_urls
+#end
 
 
 def get_channel_videos(channel_id): #TODO not tested THIS is alternative channel video extraction
@@ -178,12 +176,13 @@ def get_channel_videos(channel_id): #TODO not tested THIS is alternative channel
         for item in response["items"]:
             video_id = item["contentDetails"]["videoId"]
             videos.append(f'https://www.youtube.com/watch?v={video_id}')
+        #end
 
         next_page_token = response.get("nextPageToken")
         if not next_page_token:
             break
+        #end
+    #end
 
     return videos
-#end
-
 #end

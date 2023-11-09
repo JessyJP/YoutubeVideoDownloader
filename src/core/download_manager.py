@@ -20,14 +20,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-# Improts
+# Imports
 import subprocess
+from typing import Union
 import ffmpeg as ffmpeg # Video Editing Module
 
 # from core.common import isDeployed
 import sys
 isDeployed = getattr(sys, "frozen", False)
-
 
 
 ## ================================= Progress & Other function =================================
