@@ -49,6 +49,30 @@ import configparser
 import pyperclip
 
 
+from typing import Union
+from core.pytube_handler import VideoInfo
+from core.youtube_dl_handler import VideoInfo_alternative
+
+
+# -------- Get the video info from the URL --------
+def get_url_info_entry(url: str, use_alternative=False) -> Union[VideoInfo_alternative, VideoInfo_alternative, None]:
+    try:
+        video_info = VideoInfo(url=url)
+        return video_info
+    except Exception as e:
+        print(f"An error occurred while fetching the video information using VideoInfo for {url}: {e}")
+        if use_alternative:
+            try:
+                video_info_alt = VideoInfo_alternative(url)
+                return video_info_alt
+            except Exception as e_alt:
+                print(f"An error occurred while fetching the video information using VideoInfo_alternative for {url}: {e_alt}")
+            #end
+        #end
+        return None
+    #end
+#end
+
 class DownloadManager():
     def __init__(self):        
         # Video Info list
