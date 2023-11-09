@@ -23,7 +23,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import os
 os.system("title Don't mind the LOG window")
 import argparse
-import gui.splashscreen
+# import gui.splashscreen
 from core.pytube_handler import LimitsAndPriority
 import ctypes
 from core.common import *
