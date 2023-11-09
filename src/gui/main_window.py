@@ -199,7 +199,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
 
         application_window_icon_path = f"{self.theme['global']['directories']['icons']}{self.theme['icons']['application_window']}"
         if sys.platform != "win32":
-            img = tk.PhotoImage(file='path_to_your_icon.gif')
+            img = tk.PhotoImage(file=application_window_icon_path.replace(".ico", ".png"))
             self.tk.call('wm', 'iconphoto', self._w, img)
         else:
             self.iconbitmap(application_window_icon_path)
