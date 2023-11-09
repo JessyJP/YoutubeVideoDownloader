@@ -1073,7 +1073,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
     def get_download_location(self):
         outputdir = self.download_location_entry.get()
         if outputdir == "" or not os.path.isdir(outputdir):
-            self.select_location()
+            self.open_select_location_dialog()
             outputdir = self.download_location_entry.get()
             if outputdir == "":
                 self.dispStatus("Please select download location!")
