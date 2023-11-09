@@ -32,9 +32,9 @@ import csv
 import pytchat
 
 from core.validation_methods import check_for_disallowed_filename_chars
-from core.download_manager import combine_via_auto_selection
 from core.download_options import setOutputKeepsStr
 from core.download_options import * # TODO: list them one by one
+from core.post_download_mux import combine_via_auto_selection
 
 ## ================================= Video Info class =================================
 class VideoInfo(YouTube):
