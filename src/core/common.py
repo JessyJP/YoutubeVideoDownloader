@@ -65,3 +65,15 @@ def install_missing_modules(modules):
         #end
     #end
 #end
+
+def add_module_paths(root_dir):
+    for subdir, dirs, files in os.walk(root_dir):
+        for file in files:
+            if file.endswith('.py'):
+                sys.path.insert(0, subdir)
+                print(f"Added {subdir} to sys.path")
+                break
+            #end
+        #end
+    #end
+#end
