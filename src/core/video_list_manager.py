@@ -80,6 +80,35 @@ class VideoListManager:
         pass
     #TODO: not implemented
 
+    # Get the current URLs in the tree view and video IDs
+    def getURL_videoIDList(self):
+        current_url_entries = set()
+        current_video_ids = set()
+        for item in self.getVideoList():
+            current_url_entries.add(item.url)
+            current_video_ids.add(item.video_id)
+        #end
+        return current_url_entries, current_video_ids
+    #end
+
+    def remove_duplicate_items(self):
+        # Get the current video IDs in the tree view
+        current_video_ids = set()
+        for item in self.getVideoList():
+            current_video_ids.add(item.video_id)
+        #end
+        
+        # Check each row in the tree view and remove duplicates
+        for item in self.getVideoList():
+            video_id = item.video_id
+            if video_id in current_video_ids:
+                current_video_ids.remove(video_id)
+            else:
+                self.removeItem(item)
+            #end
+        #end
+    #end
+
     ## --------------------------- Video info download ----------------------------------------
 
     def video_item_process_download(self, item: VideoInfo, limits: LimitsAndPriority, outputdir: str, outputExt: str):
