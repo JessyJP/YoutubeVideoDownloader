@@ -39,8 +39,8 @@ def hide_console():
     kernel32.FreeConsole()
     user32.ShowWindow(HWND, SW_HIDE)
 
-## Command line parsing tool
-if __name__ == "__main__":
+## Main function and also a command line parsing tool
+def main():
     parser = argparse.ArgumentParser(description="YouTube video downloader")
 
     # Condition to check if there are no input arguments or if "-gui" is specified
@@ -81,4 +81,11 @@ if __name__ == "__main__":
             info.process_downloads_combine_keep(limits, args.output)
         #end
     #end
+#end
+
+
+# This block ensures the main function runs only when 
+# the script is executed directly, not when imported
+if __name__ == "__main__":
+    main()
 #end
