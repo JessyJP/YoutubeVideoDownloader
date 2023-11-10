@@ -19,13 +19,23 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).parent))
+import os
+from src.core.common import add_module_paths
 
-from src.YouTubeDownloader import __main__
+# Determine the root of your project (one level up from this script)
+project_root = os.path.dirname(os.path.abspath(__file__))
+source_dir = os.path.join(project_root, "src")
+
+# Add to the system path
+# sys.path.insert(0, project_root)
+# print(f"Added project root {project_root} to sys.path")
+add_module_paths(source_dir)
+
+# Change the working directory to the 'src' directory
+
+from src.YouTubeDownloader import main  
 
 if __name__ == '__main__':
-    __main__.start()
+    main()
 
 # NOTE: if running this script returns an error, just run "YouTubeDownloader.py" directly
