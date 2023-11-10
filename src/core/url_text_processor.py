@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 ## ================================= Get the video info from the URL function =================================
 
-def get_url_info_entry(url: str, use_alternative=False) -> Union[VideoInfo, VideoInfo_alternative, None]:
+def get_video_info_item_from_url(url: str, use_alternative=False) -> Union[VideoInfo, VideoInfo_alternative, None]:
     try:
         video_info = VideoInfo(url=url)
         return video_info

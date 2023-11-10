@@ -27,7 +27,8 @@ import argparse
 from core.pytube_handler import LimitsAndPriority
 import ctypes
 from core.common import *
-from gui.main_window import get_url_info_entry, main_runGUI
+from gui.main_window import main_runGUI
+from core.url_text_processor import get_video_info_item_from_url #TODO: This will have to be substituted with the manager import functionality
 
 
 
@@ -77,7 +78,7 @@ def main():
         limits = LimitsAndPriority()
 
         for url in args.urls:
-            info = get_url_info_entry(url)
+            info = get_video_info_item_from_url(url)
             info.process_downloads_combine_keep(limits, args.output)
         #end
     #end

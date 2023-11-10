@@ -34,9 +34,6 @@ import subprocess
 import shlex
 # Core imports
 from core.custom_thread import AnalysisThread
-from core.validation_methods import checkForValidYoutubeURLs, is_valid_youtube_channel, is_valid_youtube_playlist
-from core.url_text_processor import extract_URL_list_from_text, get_html_content, get_video_urls_from_playlist, get_videos_and_playlists_from_Channel
-from core.url_text_processor import get_url_info_entry
 from core.pytube_handler import LimitsAndPriority, VideoInfo
 from core.video_list_manager import VideoListManager
 from core.download_options import *
@@ -558,6 +555,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
         # Sort  the info table based on the sorted order of tree view data #TODO: fix error here
         # self.infoList = [x[1] for x in sorted(zip(data, self.getVideoList()), key=lambda x: id_to_index[x[0][1]])]
+        # NOTE: Also if this is implemented it will require a sorting function to be implemented in the parent class 
 
         # Move the sorted data to the correct position in the treeview
         for indx, item in enumerate(data):
@@ -565,7 +563,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
 
         # Update the status message to indicate the sorting column
-        self.dispStatus( f"Sorting by: {col} in "+heading_symbol+" direction")
+        self.setUiDispStatus( f"Sorting by: {col} in "+heading_symbol+" direction")
 
         # Include a sorting direction symbol to the heading
         heading_text = self.theme["tree_view"]["heading"][col]
@@ -595,7 +593,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             msg = f"Selected {len(selected_items)} of {total_items} items"
         #end
 
-        self.dispStatus( msg)
+        self.setUiDispStatus( msg)
     #end
 
     def extend_selection(self, event):
@@ -878,14 +876,21 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     # Intermediate method to run the import operation in a separate thread
     def import_youtube_videos_threaded(self, text):
         if self.download_in_progress_flag == False:
-            t = threading.Thread(target=self.import_valid_Youtube_videos_from_textOrURL_list, args=(text,))
+            # Reset just in case
+            self.reset_cancel_flag()  
+            # Disable the download button if it's not already disabled
+            self.download_button.config(state='disabled')
+            # Get the threading mode flag
+            use_analysis_multithreading = self.config.getboolean("General", "multithread_analyse_procedure")
+            # Make and start an analysis thread
+            t = threading.Thread(target=self.import_valid_Youtube_videos_from_textOrURL_list, args=(text, use_analysis_multithreading))
             t.start()
         #end
     #end
 
-    # NOTE: overwrite this function
+    # NOTE: this function overwrites the parent implementation
     # Get the current URLs in the tree view and video IDs
-    def getURL_videoIDList(self):# TODO it's best to extract that from the self.infoList
+    def getURL_videoIDList(self):# TODO it's best to extract that from the self.getVideoList()
         current_url_entries = set()
         current_video_ids = set()
         for item in self.tree.get_children():  # Update the urls and the entries
@@ -895,128 +900,18 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         return current_url_entries, current_video_ids
     #end
 
-    # Process Text and URLs
-    def import_valid_Youtube_videos_from_textOrURL_list(self, text, recursiveCheckOfURLcontent_mode=0):
-        self.reset_cancel_flag()  # Reset just in case
-
-        # Make sure to clean up the download list and simplify it from duplicates
-        self.remove_duplicate_items()
-
-        # Disable the download button if it's not already disabled
-        self.download_button.config(state='disabled')
-
-        numYT_vidMSG = "- YouTube Video URL(s)"
-        # Check the recursion level
-        if recursiveCheckOfURLcontent_mode == 1:
-            dispPrefix = self.status_bar_label.cget("text").split(numYT_vidMSG)[0] + " - playlist videos"
-            URLs_toCheck = text
-        elif recursiveCheckOfURLcontent_mode == 3:
-            dispPrefix = self.status_bar_label.cget("text").split(numYT_vidMSG)[0] + " - sub-links"
-            URLs_toCheck = extract_URL_list_from_text(text)
-            URLs_toCheck = checkForValidYoutubeURLs(URLs_toCheck)  # TODO: needs to be improved
-        else:  # recursiveCheckOfURLcontent_mode == 0# i.e. default
-            global topLevelAnalyzeRunning
-            topLevelAnalyzeRunning = True  # Could be used to regulate how many simultaneous Analyse operations there can be
-            dispPrefix = "Import Youtube URLs : Currently Processing URL(s)"
-            URLs_toCheck = extract_URL_list_from_text(text)
-        #end
-
-        # Remove duplicates by converting to set and back to list
-        URLs_toCheck = set(URLs_toCheck)
-        N = len(URLs_toCheck)
-        n = 0
-        threads = []# This is used in the multithreading case only
-        self.dispStatus(f"{dispPrefix} found {N}")
-        self.update_progressbar(n, N, recursiveCheckOfURLcontent_mode)
-
-        # Process the URLs one at a time and add only unique ones
-        for url in URLs_toCheck:
-            # Run in Single thread or multithread mode
-            if self.config.getboolean("General", "multithread_analyse_procedure"): 
-                self.disp_diagnostic_info_in_multithread();               
-                t = AnalysisThread(target=self.process_url, args=(url, recursiveCheckOfURLcontent_mode))
-                t.start()
-                threads.append(t)                
-            else:
-                n=n+1;
-                self.dispStatus(f"{dispPrefix} {n} of {N} {numYT_vidMSG} {len(self.infoList)} ")
-                self.process_url(url, recursiveCheckOfURLcontent_mode)
-                self.update_progressbar(n, N, recursiveCheckOfURLcontent_mode)
-            #end
-        #end
-
-        # In the multithread case wait for the threads to first join
-        if self.config.getboolean("General", "multithread_analyse_procedure"):
-            # Wait for all threads to complete
-            for t in threads:
-                t.join()
-            #end
-        #end
-
-        # To finish up the analysis
-        if recursiveCheckOfURLcontent_mode == 0:  # This checks the recursion mode
-            self.dispStatus("URL import and Analysis is Complete!")  # Clear the diagnostic output
-            # self.dispStatus("");# Clear the diagnostic output #TODO: select one
-            self.update_progressbar(N, N, recursiveCheckOfURLcontent_mode)
-            self.download_button.config(state='normal')
-
-            # Make sure to clean up the download list and simplify it from duplicates
-            self.remove_duplicate_items()
-        #end
+    # NOTE: this function overwrites the parent implementation
+    def addItem(self, vi_item):
+        super().addItem(vi_item)
+        self.tree.insert("", "end", values=vi_item.as_tuple())
+        # # Add the URL and video ID to the current_url_entries and current_video_ids sets
+        # current_url_entries.add(vi_item.watch_url) # NOTE: effective placeholder because it's not inserted or  returned
+        # current_video_ids.add(vi_item.video_id) # NOTE: effective placeholder because it's not inserted or  returned
     #end
 
-    def process_url(self, url, recursiveCheckOfURLcontent_mode):
-        if self.cancel_flag:
-            self.download_button.config(state='normal')
-            return
-        #end
-        
-        # Get the latest list of URL(s) and VideoID(s)
-        current_url_entries, current_video_ids = self.getURL_videoIDList()
-
-        if url not in current_url_entries:
-            info = get_url_info_entry(url)
-
-            if info is None:
-                if recursiveCheckOfURLcontent_mode == 0 or recursiveCheckOfURLcontent_mode == 2:  # This checks the recursion mode
-                    try:
-                        if is_valid_youtube_playlist(url):
-                            recursiveCheckOfURLcontent_mode = 1  # This controls the recursion mode for playlists
-                            urlsFromPlaylist = get_video_urls_from_playlist(url)
-                            self.import_valid_Youtube_videos_from_textOrURL_list(urlsFromPlaylist, recursiveCheckOfURLcontent_mode)
-                        elif is_valid_youtube_channel(url):
-                            recursiveCheckOfURLcontent_mode = 2  # This controls the recursion mode for channels
-                            urlsFromChannel = get_videos_and_playlists_from_Channel(url)
-                            self.import_valid_Youtube_videos_from_textOrURL_list(urlsFromChannel, recursiveCheckOfURLcontent_mode)
-                        else:
-                            recursiveCheckOfURLcontent_mode = 3  # This controls the recursion mode for other urls
-                            web_page_html = get_html_content(url)
-                            self.import_valid_Youtube_videos_from_textOrURL_list(web_page_html, recursiveCheckOfURLcontent_mode)
-                        #end
-                    #end
-                    except Exception as e:
-                        print(f"Error: {e}")
-                    finally:
-                        recursiveCheckOfURLcontent_mode = 0  # This controls the recursion mode
-                    #end
-                #end
-                return
-            #end
-
-            
-            # Check if the video ID already exists and insert a new row in the table with the URL and an empty checkbox and videoProperties
-            if info.video_id not in current_video_ids:
-                self.tree.insert("", "end", values=info.as_tuple())
-                # Add the URL and video ID to the current_url_entries and current_video_ids sets
-                current_url_entries.add(url)
-                current_video_ids.add(info.video_id)
-                self.infoList.append(info)
-            #end
-        #end
-    #end
-
-    # NOTE: similar to and otherwise an overwrite of remove_duplicate_items
+    # NOTE: this function overwrites the parent implementation
     def remove_duplicate_items(self):
+        super().remove_duplicate_items()
         # Get the current video IDs in the tree view
         current_video_ids = set()
         for item in self.tree.get_children():
@@ -1034,8 +929,9 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
     #end
 
+    # NOTE:Overwrite this function from the parent class interface
     diagnostics_thread = None;# Static variable
-    def disp_diagnostic_info_in_multithread(self, interval=0.1):
+    def updateUiDistStatus_in_multithread_mode(self, interval=0.1):
         # Only if the thread is not running
         if self.diagnostics_thread is None or not self.diagnostics_thread.is_alive():
             def diagnostic_message(stats):
@@ -1050,7 +946,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             def display_diagnostics_thread(interval):
                 while True:
                     stats = AnalysisThread.get_multithread_stats()
-                    self.dispStatus(diagnostic_message(stats))
+                    self.setUiDispStatus(diagnostic_message(stats))
                     sleep(interval)
 
                     # Break condition: All threads from AnalysisThread are finished
@@ -1078,11 +974,11 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             self.open_select_location_dialog()
             outputdir = self.download_location_entry.get()
             if outputdir == "":
-                self.dispStatus("Please select download location!")
+                self.setUiDispStatus("Please select download location!")
                 return None
             #end
             if not os.path.isdir(outputdir):
-                self.dispStatus("Invalid download location! Please select a valid download location!")
+                self.setUiDispStatus("Invalid download location! Please select a valid download location!")
                 return None        
             #end
         #end
@@ -1155,14 +1051,21 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     # there is need to regulate the UI behavior as well as provide the ability
     # to update status & progress as well as cancel the procedure
 
-    # Function for diagnostic output
-    def dispStatus(self, msg: str = ""):# TODO: funcCall may be obsolete in the future
+    # Set/get pair functions for diagnostic output in above the progress bar
+    # NOTE:Overwrite this function from the parent class interface
+    def getUiDispStatus(self):
+        return self.status_bar_label.cget("text")
+    #end
+    
+    # NOTE:Overwrite this function from the parent class interface
+    def setUiDispStatus(self, msg: str = ""):# TODO: funcCall may be obsolete in the future
         self.status_bar_label.config(text=msg)
         self.progress_bar_msg.set(msg)# TODO: may be redundant 
         self.update_idletasks();# Update the GUI
         self.tree.update_idletasks();# Update the GUI
     #end
 
+    # NOTE:Overwrite this function from the parent class interface
     def update_progressbar(self, index_in: int, total_in :int, task_level):
         global index, total
         if total_in == 0:
@@ -1184,9 +1087,9 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.update()  # Refresh the window to show the progress
     #end
 
-
-    def updateAnalysisProgress(self):
-        pass
+    # NOTE:Overwrite this function from the parent class interface
+    def enable_UI_elements_after_analysis(self):
+        self.download_button.config(state='normal')
     #end
     
     # NOTE:Overwrite this function from the parent class
@@ -1206,18 +1109,18 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
     def update_download_progress(self):
         # Global GUI update while downloading
-        N = len(self.infoList)
-        count_done          = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.DONE)
-        count_in_progress   = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.IN_PROGRESS)# TODO: this could be implemented different, so that percentage is included, basically this has to be ignored and calculated as total - the other 2
-        count_error         = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.ERROR)
+        N = len(self.getVideoList())
+        count_done          = sum(1 for video_info in self.getVideoList() if video_info.download_status == DownloadProgress.DONE)
+        count_in_progress   = sum(1 for video_info in self.getVideoList() if video_info.download_status == DownloadProgress.IN_PROGRESS)# TODO: this could be implemented different, so that percentage is included, basically this has to be ignored and calculated as total - the other 2
+        count_error         = sum(1 for video_info in self.getVideoList() if video_info.download_status == DownloadProgress.ERROR)
         self.update_progressbar(count_done+count_error,N,0)
-        self.dispStatus(f"Processing {N} item(s): Completed downloads {count_done} of {N}      Still in progress = {count_in_progress}, Errors = {count_error}!")
+        self.setUiDispStatus(f"Processing {N} item(s): Completed downloads {count_done} of {N}      Still in progress = {count_in_progress}, Errors = {count_error}!")
     #end
 
     def cancel_operation_flagON(self, event=None):
         self.cancel_flag = True
         msg = "Cancel the currently running operation!";
-        self.dispStatus(msg)
+        self.setUiDispStatus(msg)
     #end
 
     def reset_cancel_flag(self):
@@ -1227,7 +1130,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     def disable_UI_elements_during_download(self):
         self.download_in_progress_flag = True
         self.update_progressbar(0,len(self.getVideoList()),0)
-        self.dispStatus(f"Starting Download of {len(self.getVideoList())} item(s) now!")
+        self.setUiDispStatus(f"Starting Download of {len(self.getVideoList())} item(s) now!")
 
         # Disable the input URL text field
         self.url_entry.config(state='disabled')
