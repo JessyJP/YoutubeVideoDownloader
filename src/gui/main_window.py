@@ -726,6 +726,25 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         return None
     #end
 
+    # Overwrite this function from the parent class
+    def updateUI_ItemElementStatus(self, videoItem,  download_status=None):        
+        # Get the associated item
+        ui_item = self.get_tree_view_UI_item_by_video_info(videoItem)
+        # Update the download status. Sometimes the download status contains download flags.
+        # Therefore, in some situations the download status is updated only for the UI. 
+        if download_status is None:
+            self.tree.set(ui_item, 'download_status', videoItem.download_status)
+        else:
+            self.tree.set(ui_item, 'download_status', download_status)
+
+        # Global Update GUI
+        N = len(self.infoList)
+        count_done          = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.DONE)
+        count_in_progress   = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.IN_PROGRESS)# TODO: this could be implemented different, so that percentage is included, basically this has to be ignored and calculated as total - the other 2
+        count_error         = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.ERROR)
+        self.update_progress(count_done+count_error,N,0)
+        self.dispStatus(f"Processing {N} item(s): Completed downloads {count_done} of {N}      Still in progress = {count_in_progress}, Errors = {count_error}!")
+    #end
 
     # ------ Callbacks and companion functions for the tree view rows operations Context menu or Key Bindings -------
     def updateTreeViewFromVideoInfoTable(self):
@@ -1033,7 +1052,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
     #end
 
-    diagnostics_thread = None;
+    diagnostics_thread = None;# Static variable
     def disp_diagnostic_info_in_multithread(self, interval=0.1):
         # Only if the thread is not running
         if self.diagnostics_thread is None or not self.diagnostics_thread.is_alive():
@@ -1120,7 +1139,6 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
     #end
 
-
     def download_all_entries_thread(self):
         # Disable relevant UI elements during download
         self.disableUIelementsDuringDownload()
@@ -1128,7 +1146,6 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         # Get valid download location
         outputDir = self.get_download_location()
         if outputDir is None:
-            # TODO: check if the path is valid and if exists. Could be created if it doesn't. THis is done in the get download location function.
             # Re-enable relevant UI elements after download
             self.enableUIelementsAfterDownload()
             return
