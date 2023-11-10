@@ -554,10 +554,10 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
 
         # Create a mapping between tree view children IDs and their indices in the info table
-        # id_to_index = {info.video_id: index for index, info in enumerate(self.getTBL())}
+        # id_to_index = {info.video_id: index for index, info in enumerate(self.getVideoList())}
 
         # Sort  the info table based on the sorted order of tree view data #TODO: fix error here
-        # self.infoList = [x[1] for x in sorted(zip(data, self.getTBL()), key=lambda x: id_to_index[x[0][1]])]
+        # self.infoList = [x[1] for x in sorted(zip(data, self.getVideoList()), key=lambda x: id_to_index[x[0][1]])]
 
         # Move the sorted data to the correct position in the treeview
         for indx, item in enumerate(data):
@@ -693,20 +693,20 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         # Get the index of the selected tree view item
         item_index = self.tree.index(item)
 
-        # Use the get_video_info_by_index_or_video_id function to find the VideoInfo object
-        video_info = self.get_video_info_by_index_or_video_id(video_id, item_index)
+        # Use the getItemByIndexOrVideoID function to find the VideoInfo object
+        video_info = self.getItemByIndexOrVideoID(video_id, item_index)
 
         return video_info
     #end
 
-    def get_tree_view_item_by_video_info(self, video_info: VideoInfo) -> Union[str, None]:
+    def get_tree_view_UI_item_by_video_info(self, video_info: VideoInfo) -> Union[str, None]:
         # Check if the input video_info is valid
         if video_info is None:
             return None
         #end
 
         # Try to find the tree view item by index first
-        index = self.getRowIndex(video_info)
+        index = self.getItemIndex(video_info)
         if index != -1:
             item = self.tree.get_children()[index]
             # Check if the video_id matches
@@ -733,7 +733,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.tree.delete(*self.tree.get_children())
 
         # Re-insert all entries from the table
-        for info in self.getTBL():
+        for info in self.getVideoList():
             self.tree.insert("", "end", values=info.as_tuple())
         #end
     #end
@@ -746,7 +746,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             video_info = self.get_video_info_by_entry(item)
 
             if video_info is not None:
-                self.removeRow(video_info)
+                self.removeItem(video_info)
             else:
                 raise ValueError("VideoInfo not found for the selected tree view item!")
             #end
@@ -1144,7 +1144,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         process_via_multithreading = self.config.getboolean("General", "multithread_download_procedure")
 
         # Call the download manager processing function with all arguments
-        self.download_all_entries( process_via_multithreading, limits, outputDir, outputExt)
+        self.downloadAllVideoItems( process_via_multithreading, limits, outputDir, outputExt)
 
         # Re-enable relevant UI elements after download
         self.enableUIelementsAfterDownload()
@@ -1197,8 +1197,8 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
     def disableUIelementsDuringDownload(self):
         self.download_in_progress_flag = True
-        self.update_progress(0,len(self.getTBL()),0)
-        self.dispStatus(f"Starting Download of {len(self.getTBL())} item(s) now!")
+        self.update_progress(0,len(self.getVideoList()),0)
+        self.dispStatus(f"Starting Download of {len(self.getVideoList())} item(s) now!")
 
         # Disable the input URL text field
         self.url_entry.config(state='disabled')

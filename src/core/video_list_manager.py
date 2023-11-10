@@ -37,24 +37,24 @@ class VideoListManager:
         # Video Info list
         self.infoList: List[VideoInfo] = []
 
-    def getTBL(self):
+    def getVideoList(self):
         return self.infoList;
 
-    def getRow(self,rowIndex):
+    def getItem(self,rowIndex):
         return self.infoList[rowIndex]
     
-    def getRowIndex(self, video_info):
+    def getItemIndex(self, video_info):
         index = self.infoList.index(video_info)
         return index
     
-    def removeRow(self, video_info):        
+    def removeItem(self, video_info):        
         if video_info is not None:
             # Remove the VideoInfo object from the infoList
             index_to_remove = self.infoList.index(video_info)
             self.infoList.pop(index_to_remove)
 
     # This method is used to locate a video info from a list
-    def get_video_info_by_index_or_video_id(self, video_id: str, index: int = -1) -> Union[VideoInfo, None]:
+    def getItemByIndexOrVideoID(self, video_id: str, index: int = -1) -> Union[VideoInfo, None]:
         # Check if the input index is valid and if the video_id at that index matches the input video_id
         if 0 <= index < len(self.infoList) and self.infoList[index].video_id == video_id:
             return self.infoList[index]
@@ -71,7 +71,7 @@ class VideoListManager:
         return None
     #end
 
-    def getRowProp(index,property):
+    def getItemProp(index,property):
         pass
 
     def setRowProp(index,property):
@@ -79,7 +79,7 @@ class VideoListManager:
 
 
     ## Process methods
-    def download_all_entries(self, process_via_multithreading, limits, outputDir, outputExt):
+    def downloadAllVideoItems(self, process_via_multithreading, limits, outputDir, outputExt):
         # Create a list to hold thread objects
         download_threads = []
         # Get lengths
@@ -88,7 +88,7 @@ class VideoListManager:
         # for info in self.infoList:
         for n in range(N):
 
-            def download_by_info(n, limits, outputdir, outputExt):
+            def video_item_process_download(n, limits, outputdir, outputExt):
                 # Define variables
                 N = len(self.infoList)
                 self.infoList[n].log(f"Process Entry Download {n+1} of {N}: ");
@@ -97,16 +97,16 @@ class VideoListManager:
                 _IN_PROGRESS_ = "Downloading Now..."
 
                 # Get the associated item
-                item = self.get_tree_view_item_by_video_info(self.infoList[n])
+                ui_item = self.get_tree_view_UI_item_by_video_info(self.infoList[n])
                 # initial_download_keep_str = self.tree.set(item, 'download_status')
-                def setItemStatus(item,new_status=None):
-                    self.tree.set(item, 'download_status', new_status)
+                def setUiItemStatus(ui_item, new_status=None):
+                    self.tree.set(ui_item, 'download_status', new_status)
                 #end
                 
                 # TODO: get local limits here maybe. And if they exists apply them here. If not use global
 
                 # Start 
-                setItemStatus(item,_IN_PROGRESS_)
+                setUiItemStatus(ui_item, _IN_PROGRESS_)
                 try:
                     self.infoList[n].process_downloads_combine_keep(limits, outputdir, outputExt)                
                     self.infoList[n].download_status = _DONE_
@@ -118,7 +118,7 @@ class VideoListManager:
                 #end
 
                 # Global Update GUI
-                setItemStatus(item, self.infoList[n].download_status)
+                setUiItemStatus(ui_item, self.infoList[n].download_status)
                 count_done          = sum(1 for video_info in self.infoList if video_info.download_status == _DONE_)
                 count_in_progress   = sum(1 for video_info in self.infoList if video_info.download_status == _IN_PROGRESS_)
                 count_error         = sum(1 for video_info in self.infoList if video_info.download_status == _ERROR_)
@@ -128,11 +128,11 @@ class VideoListManager:
 
             # Run in Single thread or multithread mode
             if process_via_multithreading:
-                t = threading.Thread(target=download_by_info, args=(n, limits, outputDir, outputExt))
+                t = threading.Thread(target=video_item_process_download, args=(n, limits, outputDir, outputExt))
                 t.start()
                 download_threads.append(t)            
             else:
-                download_by_info(n, limits, outputDir, outputExt)
+                video_item_process_download(n, limits, outputDir, outputExt)
             #end
         #end
 
