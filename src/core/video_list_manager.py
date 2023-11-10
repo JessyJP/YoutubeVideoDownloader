@@ -86,7 +86,7 @@ class VideoListManager:
         # TODO: get local limits here maybe. And if they exists apply them here. If not use global
         
         # Start 
-        self.updateUI_ItemElementStatus(item, DownloadProgress.IN_PROGRESS)
+        self.updateVideoItemUIDownloadState(item, DownloadProgress.IN_PROGRESS)
         try:
             item.process_downloads_combine_keep(limits, outputdir, outputExt)                
             item.download_status = DownloadProgress.DONE
@@ -99,7 +99,7 @@ class VideoListManager:
             shutil.rmtree(temp_path)
         #end
         # Finish
-        self.updateUI_ItemElementStatus(item)
+        self.updateVideoItemUIDownloadState(item)
 
     #end
 
@@ -135,6 +135,6 @@ class VideoListManager:
     ## -------------------------- Abstract/Template UI functions -----------------------------
     # These functions are provisioned to be overwritten by the child classes for UI updates.
     # They are not compulsory to implement.
-    def updateUI_ItemElementStatus(self, videoItem, download_status=None):
+    def updateVideoItemUIDownloadState(self, videoItem, download_status=None):
         pass
 
