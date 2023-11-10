@@ -24,18 +24,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import threading
 
 ## ================================= Multithreading functions =================================
-class DownloadThread(threading.Thread):
+class AnalysisThread(threading.Thread):
     threads = []
 
     def __init__(self, *args, **kwargs):
-        super(DownloadThread, self).__init__(*args, **kwargs)
+        super(AnalysisThread, self).__init__(*args, **kwargs)
         self.exception = None
         self.exitcode = 0
-        DownloadThread.threads.append(self)
+        AnalysisThread.threads.append(self)
 
     def run(self):
         try:
-            super(DownloadThread, self).run()
+            super(AnalysisThread, self).run()
         except Exception as e:
             self.exception = e
             self.exitcode = 1

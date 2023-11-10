@@ -33,7 +33,7 @@ import threading
 import subprocess
 import shlex
 # Core imports
-from core.custom_thread import DownloadThread
+from core.custom_thread import AnalysisThread
 from core.validation_methods import checkForValidYoutubeURLs, is_valid_youtube_channel, is_valid_youtube_playlist
 from core.url_text_processor import extract_URL_list_from_text, get_html_content, get_video_urls_from_playlist, get_videos_and_playlists_from_Channel
 from core.url_text_processor import get_url_info_entry
@@ -953,7 +953,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             # Run in Single thread or multithread mode
             if self.config.getboolean("General", "multithread_analyse_procedure"): 
                 self.disp_diagnostic_info_in_multithread();               
-                t = DownloadThread(target=self.process_url, args=(url, recursiveCheckOfURLcontent_mode))
+                t = AnalysisThread(target=self.process_url, args=(url, recursiveCheckOfURLcontent_mode))
                 t.start()
                 threads.append(t)                
             else:
@@ -1067,22 +1067,22 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             #end
             def display_diagnostics(interval):
                 while True:
-                    stats = DownloadThread.get_multithread_stats()
+                    stats = AnalysisThread.get_multithread_stats()
                     self.dispStatus(diagnostic_message(stats))
                     sleep(interval)
 
-                    # Break condition: All threads from DownloadThread are finished
-                    if len(DownloadThread.get_active_threads(DownloadThread.threads)) == 0:
+                    # Break condition: All threads from AnalysisThread are finished
+                    if len(AnalysisThread.get_active_threads(AnalysisThread.threads)) == 0:
                         break
                     #end
                 #end
 
                 # Set self.diagnostics_thread to None when it's done
                 self.diagnostics_thread = None
-                DownloadThread.reset_threads()
+                AnalysisThread.reset_threads()
             #end
 
-            self.diagnostics_thread = DownloadThread(target=display_diagnostics, args=(interval,), daemon=True)
+            self.diagnostics_thread = AnalysisThread(target=display_diagnostics, args=(interval,), daemon=True)
             self.diagnostics_thread.start()
         #end
     #end
