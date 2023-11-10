@@ -878,11 +878,12 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     # Intermediate method to run the import operation in a separate thread
     def import_youtube_videos_threaded(self, text):
         if self.download_in_progress_flag == False:
-            t = threading.Thread(target=self.importValidYoutubeVideosFromTextOrURL_list, args=(text,))
+            t = threading.Thread(target=self.import_valid_Youtube_videos_from_textOrURL_list, args=(text,))
             t.start()
         #end
     #end
 
+    # NOTE: overwrite this function
     # Get the current URLs in the tree view and video IDs
     def getURL_videoIDList(self):# TODO it's best to extract that from the self.infoList
         current_url_entries = set()
@@ -895,11 +896,11 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     #end
 
     # Process Text and URLs
-    def importValidYoutubeVideosFromTextOrURL_list(self, text, recursiveCheckOfURLcontent_mode=0):
+    def import_valid_Youtube_videos_from_textOrURL_list(self, text, recursiveCheckOfURLcontent_mode=0):
         self.reset_cancel_flag()  # Reset just in case
 
         # Make sure to clean up the download list and simplify it from duplicates
-        self.remove_duplicate_entries()
+        self.remove_duplicate_items()
 
         # Disable the download button if it's not already disabled
         self.download_button.config(state='disabled')
@@ -926,7 +927,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         n = 0
         threads = []# This is used in the multithreading case only
         self.dispStatus(f"{dispPrefix} found {N}")
-        self.update_progress(n, N, recursiveCheckOfURLcontent_mode)
+        self.update_progressbar(n, N, recursiveCheckOfURLcontent_mode)
 
         # Process the URLs one at a time and add only unique ones
         for url in URLs_toCheck:
@@ -940,7 +941,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
                 n=n+1;
                 self.dispStatus(f"{dispPrefix} {n} of {N} {numYT_vidMSG} {len(self.infoList)} ")
                 self.process_url(url, recursiveCheckOfURLcontent_mode)
-                self.update_progress(n, N, recursiveCheckOfURLcontent_mode)
+                self.update_progressbar(n, N, recursiveCheckOfURLcontent_mode)
             #end
         #end
 
@@ -956,11 +957,11 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         if recursiveCheckOfURLcontent_mode == 0:  # This checks the recursion mode
             self.dispStatus("URL import and Analysis is Complete!")  # Clear the diagnostic output
             # self.dispStatus("");# Clear the diagnostic output #TODO: select one
-            self.update_progress(N, N, recursiveCheckOfURLcontent_mode)
+            self.update_progressbar(N, N, recursiveCheckOfURLcontent_mode)
             self.download_button.config(state='normal')
 
             # Make sure to clean up the download list and simplify it from duplicates
-            self.remove_duplicate_entries()
+            self.remove_duplicate_items()
         #end
     #end
 
@@ -982,15 +983,15 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
                         if is_valid_youtube_playlist(url):
                             recursiveCheckOfURLcontent_mode = 1  # This controls the recursion mode for playlists
                             urlsFromPlaylist = get_video_urls_from_playlist(url)
-                            self.importValidYoutubeVideosFromTextOrURL_list(urlsFromPlaylist, recursiveCheckOfURLcontent_mode)
+                            self.import_valid_Youtube_videos_from_textOrURL_list(urlsFromPlaylist, recursiveCheckOfURLcontent_mode)
                         elif is_valid_youtube_channel(url):
                             recursiveCheckOfURLcontent_mode = 2  # This controls the recursion mode for channels
                             urlsFromChannel = get_videos_and_playlists_from_Channel(url)
-                            self.importValidYoutubeVideosFromTextOrURL_list(urlsFromChannel, recursiveCheckOfURLcontent_mode)
+                            self.import_valid_Youtube_videos_from_textOrURL_list(urlsFromChannel, recursiveCheckOfURLcontent_mode)
                         else:
                             recursiveCheckOfURLcontent_mode = 3  # This controls the recursion mode for other urls
                             web_page_html = get_html_content(url)
-                            self.importValidYoutubeVideosFromTextOrURL_list(web_page_html, recursiveCheckOfURLcontent_mode)
+                            self.import_valid_Youtube_videos_from_textOrURL_list(web_page_html, recursiveCheckOfURLcontent_mode)
                         #end
                     #end
                     except Exception as e:
@@ -1014,7 +1015,8 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
     #end
 
-    def remove_duplicate_entries(self):
+    # NOTE: similar to and otherwise an overwrite of remove_duplicate_items
+    def remove_duplicate_items(self):
         # Get the current video IDs in the tree view
         current_video_ids = set()
         for item in self.tree.get_children():
@@ -1045,7 +1047,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
                 )
                 return message
             #end
-            def display_diagnostics(interval):
+            def display_diagnostics_thread(interval):
                 while True:
                     stats = AnalysisThread.get_multithread_stats()
                     self.dispStatus(diagnostic_message(stats))
@@ -1062,7 +1064,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
                 AnalysisThread.reset_threads()
             #end
 
-            self.diagnostics_thread = AnalysisThread(target=display_diagnostics, args=(interval,), daemon=True)
+            self.diagnostics_thread = AnalysisThread(target=display_diagnostics_thread, args=(interval,), daemon=True)
             self.diagnostics_thread.start()
         #end
     #end
@@ -1121,13 +1123,13 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
     def download_all_entries_thread(self):
         # Disable relevant UI elements during download
-        self.disableUIelementsDuringDownload()
+        self.disable_UI_elements_during_download()
 
         # Get valid download location
         outputDir = self.get_download_location()
         if outputDir is None:
             # Re-enable relevant UI elements after download
-            self.enableUIelementsAfterDownload()
+            self.enable_UI_elements_after_download()
             return
         #end
 
@@ -1144,7 +1146,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.downloadAllVideoItems( process_via_multithreading, limits, outputDir, outputExt)
 
         # Re-enable relevant UI elements after download
-        self.enableUIelementsAfterDownload()
+        self.enable_UI_elements_after_download()
     #end
 
 # === Application Stage ANY: Functions to handle long operation states, status and diagnostic information ===
@@ -1161,11 +1163,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.tree.update_idletasks();# Update the GUI
     #end
 
-    def updateAnalysisProgress(self):
-        pass
-    #end
-
-    def update_progress(self, index_in: int, total_in :int, task_level):
+    def update_progressbar(self, index_in: int, total_in :int, task_level):
         global index, total
         if total_in == 0:
             return;
@@ -1186,6 +1184,11 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.update()  # Refresh the window to show the progress
     #end
 
+
+    def updateAnalysisProgress(self):
+        pass
+    #end
+    
     # NOTE:Overwrite this function from the parent class
     def updateVideoItemUIDownloadState(self, videoItem,  download_status=None):        
         # Get the associated item
@@ -1198,16 +1201,16 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             self.tree.set(ui_item, 'download_status', download_status)
 
         # Also update the global download progress
-        self.updateDownloadProgress()
+        self.update_download_progress()
     #end
 
-    def updateDownloadProgress(self):
+    def update_download_progress(self):
         # Global GUI update while downloading
         N = len(self.infoList)
         count_done          = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.DONE)
         count_in_progress   = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.IN_PROGRESS)# TODO: this could be implemented different, so that percentage is included, basically this has to be ignored and calculated as total - the other 2
         count_error         = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.ERROR)
-        self.update_progress(count_done+count_error,N,0)
+        self.update_progressbar(count_done+count_error,N,0)
         self.dispStatus(f"Processing {N} item(s): Completed downloads {count_done} of {N}      Still in progress = {count_in_progress}, Errors = {count_error}!")
     #end
 
@@ -1221,9 +1224,9 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.cancel_flag = False
     #end
 
-    def disableUIelementsDuringDownload(self):
+    def disable_UI_elements_during_download(self):
         self.download_in_progress_flag = True
-        self.update_progress(0,len(self.getVideoList()),0)
+        self.update_progressbar(0,len(self.getVideoList()),0)
         self.dispStatus(f"Starting Download of {len(self.getVideoList())} item(s) now!")
 
         # Disable the input URL text field
@@ -1247,7 +1250,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.download_button.config(text=self.theme["texts"]["download_cancel_button"])
     #end
 
-    def enableUIelementsAfterDownload(self):
+    def enable_UI_elements_after_download(self):
         self.download_in_progress_flag = False
         self.reset_cancel_flag()
 
@@ -1279,7 +1282,7 @@ def main_runGUI():
     app.mainloop()
 #end
 
-# === Application Main function run ===
+# === Application run Main window GUI  ===
 if __name__ == "__main__":
     main_runGUI()
 #end
