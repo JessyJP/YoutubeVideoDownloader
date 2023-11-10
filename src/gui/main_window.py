@@ -36,8 +36,9 @@ import shlex
 from core.custom_thread import DownloadThread
 from core.validation_methods import checkForValidYoutubeURLs, is_valid_youtube_channel, is_valid_youtube_playlist
 from core.url_text_processor import extract_URL_list_from_text, get_html_content, get_video_urls_from_playlist, get_videos_and_playlists_from_Channel
+from core.url_text_processor import get_url_info_entry
 from core.pytube_handler import LimitsAndPriority, VideoInfo
-from core.download_manager import DownloadManager, get_url_info_entry
+from core.download_manager import DownloadManager
 from core.download_options import *
 # GUI imports
 import tkinter as tk

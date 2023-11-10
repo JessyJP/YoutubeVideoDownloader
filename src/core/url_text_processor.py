@@ -31,11 +31,34 @@ from bs4 import BeautifulSoup
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
 import googleapiclient.errors
+# Core Imports
+from core.pytube_handler import VideoInfo
+from core.youtube_dl_handler import VideoInfo_alternative
 
 # from core.common import logger
 import logging
 # Logging
 logger = logging.getLogger(__name__)
+
+## ================================= Get the video info from the URL function =================================
+
+def get_url_info_entry(url: str, use_alternative=False) -> Union[VideoInfo, VideoInfo_alternative, None]:
+    try:
+        video_info = VideoInfo(url=url)
+        return video_info
+    except Exception as e:
+        print(f"An error occurred while fetching the video information using VideoInfo for {url}: {e}")
+        if use_alternative:
+            try:
+                video_info_alt = VideoInfo_alternative(url)
+                return video_info_alt
+            except Exception as e_alt:
+                print(f"An error occurred while fetching the video information using VideoInfo_alternative for {url}: {e_alt}")
+            #end
+        #end
+        return None
+    #end
+#end
 
 ## ================================= Input Pre-Download get/select functions =================================
 
