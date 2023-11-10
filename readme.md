@@ -24,27 +24,108 @@
 - Can work in Windowed GUI mode and non-gui mode from the command line
 - Can integrate with external software for stream muxing and transcoding and editing
 
-## Current State of Development
+## Setup and Execution Guide
+
+This guide walks you through the steps to set up and run the project. It is recommended to use a virtual environment for this setup to ensure that the dependencies of the project do not interfere with other Python projects or system-wide Python packages.
+
+### Step 1: Creating a Virtual Environment
+
+A virtual environment is an isolated Python environment that allows you to manage dependencies for different projects separately. To create a virtual environment, follow these steps or use a tool such as your IDE:
+
+1. **Navigate to your project's root directory**:
+   ```bash
+   cd download/path/to/YoutubeVideoDownloader
+   ```
+
+2. **Create a Virtual Environment**:
+   - For **Windows**, use:
+     ```bash
+     python -m venv .venv
+     ```
+   - For **macOS and Linux**, use:
+     ```bash
+     python3 -m venv .venv
+     ```
+
+3. **Activate the Virtual Environment**:
+   - On **Windows**, run:
+     ```bash
+     .\.venv\Scripts\activate
+     ```
+   - On **macOS and Linux**, run:
+     ```bash
+     source .venv/bin/activate
+     ```
+   You will know that the virtual environment is activated as the name of the virtual environment (.venv) will appear on your terminal prompt.
+
+### Step 2: Installing Dependencies
+With the virtual environment activated, install all the required dependencies listed in `versioned_requirements.txt`:
+
+```bash
+pip install -r versioned_requirements.txt
+```
+This command will install the exact versions of the dependencies required for the project.
+
+### Step 3: Making an executable package on your platform
+Once all dependencies are installed, you can run the `make.py` script:
+
+```bash
+python make.py
+```
+Or on some systems, you might need to use:
+
+```bash
+python3 make.py
+```
+This will execute the script and perform the make and packaging tasks defined in `make.py`.
+
+### Step 4: Running the Script
+* If you have ran "Step 3" then you can use the produced executable:
+  *  YouTubeDownloader.exe for Windows
+  *  YouTubeDownloader for Linux.
+* A zip package is also produced for portable use with all necessary files.
+* You can open it graphically or from the terminal. 
+  * From the terminal you can start it as a command line tool or in GUI mode with a flag. 
+  * You can also use it as a web application or cloud application and serve it via a webpage.
+* You can also run all those options directly from python without "Step 3" from terminal or IDE. For easy quick start run:
+  ```bash
+  python run_app.py # will run the GUI by default.
+  ```
+  You can also run the actual starting point from inside src.
+  ```bash
+  cd src
+  python YouTubeDownloader.py
+  ```
+### Additional Notes
+
+- **Deactivating the Virtual Environment**: To exit the virtual environment, simply run `deactivate` in your terminal. This will revert to your global Python environment.
+- **Reactivating**: To work on your project again after deactivating, navigate to your project directory and activate the virtual environment as shown in Step 1.
+
+
+## Current State of Development TODO(s)
 
 [//]: # (Add the current state of things section here when content is provided)
 - [ ] There are various TODO notes in the coded related to implementation of features and bugfixes.
-- [x] First and foremost stable packaging and release mechanism.
+
 The program can work just fine portable but it's good to have a type of installer.
 - [x] URL scraping from YouTube Channel URLs
-  - [ ] Testing is needed 
+  - [ ] Testing is needed, meaning automated testing procedures during build time.
 - [ ] Per video quality stream selection no yet implemented. (only global limiters available at the moment)
 This could be with a selection and a button to transfer the limits.
-- [x] Finish the "keep file" functionality for separate audio,video, subtitle,etc. data(Easy to implement)
+- [x] Finish the "keep file" functionality for separate audio,video, subtitle,etc. data.
   - [ ] Subtitles download and integration still to be implemented.
   - [ ] Comments download still to be implemented 
-- [ ] Better progress reporting and percentage for download progress implementation
+- [ ] Better progress reporting and percentage for download progress implementation.
+This is relevant when there are a lot of links/text/channels inserted at the same time.
+	- Download reporting is ok but not too detailed.
+	- Analysis reporting could do much better. 
 
-- [ ] Improve multithreading and parallel downloads
+- [x] Improve multithreading and parallel downloads
     - It gets really slow when there is over hundred URLs to analyse, so for now the analyses is set to single thread by default.
 - [ ] The settings sub-window needs to be implemented. Currently it is in embryonic state. 
   - In the settings window the user will be able to select, themes languages, paths, shortcut combinations etc.
   - Column order can also be implemented in the Settings and as drag and drop option.
-- [ ] Redesign file and functionality separation.
+- [x] Redesign file and functionality separation.
   - It would be necessary to better spread the functionality in the GUI and the core across files. 
   - This will make it easier for proper terminal use implementation. 
   - There should be an option for straight through command user and interactive terminal use.
@@ -61,6 +142,7 @@ This could be with a selection and a button to transfer the limits.
 - [ ] Improve error handling and reporting
 - [ ] Create a user guide and documentation
 - [ ] Optimize performance and resource usage
+	- [x] Some parts about startup were optimized. But still not the best
 - [ ] Expand language support
 - [ ] Add user customization options (themes, settings, etc.) made more accessible.
 - [ ] Implement automatic updates and version checking
