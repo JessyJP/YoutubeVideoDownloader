@@ -726,26 +726,6 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         return None
     #end
 
-    # Overwrite this function from the parent class
-    def updateUI_ItemElementStatus(self, videoItem,  download_status=None):        
-        # Get the associated item
-        ui_item = self.get_tree_view_UI_item_by_video_info(videoItem)
-        # Update the download status. Sometimes the download status contains download flags.
-        # Therefore, in some situations the download status is updated only for the UI. 
-        if download_status is None:
-            self.tree.set(ui_item, 'download_status', videoItem.download_status)
-        else:
-            self.tree.set(ui_item, 'download_status', download_status)
-
-        # Global Update GUI
-        N = len(self.infoList)
-        count_done          = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.DONE)
-        count_in_progress   = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.IN_PROGRESS)# TODO: this could be implemented different, so that percentage is included, basically this has to be ignored and calculated as total - the other 2
-        count_error         = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.ERROR)
-        self.update_progress(count_done+count_error,N,0)
-        self.dispStatus(f"Processing {N} item(s): Completed downloads {count_done} of {N}      Still in progress = {count_in_progress}, Errors = {count_error}!")
-    #end
-
     # ------ Callbacks and companion functions for the tree view rows operations Context menu or Key Bindings -------
     def updateTreeViewFromVideoInfoTable(self):
         # Clear the tree view
@@ -1181,6 +1161,10 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.tree.update_idletasks();# Update the GUI
     #end
 
+    def updateAnalysisProgress(self):
+        pass
+    #end
+
     def update_progress(self, index_in: int, total_in :int, task_level):
         global index, total
         if total_in == 0:
@@ -1200,6 +1184,31 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.progress_bar.update()  # Refresh the window to show the progress
         self.progress_bar.update_idletasks()  # Refresh the window to show the progress
         self.update()  # Refresh the window to show the progress
+    #end
+
+    # NOTE:Overwrite this function from the parent class
+    def updateVideoItemUIDownloadState(self, videoItem,  download_status=None):        
+        # Get the associated item
+        ui_item = self.get_tree_view_UI_item_by_video_info(videoItem)
+        # Update the download status. Sometimes the download status contains download flags.
+        # Therefore, in some situations the download status is updated only for the UI. 
+        if download_status is None:
+            self.tree.set(ui_item, 'download_status', videoItem.download_status)
+        else:
+            self.tree.set(ui_item, 'download_status', download_status)
+
+        # Also update the global download progress
+        self.updateDownloadProgress()
+    #end
+
+    def updateDownloadProgress(self):
+        # Global GUI update while downloading
+        N = len(self.infoList)
+        count_done          = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.DONE)
+        count_in_progress   = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.IN_PROGRESS)# TODO: this could be implemented different, so that percentage is included, basically this has to be ignored and calculated as total - the other 2
+        count_error         = sum(1 for video_info in self.infoList if video_info.download_status == DownloadProgress.ERROR)
+        self.update_progress(count_done+count_error,N,0)
+        self.dispStatus(f"Processing {N} item(s): Completed downloads {count_done} of {N}      Still in progress = {count_in_progress}, Errors = {count_error}!")
     #end
 
     def cancel_operation_flagON(self, event=None):
