@@ -24,6 +24,10 @@ from enum import Enum
 
 ## ================================= Download Keep Options =================================
 
+class DownloadProgress():# TODO: enum would be better, more rewriting is needed
+    DONE = "Done!"
+    ERROR = "Error!"
+    IN_PROGRESS = "Downloading Now..."
 
 class MediaSymbols(Enum):
     COMBINED       = "☑"
