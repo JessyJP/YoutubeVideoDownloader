@@ -27,15 +27,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
 import threading
-from typing import Union
+from typing import List, Union
 from core.pytube_handler import VideoInfo
 import shutil
 
 
-class DownloadManager():
+class VideoListManager:
     def __init__(self):        
         # Video Info list
-        self.infoList = [];
+        self.infoList: List[VideoInfo] = []
 
     def getTBL(self):
         return self.infoList;

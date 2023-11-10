@@ -38,7 +38,7 @@ from core.validation_methods import checkForValidYoutubeURLs, is_valid_youtube_c
 from core.url_text_processor import extract_URL_list_from_text, get_html_content, get_video_urls_from_playlist, get_videos_and_playlists_from_Channel
 from core.url_text_processor import get_url_info_entry
 from core.pytube_handler import LimitsAndPriority, VideoInfo
-from core.download_manager import DownloadManager
+from core.video_list_manager import VideoListManager
 from core.download_options import *
 # GUI imports
 import tkinter as tk
@@ -54,7 +54,7 @@ import inspect
 
 
 ## Main Application window
-class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
+class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 # === Application Stage 1: Initialization functions ===
 
     # Class Constructor: Creates the application, loads theme and configuration also adds global keybindings
@@ -64,7 +64,7 @@ class YouTubeDownloaderGUI(tk.Tk,DownloadManager):
         # print(YouTubeDownloaderGUI.__mro__)
 
         tk.Tk.__init__(self)
-        DownloadManager.__init__(self)
+        VideoListManager.__init__(self)
 
         # First Load configuration file 
         self.config_file = 'config.ini'
