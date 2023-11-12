@@ -1,60 +1,125 @@
 import { 
-    analyzeURL,
-    analyzeVideo, 
-    getAudioBitrateList, 
-    getVideoResolutionList, 
-    getFPSValueList, 
-    downloadVideo, 
-    playVideoPreview, 
-    selectDownloadLocation
+    analyzeURLtext,
+    // getAudioBitrateList, 
+    // getVideoResolutionList, 
+    // getFPSValueList, 
+    // downloadVideo, 
+    // playVideoPreview, 
+    // selectDownloadLocation
+    // Import other necessary functions
 } from './api.js';
 
+import { switchTheme } from './functions.js';
 
-document.getElementById("analyze-btn").addEventListener("click", async () => {
-    console.log("Analyze Button press!")
-    const url = document.getElementById("url-entry").value;
-    if (!url) return alert("Please enter a video URL.");
+import TableManager from './TableManager.js';
 
-    const data = await analyzeURL(url);
+// ====================================
+// Page main event handling
 
-    if (data.message) {
-        alert(data.message);
-    }
-
-    // Handle the response data further as needed.
-    // E.g., update the table with the video data.
+// Start checking on page load
+window.addEventListener("load", () => {
+    const defaultTheme = 'dark-theme'
+    switchTheme(defaultTheme);
+    // This is for last
+    tableManager.checkAndUpdateState();
 });
 
+// Ensure the auto-update process is stopped when leaving the page
+window.addEventListener("unload", () => {
+    tableManager.checkModeFlag = false;
+});
+
+//  =======================================================
+
+// Instantiate TableManager only once
+const tableManager = new TableManager();
+
+// Function to handle button clicks
+function onUserInteraction() {
+    tableManager.checkAndUpdateState();
+}
+
+//  =======================================================
+// User event handling 
+
+// Analyze Button Event Listener
 document.getElementById("analyze-btn").addEventListener("click", async () => {
     const url = document.getElementById("url-entry").value;
-    
-    if (!url) return alert("Please enter a video URL.");
-
-    const data = await analyzeVideo(url);
-
-    if (data.message) {
-        alert(data.message);
+    if (!url) {
+        alert("Please enter a video URL.");
+        return;
     }
 
-    // Handle the response data further as needed.
-    // E.g., update the table with the video data.
+    // Call analyzeURLtext and handle the response
+    const data = await analyzeURLtext(url);
+    console.log(data.message);
+    // Optionally, update the UI or perform additional actions based on the response
+    onUserInteraction()
+});
+
+// Download Button Event Listener
+document.getElementById("download-btn").addEventListener("click", () => {
+    // Implement the download logic here
+    // Example: initiate the download process for the selected video
+    onUserInteraction()
 });
 
 document.getElementById("play-btn").addEventListener("click", async () => {
-    const videoPath = 'path/to/selected/video'; // You'll need a mechanism to select a specific video
-    const data = await playVideoPreview(videoPath);
-    if (data.message) {
-        alert(data.message);
+    const videoPath = 'path/to/selected/video'; // Implement the mechanism to get the selected video path
+    try {
+        const data = await playVideoPreview(videoPath);
+        if (data.message) {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error("Error playing video preview: ", error);
+        alert("Failed to play video preview.");
     }
+    onUserInteraction();
 });
 
 document.getElementById("location-btn").addEventListener("click", async () => {
-    const locationData = await selectDownloadLocation();
-    const inputLocation = document.getElementById("download-location");
-    inputLocation.value = locationData.download_location;
+    try {
+        const locationData = await selectDownloadLocation();
+        const inputLocation = document.getElementById("download-location");
+        inputLocation.value = locationData.download_location;
+    } catch (error) {
+        console.error("Error selecting download location: ", error);
+        alert("Failed to select download location.");
+    }
+    onUserInteraction();
 });
 
-// Optionally populate drop-down lists on page load or based on certain actions
+
+// window.addEventListener("load", async () => {
+//     // Existing load event logic
+//     tableManager.checkAndUpdateState();
+
+//     // Additional logic to populate drop-downs
+//     try {
+//         const audioBitrateList = await getAudioBitrateList();
+//         const videoResolutionList = await getVideoResolutionList();
+//         const fpsValueList = await getFPSValueList();
+
+//         populateDropdown("audio-limiter", audioBitrateList, "kbps");
+//         populateDropdown("video-limiter", videoResolutionList, "p");
+//         populateDropdown("fps-limiter", fpsValueList, "fps");
+//     } catch (error) {
+//         console.error("Error populating dropdowns: ", error);
+//     }
+// });
+
+// function populateDropdown(elementId, items, unit) {
+//     const dropdown = document.getElementById(elementId);
+//     items.forEach(item => {
+//         let option = document.createElement("option");
+//         option.value = item;
+//         option.text = `${item} ${unit}`;
+//         dropdown.appendChild(option);
+//     });
+// }
+
+
 // window.addEventListener("load", async () => {
 //     const audioBitrateList = await getAudioBitrateList();
 //     const videoResolutionList = await getVideoResolutionList();
@@ -86,4 +151,15 @@ document.getElementById("location-btn").addEventListener("click", async () => {
 //     });
 // });
 
-// You can continue to add more event listeners as needed.
+
+document.getElementById("theme-btn").addEventListener("click", () => {
+    // Determine the new theme based on the current one
+    const currentTheme = document.body.className;
+    const newTheme = currentTheme === 'dark-theme' ? 'light-theme' : 'dark-theme';
+
+    // Switch to the new theme
+    switchTheme(newTheme);
+
+    // Trigger state check
+    onUserInteraction();
+});

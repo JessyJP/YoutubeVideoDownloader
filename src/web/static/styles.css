@@ -1,6 +1,39 @@
+/* ================================= Colour themes ================================= */
+:root {
+    /* Default theme - Dark theme */
+    --background-color: #333;
+    --text-color: #f4f4f4;
+    --app-window-bg: #222;
+    --table-header-bg: #444;
+    --table-row-bg: #383838;
+    --table-border-color: #555;
+    --button-bg: #0056b3;
+    --button-hover-bg: #003f7f;
+    --input-border-color: #555;
+}
+
+/* Dark theme colors (now set as default) */
+/* No need for a separate .dark-theme selector since these are now the default */
+
+/* Light theme colors */
+.light-theme {
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --app-window-bg: #fff;
+    --table-header-bg: #f2f2f2;
+    --table-row-bg: #f9f9f9;
+    --table-border-color: #ddd;
+    --button-bg: #007BFF;
+    --button-hover-bg: #0056b3;
+    --input-border-color: #ddd;
+}
+
+/* ================================= Element CSS ================================= */
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: var(--background-color);
+    color: var(--text-color);
     margin: 0;
     padding: 0;
 }
@@ -8,7 +41,7 @@ body {
 .app-window {
     max-width: 1300px;
     margin: 50px auto;
-    background-color: #fff;
+    background-color: var(--app-window-bg);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -20,14 +53,18 @@ body {
 }
 
 #video-list th, #video-list td {
-    border: 1px solid #ddd;
+    border: 1px solid var(--table-border-color);
     padding: 8px;
     text-align: left;
     word-wrap: break-word; /* allow long content to wrap */
 }
 
 #video-list th {
-    background-color: #f2f2f2;
+    background-color: var(--table-header-bg);
+}
+
+#video-list tr:nth-child(even) {
+    background-color: var(--table-row-bg); /* zebra-striping for table rows */
 }
 
 .controls, .settings-row {
@@ -38,22 +75,17 @@ body {
     gap: 10px;
 }
 
-.controls input {
-    flex: 1;
-    min-width: 250px; /* minimum width for the input box */
-}
-
-#url-entry, #download-location {
+.controls input, .diagnostic-output textarea, #url-entry, #download-location, #diagnostic-text {
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--input-border-color);
     border-radius: 4px;
     width: 100%;
 }
 
 button {
     padding: 10px 20px;
-    background-color: #007BFF;
-    color: #fff;
+    background-color: var(--button-bg);
+    color: var(--text-color);
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -61,17 +93,28 @@ button {
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: var(--button-hover-bg);
 }
 
-#settings-btn img {
+#settings-btn img, #theme-btn img {
     width: 20px;
     height: 20px;
 }
 
 select {
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--input-border-color);
     border-radius: 4px;
     cursor: pointer;
+}
+
+/* Styles for the diagnostic output area */
+.diagnostic-output {
+    width: 98%;
+    margin-top: 20px;
+}
+
+#diagnostic-text {
+    height: 20px; /* Adjust as needed */
+    resize: vertical; /* Allow vertical resizing */
 }
