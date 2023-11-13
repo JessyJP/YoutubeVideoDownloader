@@ -145,6 +145,23 @@ select {
     resize: vertical; /* Allow vertical resizing */
 }
 
-/* #analyze-btn, #download-btn {
-    
-} */
+.controls2 {
+    display: flex;
+    justify-content: flex-start; /* Aligns children to the left */
+    gap: 10px; /* Optional: adds space between buttons */
+}
+
+button:disabled {
+    background-color: #ccc; /* Gray background for disabled buttons */
+    color: #666; /* Darker text for disabled buttons */
+    cursor: not-allowed; /* Cursor indicates that the item is not available */
+    /* Remove the height property unless you specifically need it */
+}
+
+/* If you are using a class to indicate disabled state, use this */
+.disabled-button {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    /* Again, remove the height property unless it's necessary */
+}

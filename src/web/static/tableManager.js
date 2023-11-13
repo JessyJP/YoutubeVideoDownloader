@@ -85,14 +85,20 @@ class TableManager {
         if (currentState === 'ANALYSIS') {
             analyzeBtn.disabled = true;
             downloadBtn.disabled = true;
+            // analyzeBtn.classList.add("disabled-button");
+            // downloadBtn.classList.add("disabled-button");
             // Set other buttons as needed
         } else if (currentState === 'DOWNLOAD') {
             analyzeBtn.disabled = true;
             downloadBtn.disabled = true;
+            // analyzeBtn.classList.add("disabled-button");
+            // downloadBtn.classList.add("disabled-button");
             // Set other buttons as needed
         } else {
             analyzeBtn.disabled = false;
             downloadBtn.disabled = false;
+            // analyzeBtn.classList.remove("disabled-button");
+            // downloadBtn.classList.remove("disabled-button");
             // Set other buttons as needed
         }
     }
