@@ -1,7 +1,7 @@
 import { 
     analyzeURLtext,
+    downloadVideoList,
     postClientStateSettings
-    // downloadVideo, 
     // playVideoPreview, 
     // selectDownloadLocation
 } from './api.js';
@@ -57,13 +57,17 @@ document.getElementById("analyze-btn").addEventListener("click", async () => {
 });
 
 // Download Button Event Listener
-document.getElementById("download-btn").addEventListener("click", () => {
-    // Implement the download logic here
-    // Example: initiate the download process for the selected video
-    onUserInteraction()
+document.getElementById("download-btn").addEventListener("click", async () => {
+    // Call downloadVideoList and handle the response
+    const response = await downloadVideoList();
+    console.log(response.message);
+    // Optionally, update the UI or perform additional actions based on the response
+    onUserInteraction();
 });
 
+
 document.getElementById("play-btn").addEventListener("click", async () => {
+    // TODO: still unfinished
     const videoPath = 'path/to/selected/video'; // Implement the mechanism to get the selected video path
     try {
         const data = await playVideoPreview(videoPath);
@@ -78,6 +82,7 @@ document.getElementById("play-btn").addEventListener("click", async () => {
 });
 
 document.getElementById("location-btn").addEventListener("click", async () => {
+    // TODO: still unfinished
     try {
         const locationData = await selectDownloadLocation();
         const inputLocation = document.getElementById("download-location");

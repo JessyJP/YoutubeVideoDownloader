@@ -223,16 +223,14 @@ def analyzeURLtext():
 
 @app.route('/api/downloadVideoList', methods=['POST'])
 def downloadVideoList():
-    data = request.json
+    # data = request.json
 
-    # TODO: we need to get the limits from the frontend.
-    limitsFromClient = ""
-
+    limitsFromClient = vlm.lastLimits
 
     vlm.downloadAllVideoItems(
                         process_via_multithreading=vlm.process_via_multithreading,
                         limits=limitsFromClient,
-                        output=vlm.tmpOutputDir,
+                        outputDir=vlm.tmpOutputDir,
                         outputExt=vlm.outputExt)
     
     return jsonify({"download": "download_path"})
