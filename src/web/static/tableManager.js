@@ -69,22 +69,7 @@ class TableManager {
         } else {
             videoList.forEach((video, index) => {
                 const row = this.videoListTableBody.insertRow();
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${video.download_status || 'N/A'}</td>
-                    <td>${video.watch_url}</td>
-                    <td>${video.title || 'N/A'}</td>
-                    <td>${video.author || 'N/A'}</td>
-                    <td>${video.length != null ? video.length : 'N/A'}</td>
-                    <td>${video.description || 'N/A'}</td>
-                    <td>${video.publish_date || 'N/A'}</td>
-                    <td>${video.views != null ? video.views : 'N/A'}</td>
-                    <td>${video.thumbnail_url || 'N/A'}</td>
-                    <td>${video.rating || 'N/A'}</td>
-                    <td>${video.video_id || 'N/A'}</td>
-                    <td>${video.quality_str || 'N/A'}</td>
-                    <td>${video.video_size_mb || 'N/A'}</td>
-                `;
+                row.innerHTML = videoItem.toTableRow(index);
             });
         }
     }
