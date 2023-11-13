@@ -249,7 +249,7 @@ class VideoListManager:
     #end
 
     ## Process methods
-    def downloadAllVideoItems(self, process_via_multithreading, limits, outputDir, outputExt):
+    def downloadAllVideoItems(self, process_via_multithreading: bool, limits: LimitsAndPriority, outputDir: str, outputExt: str):
         # Create a list to hold thread objects
         download_threads = []
         # Get lengths
