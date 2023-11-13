@@ -54,7 +54,7 @@ class WebWrapper(VideoListManager):
         # Parameters for Analysis
         self.use_multithreading_analysis = False
         # Parameters for Download
-        self.process_via_multithreading = False  
+        self.process_via_multithreading = True  
         self.tmpOutputDir = default_tmp_dir 
         self.outputExt = ".mkv"
 
