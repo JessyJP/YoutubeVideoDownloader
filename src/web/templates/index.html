@@ -5,9 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Downloader GUI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
 </head>
 <body>
     <div class="app-window">
+        <!-- Logo and Title as Link -->
+        <div class="header">
+            <a href="https://github.com/JessyJP/YoutubeVideoDownloader" target="_blank">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+                <h1 class="title">Video Downloader GUI</h1>
+            </a>
+        </div>
+
         <table id="video-list">
             <thead>
                 <tr>
@@ -37,7 +47,7 @@
         </div>
         <div class="settings-row">
             <button type="button" id="settings-btn">
-                <img src="{{ url_for('static', filename='configuration_gear_icon_normal.png') }}" alt="Settings Icon">
+                <img src="{{ url_for('static', filename='images/configuration_gear_icon_normal.png') }}" alt="Settings Icon">
             </button>
             <button type="button" id="theme-btn">Theme</button> <!-- Theme Button -->
             <button type="button" id="play-btn">Play Preview Selection Locally</button>

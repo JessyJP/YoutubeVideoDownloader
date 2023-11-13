@@ -28,7 +28,26 @@
     --input-border-color: #ddd;
 }
 
-/* ================================= Element CSS ================================= */
+/* ================================= Main CSS Element ================================= */
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center; /* Center-align the text */
+    margin: 20px 0; /* Adjust top and bottom margin as needed */
+}
+
+.logo {
+    max-width: 150px; /* Adjust as needed */
+    height: auto;
+    margin-bottom: 10px; /* Space between logo and title */
+}
+
+.title {
+    color: var(--text-color);
+    margin: 0; /* Remove default margin */
+}
 
 body {
     font-family: Arial, sans-serif;
@@ -46,6 +65,8 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* ================================= Format CSS elements ================================= */
 
 #video-list {
     width: 100%;
