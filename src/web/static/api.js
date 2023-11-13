@@ -1,3 +1,5 @@
+import { VideoItem } from "./VideoItem.js";
+
 const API_PROXY = "http://localhost:80";  // Replace with your actual IP and port.
 
 
@@ -60,7 +62,8 @@ async function getVideoItemList() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json();
+        const videoItemsData = await response.json();
+        return videoItemsData.map(videoData => new VideoItem(videoData));
     } catch (error) {
         console.error("Error in getVideoItemList: ", error);
         return []; // Return an empty array in case of an error

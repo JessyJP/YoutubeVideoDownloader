@@ -1,17 +1,17 @@
 export class VideoItem {
     constructor(videoData) {
-        this.download_status = videoData.download_status || 'N/A';
-        this.watch_url = videoData.watch_url || 'N/A';
-        this.title = videoData.title || 'N/A';
-        this.author = videoData.author || 'N/A';
+        this.download_status = videoData.download_status;
+        this.watch_url = videoData.watch_url;
+        this.title = videoData.title;
+        this.author = videoData.author;
         this.length = videoData.length != null ? videoData.length.toString() : 'N/A';
-        this.description = videoData.description || 'N/A';
-        this.publish_date = videoData.publish_date || 'N/A';
+        this.description = videoData.description;
+        this.publish_date = videoData.publish_date;
         this.views = videoData.views != null ? videoData.views.toString() : 'N/A';
-        this.thumbnail_url = videoData.thumbnail_url || 'N/A';
-        this.rating = videoData.rating || 'N/A';
-        this.video_id = videoData.video_id || 'N/A';
-        this.quality_str = videoData.quality_str || 'N/A';
+        this.thumbnail_url = videoData.thumbnail_url;
+        this.rating = videoData.rating;
+        this.video_id = videoData.video_id;
+        this.quality_str = videoData.quality_str;
         this.video_size_mb = videoData.video_size_mb != null ? videoData.video_size_mb.toString() : 'N/A';
     }
 

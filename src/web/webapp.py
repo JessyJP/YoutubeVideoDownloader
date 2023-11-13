@@ -172,7 +172,7 @@ def video_info_to_json(vItem: VideoInfo) -> dict:
         #end
     #end
 
-    return json.dumps(video_info_dict, indent=4)
+    return video_info_dict#json.dumps(video_info_dict, indent=4)
 #end
 
 #==============================================================================
@@ -189,8 +189,6 @@ thread = None
 
 @app.route('/')
 def index():
-
-
     return render_template('index.html', title="YouTubeDownloader",
                             **vlm.getLimitsDropdownValuesAndLastSelection())
 #end

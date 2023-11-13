@@ -3,6 +3,7 @@ import {
     getState,
     getStatusMsg
 } from './api.js';
+import { VideoItem } from "./VideoItem.js";
 
 class TableManager {
     constructor() {
@@ -69,7 +70,7 @@ class TableManager {
         } else {
             videoList.forEach((video, index) => {
                 const row = this.videoListTableBody.insertRow();
-                row.innerHTML = videoItem.toTableRow(index);
+                row.innerHTML = video.toTableRow(index);
             });
         }
     }
