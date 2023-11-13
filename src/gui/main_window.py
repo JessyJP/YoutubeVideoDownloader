@@ -889,6 +889,18 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     #end
 
     # NOTE: this function overwrites the parent implementation
+    def process_url(self, url, use_analysis_multithreading, recursiveCheckOfURLcontent_mode):
+        # Add this an interrupt that can be activated from the gui
+        if self.cancel_flag:
+            self.download_button.config(state='normal')
+            return
+        #end
+        
+        # Call the parent after checking the interrupt
+        VideoListManager.process_url(self, url, use_analysis_multithreading, recursiveCheckOfURLcontent_mode)
+    #end
+
+    # NOTE: this function overwrites the parent implementation
     # Get the current URLs in the tree view and video IDs
     def getURL_videoIDList(self):# TODO it's best to extract that from the self.getVideoList()
         current_url_entries = set()

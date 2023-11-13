@@ -93,7 +93,7 @@ class VideoListManager:
         current_url_entries = set()
         current_video_ids = set()
         for item in self.getVideoList():
-            current_url_entries.add(item.url)
+            current_url_entries.add(item.watch_url)
             current_video_ids.add(item.video_id)
         #end
         return current_url_entries, current_video_ids
@@ -186,12 +186,7 @@ class VideoListManager:
         #end
     #end
 
-    def process_url(self, url, use_analysis_multithreading, recursiveCheckOfURLcontent_mode):
-        if self.cancel_flag:
-            self.download_button.config(state='normal')
-            return
-        #end
-        
+    def process_url(self, url, use_analysis_multithreading, recursiveCheckOfURLcontent_mode):  
         # Get the latest list of URL(s) and VideoID(s)
         current_url_entries, current_video_ids = self.getURL_videoIDList()
 
@@ -251,7 +246,6 @@ class VideoListManager:
         #end
         # Finish
         self.updateVideoItemUIDownloadState(item)
-
     #end
 
     ## Process methods
