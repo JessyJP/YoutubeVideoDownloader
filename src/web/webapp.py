@@ -54,7 +54,7 @@ class WebWrapper(VideoListManager):
         # Parameters for Analysis
         self.use_multithreading_analysis = False
         # Parameters for Download
-        self.process_via_multithreading = True  
+        self.process_via_multithreading = False  
         self.tmpOutputDir = default_tmp_dir 
         self.outputExt = ".mkv"
 
@@ -132,11 +132,33 @@ class WebWrapper(VideoListManager):
 
         return render_data
     #end
+
+    def getLimitsAndPriorityFromUI(self):
+        # TODO: this function should just be integrated or abstracted
+        limits_and_priority = LimitsAndPriority()
+
+        # Get the audio bitrate
+        limits_and_priority.bitrate = self.lastLimits.bitrate.replace("kbps","").strip()
+        # Parse audio format priority into a list
+        audio_format_priority_str = "wav, mp3, aac, m4a"
+        limits_and_priority.audio_format_priority = [format.strip() for format in audio_format_priority_str.split(",")]
+
+        # Get video resolution 
+        limits_and_priority.resolution = self.lastLimits.resolution.replace("p","").strip()
+        # Get video fps
+        limits_and_priority.fps = self.lastLimits.fps.replace("fps","").strip()
+        # Parse video format priority into a list
+        video_format_priority_str = "mp4, webm, flv, 3gp, m4a"
+        limits_and_priority.video_format_priority = [format.strip() for format in video_format_priority_str.split(",")]
+        # TODO here we can just implement the list directly but the input might come from a env variable hance why we parse strings
+        limits_and_priority.to_numeric()
+        return limits_and_priority
+    #end
 #end
 
 #============================== Helper functions ==============================
 # Function to convert VideoInfo data to JSON
-def video_info_to_json(vItem: VideoInfo) -> dict:
+def video_info_to_dict(vItem: VideoInfo) -> dict:
     video_info_tuple = vItem.as_tuple()
     
     video_info_dict = {
@@ -205,7 +227,7 @@ def getStatusMsg():
 def getVideoItemList():
     jsonList = []
     for item in vlm.getVideoList():
-        jsonList.append(video_info_to_json(item))
+        jsonList.append(video_info_to_dict(item))
     #end
     return jsonify(jsonList)
 #end
@@ -223,16 +245,20 @@ def analyzeURLtext():
 
 @app.route('/api/downloadVideoList', methods=['POST'])
 def downloadVideoList():
+    # Set state to ANALYSIS at the start
+    vlm.processState = ProcessRoutine.DOWNLOAD
+    # TODO: we could do a try-except here because we don't know what might happen and the flag might get stuck
+    # TODO: Similar approach should probably be taken for the analysis. I could do when i am not feeling lazy. 
     # data = request.json
-
-    limitsFromClient = vlm.lastLimits
-
+    numericLimits = vlm.getLimitsAndPriorityFromUI()
+    
     vlm.downloadAllVideoItems(
                         process_via_multithreading=vlm.process_via_multithreading,
-                        limits=limitsFromClient,
+                        limits=numericLimits,
                         outputDir=vlm.tmpOutputDir,
                         outputExt=vlm.outputExt)
     
+    vlm.processState = ProcessRoutine.IDLE
     return jsonify({"download": "download_path"})
 
 # @app.route('/api/play_video_preview', methods=['POST'])
