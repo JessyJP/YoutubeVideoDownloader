@@ -1,9 +1,11 @@
 import { 
     analyzeURLtext,
     downloadVideoList,
-    postClientStateSettings
+    postClientStateSettings,
+    clearItemSelectionByID,
     // playVideoPreview, 
     // selectDownloadLocation
+    getVideoItemList
 } from './api.js';
 
 import { switchTheme } from './functions.js';
@@ -60,6 +62,21 @@ document.getElementById("analyze-btn").addEventListener("click", async () => {
 document.getElementById("download-btn").addEventListener("click", async () => {
     // Call downloadVideoList and handle the response
     const response = await downloadVideoList();
+    console.log(response.message);
+    // Optionally, update the UI or perform additional actions based on the response
+    onUserInteraction();
+});
+
+// Clear Items Button Event Listener
+document.getElementById("clear-items-btn").addEventListener("click", async () => {
+    // TODO: LAZY SELECTION the selection has to be acquired here and passed to the function 
+    const videoList = await getVideoItemList();
+    // TODO: generally there should be a selection of items
+    // TODO: in this case we are doing a lazy all
+    const videoIds = videoList.map(video => video.video_id); // Extract video IDs
+
+    // Call downloadVideoList and handle the response
+    const response = await clearItemSelectionByID(videoIds);
     console.log(response.message);
     // Optionally, update the UI or perform additional actions based on the response
     onUserInteraction();

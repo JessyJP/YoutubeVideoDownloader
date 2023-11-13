@@ -261,6 +261,23 @@ def downloadVideoList():
     vlm.processState = ProcessRoutine.IDLE
     return jsonify({"download": "download_path"})
 
+@app.route('/api/clearItemSelectionByID', methods=['POST'])
+def clearItemSelectionByID():
+    data = request.json
+    video_ids = data.get('videoIds', [])
+    
+    # Logic to clear items using the video IDs
+    for id in video_ids:
+        item = vlm.getItemByIndexOrVideoID(id)
+        if item:
+            vlm.removeItem(item)
+        else:
+            print(f"Item with ID {id} not found.")
+            # Handle the case where the item is not found
+
+    return jsonify({"message": "Items cleared successfully"})
+
+
 # @app.route('/api/play_video_preview', methods=['POST'])
 # def play_video_preview():
 #     data = request.json
@@ -272,7 +289,7 @@ def downloadVideoList():
 #     return jsonify({"message": "Video is playing"})
 
 
-@app.route('/api/update_client_state', methods=['POST'])
+@app.route('/api/update_client_state', methods=['GET'])
 def update_client_state():
     data = request.get_json()
     if not data:

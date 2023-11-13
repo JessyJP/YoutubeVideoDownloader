@@ -136,6 +136,29 @@ async function postClientStateSettings() {
 }
 
 
+async function clearItemSelectionByID(videoIds) {
+    console.log("Clearing items with IDs: ", videoIds);
+
+    // Send this list of IDs to the backend
+    const response = await fetch(`${API_PROXY}/api/clearItemSelectionByID`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ videoIds: videoIds })
+    });
+
+    // Check the response from the server
+    if (response.ok) {
+        console.log("Items cleared successfully.");
+        return await response.json(); // Assuming the backend sends a response
+    } else {
+        console.error("Failed to clear items.");
+        throw new Error("Failed to clear items.");
+    }
+}
+
+
 // async function playVideoPreview(videoPath) {
 //     const response = await fetch(`${API_PROXY}/api/play_video_preview`, {
 //         method: 'POST',
@@ -161,5 +184,6 @@ export {
     downloadVideoList,
     // playVideoPreview,
     // selectDownloadLocation,
-    postClientStateSettings
+    postClientStateSettings,
+    clearItemSelectionByID,
 };
