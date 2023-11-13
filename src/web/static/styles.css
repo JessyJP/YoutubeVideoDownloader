@@ -58,12 +58,16 @@ body {
 }
 
 .app-window {
-    max-width: 1300px;
+    max-width: 1700px;
     margin: 50px auto;
     background-color: var(--app-window-bg);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 100vh; /* Set minimum height to viewport height */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 /* ================================= Format CSS elements ================================= */
@@ -71,6 +75,7 @@ body {
 #video-list {
     width: 100%;
     border-collapse: collapse;
+    overflow-x: auto; /* Enable horizontal scrolling for large tables */
 }
 
 #video-list th, #video-list td {
@@ -139,3 +144,7 @@ select {
     height: 20px; /* Adjust as needed */
     resize: vertical; /* Allow vertical resizing */
 }
+
+/* #analyze-btn, #download-btn {
+    
+} */

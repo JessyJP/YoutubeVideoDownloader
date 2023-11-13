@@ -15,6 +15,25 @@ export class VideoItem {
         this.video_size_mb = videoData.video_size_mb != null ? videoData.video_size_mb.toString() : 'N/A';
     }
 
+    // toTableRow(index) {
+    //     return `
+    //         <td>${index + 1}</td>
+    //         <td>${this.download_status}</td>
+    //         <td>${this.watch_url}</td>
+    //         <td>${this.title}</td>
+    //         <td>${this.author}</td>
+    //         <td>${this.length}</td>
+    //         <td>${this.description}</td>
+    //         <td>${this.publish_date}</td>
+    //         <td>${this.views}</td>
+    //         <td>${this.thumbnail_url}</td>
+    //         <td>${this.rating}</td>
+    //         <td>${this.video_id}</td>
+    //         <td>${this.quality_str}</td>
+    //         <td>${this.video_size_mb}</td>
+    //     `;
+    // }
+
     toTableRow(index) {
         return `
             <td>${index + 1}</td>
@@ -23,10 +42,10 @@ export class VideoItem {
             <td>${this.title}</td>
             <td>${this.author}</td>
             <td>${this.length}</td>
-            <td>${this.description}</td>
+            <td>--</td>
             <td>${this.publish_date}</td>
             <td>${this.views}</td>
-            <td>${this.thumbnail_url}</td>
+            <td>--</td>
             <td>${this.rating}</td>
             <td>${this.video_id}</td>
             <td>${this.quality_str}</td>
