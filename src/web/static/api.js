@@ -45,7 +45,6 @@ async function getStatusMsg() {
     }
 }
 
-
 async function getVideoItemList() {
     const url = `${API_PROXY}/api/getVideoItemList`;
 
@@ -68,46 +67,70 @@ async function getVideoItemList() {
     }
 }
 
-async function analyzeURLtext(url) {
-    console.log("Analyze API call made : ["+url+"]");
+async function analyzeURLtext(url_text) {
+    postClientStateSettings()// Update the latest client settings
+    console.log("Analyze API call made : ["+url_text+"]");
     const response = await fetch(`${API_PROXY}/api/analyzeURLtext`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url: url }),
+        body: JSON.stringify({ url: url_text }),
     });
     
     return await response.json();
 }
 
-async function downloadVideoList(data) {
+async function downloadVideoList() {
+    postClientStateSettings()// Update the latest client settings
+    console.log("Download API call started");
     const response = await fetch(`${API_PROXY}/api/downloadVideoList`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(),
     });
 
     return await response.json();
 }
 
-// async function getAudioBitrateList() {
-//     const response = await fetch(`${API_PROXY}/api/audio_bitrate_list`);
-//     return await response.json();
-// }
+async function postClientStateSettings() {
+    // Collect current values from dropdowns and other settings
+    const audioBitrate = document.getElementById('audio-limiter').value;
+    const videoResolution = document.getElementById('video-limiter').value;
+    const fpsValue = document.getElementById('fps-limiter').value;
+    const currentTheme = document.body.className; // Assuming the theme is stored in the body's className
+    const downloadLocation = document.getElementById('download-location').value; // Assuming there's an input field for this
 
-// async function getVideoResolutionList() {
-//     const response = await fetch(`${API_PROXY}/api/video_resolution_list`);
-//     return await response.json();
-// }
+    // Create a JSON object with these values
+    const clientStateSettings = {
+        audioBitrate,
+        videoResolution,
+        fpsValue,
+        currentTheme,
+        downloadLocation
+    };
 
-// async function getFPSValueList() {
-//     const response = await fetch(`${API_PROXY}/api/fps_value_list`);
-//     return await response.json();
-// }
+    console.log("Posting client state settings: ");
+    console.log(clientStateSettings);
 
+    // Send this object to the backend
+    const response = await fetch(`${API_PROXY}/api/update_client_state`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(clientStateSettings)
+    });
+
+    // Check the response from the server
+    if (response.ok) {
+        console.log("Client state settings updated successfully.");
+    } else {
+        console.error("Failed to update client state settings.");
+    }
+}
 
 
 // async function playVideoPreview(videoPath) {
@@ -132,10 +155,8 @@ export {
     getStatusMsg,
     getVideoItemList,
     analyzeURLtext,
-    // getAudioBitrateList,
-    // getVideoResolutionList,
-    // getFPSValueList,
     downloadVideoList,
     // playVideoPreview,
     // selectDownloadLocation,
+    postClientStateSettings
 };

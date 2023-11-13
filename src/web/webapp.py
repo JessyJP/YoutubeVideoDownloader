@@ -2,12 +2,12 @@
 import os
 import sys
 import threading
+from typing import Dict, List, Union, Tuple
 from enum import Enum
-import atexit
 from flask import Flask, render_template, request, jsonify, session
 import json
-from typing import Tuple
 import datetime
+import atexit
 
 
 #==============================================================================
@@ -24,14 +24,14 @@ from src.core.video_list_manager import VideoListManager
 from src.core.pytube_handler import LimitsAndPriority, VideoInfo
 
 #==============================================================================
-
+# Enum definition for backend current state
 class ProcessRoutine(Enum):
     IDLE     = "IDLE"
     ANALYSIS = "ANALYSIS"
     DOWNLOAD = "DOWNLOAD"
 #end
 
-
+# Singleton decorator definitions
 def singleton(cls):
     instances = {}
     def get_instance(*args, **kwargs):
@@ -41,6 +41,8 @@ def singleton(cls):
     return get_instance
 #end
 
+#==============================================================================
+# Wrapper for the manager
 @singleton
 class WebWrapper(VideoListManager):
     def __init__(self, default_tmp_dir):        
@@ -55,6 +57,10 @@ class WebWrapper(VideoListManager):
         self.process_via_multithreading = True  
         self.tmpOutputDir = default_tmp_dir 
         self.outputExt = ".mkv"
+
+        # Frontend client settings state
+        self.theme = "dark"
+        self.localSaveDir = ""
         self.lastLimits = LimitsAndPriority()
         print("WebWrapper is initialized")
     #end
@@ -82,18 +88,53 @@ class WebWrapper(VideoListManager):
         #end
     #end
 
-    def getUiDispStatus(self):
+    def getUiDispStatus(self) -> str:
         # Interface provision 
         return self.statusMsg
+    #end
 
     def setUiDispStatus(self, msg: str = ""):
         # In the GUI this was used to update the status bar at the bottom,
         # but here it can serve a more comprehensive purpose to update the client.
         self.statusMsg = msg
     #end
+
+    def getLimitsDropdownValuesAndLastSelection(self) -> Dict[str, Union[List[str], str]]:
+        # Define base values
+        base_audio_bitrates = ["max", 384, 320, 256, 192, 160, 128, 96, 64]
+        base_video_resolutions = ["max", 15360, 7680, 4320, 2160, 1440, 1080, 720, 480, 360, 240, 144]
+        base_fps_values = ["max", 240, 120, 60, 50, 48, 30, 25, 24, 15]
+
+        # Generate lists with units
+        audio_bitrate_list = [f"{bitrate} kbps" if bitrate != "max" else "max kbps" for bitrate in base_audio_bitrates]
+        video_resolution_list = [f"{resolution}p" if resolution != "max" else "max p" for resolution in base_video_resolutions]
+        fps_value_list = [f"{fps} fps" if fps != "max" else "max fps" for fps in base_fps_values]
+
+        # # Retrieve or set default last selected values
+        # self.lastLimits.bitrate = session.get('last_bitrate', audio_bitrate_list[0])
+        # self.lastLimits.resolution = session.get('last_resolution', video_resolution_list[0])
+        # self.lastLimits.fps = session.get('last_fps', fps_value_list[0])
+
+        # Get the last selection
+        self.lastLimits.bitrate = audio_bitrate_list[0] if  self.lastLimits.bitrate is None else self.lastLimits.bitrate
+        self.lastLimits.resolution = video_resolution_list[0] if  self.lastLimits.resolution is None else self.lastLimits.resolution
+        self.lastLimits.fps = fps_value_list[0] if  self.lastLimits.fps is None else self.lastLimits.fps
+
+        # Package all render data into a single dictionary
+        render_data = {
+            'audio_bitrate_list':audio_bitrate_list,
+            'video_resolution_list':video_resolution_list,
+            'fps_value_list':fps_value_list,
+            'last_bitrate':self.lastLimits.bitrate,
+            'last_resolution':self.lastLimits.resolution,
+            'last_fps':self.lastLimits.fps
+        }
+
+        return render_data
+    #end
 #end
 
-
+#============================== Helper functions ==============================
 # Function to convert VideoInfo data to JSON
 def video_info_to_json(vItem: VideoInfo) -> dict:
     video_info_tuple = vItem.as_tuple()
@@ -134,7 +175,6 @@ def video_info_to_json(vItem: VideoInfo) -> dict:
     return json.dumps(video_info_dict, indent=4)
 #end
 
-
 #==============================================================================
 
 # Flask application setup
@@ -144,38 +184,15 @@ app.secret_key = 'my_session_secret_key'  # Set a secret key for session managem
 
 thread = None
 
+#==============================================================================
 ## ---------- Router api calls ----------
 
 @app.route('/')
 def index():
-    # Define base values
-    base_audio_bitrates = ["max", 384, 320, 256, 192, 160, 128, 96, 64]
-    base_video_resolutions = ["max", 15360, 7680, 4320, 2160, 1440, 1080, 720, 480, 360, 240, 144]
-    base_fps_values = ["max", 240, 120, 60, 50, 48, 30, 25, 24, 15]
-
-    # Generate lists with units
-    audio_bitrate_list = [f"{bitrate} kbps" if bitrate != "max" else "max kbps" for bitrate in base_audio_bitrates]
-    video_resolution_list = [f"{resolution}p" if resolution != "max" else "max p" for resolution in base_video_resolutions]
-    fps_value_list = [f"{fps} fps" if fps != "max" else "max fps" for fps in base_fps_values]
-
-    # # Retrieve or set default last selected values
-    # vlm.lastLimits.bitrate = session.get('last_bitrate', audio_bitrate_list[0])
-    # vlm.lastLimits.resolution = session.get('last_resolution', video_resolution_list[0])
-    # vlm.lastLimits.fps = session.get('last_fps', fps_value_list[0])
-
-    # Get the last selection
-    vlm.lastLimits.bitrate = audio_bitrate_list[0] if  vlm.lastLimits.bitrate is None else vlm.lastLimits.bitrate
-    vlm.lastLimits.resolution = video_resolution_list[0] if  vlm.lastLimits.resolution is None else vlm.lastLimits.resolution
-    vlm.lastLimits.fps = fps_value_list[0] if  vlm.lastLimits.fps is None else vlm.lastLimits.fps
 
 
     return render_template('index.html', title="YouTubeDownloader",
-                           audio_bitrate_list=audio_bitrate_list,
-                           video_resolution_list=video_resolution_list,
-                           fps_value_list=fps_value_list,
-                           last_bitrate=vlm.lastLimits.bitrate,
-                           last_resolution=vlm.lastLimits.resolution,
-                           last_fps=vlm.lastLimits.fps)
+                            **vlm.getLimitsDropdownValuesAndLastSelection())
 #end
 
 @app.route('/api/getState', methods=['GET'])
@@ -206,25 +223,6 @@ def analyzeURLtext():
     return jsonify({"message": "Analysis process started"}), 202
 #end
 
-# @app.route('/api/audio_bitrate_list', methods=['GET'])
-# def audio_bitrate_list():
-#     # Again, we're assuming the YouTubeDownloaderGUI class has a method to get this list
-#     bitrate_list = vlm.get_audio_bitrate_list()
-    
-#     return jsonify(bitrate_list)
-
-# @app.route('/api/video_resolution_list', methods=['GET'])
-# def video_resolution_list():
-#     resolution_list = vlm.get_video_resolution_list()
-    
-#     return jsonify(resolution_list)
-
-# @app.route('/api/fps_value_list', methods=['GET'])
-# def fps_value_list():
-#     fps_list = vlm.get_fps_value_list()
-    
-#     return jsonify(fps_list)
-
 @app.route('/api/downloadVideoList', methods=['POST'])
 def downloadVideoList():
     data = request.json
@@ -251,11 +249,24 @@ def downloadVideoList():
 
 #     return jsonify({"message": "Video is playing"})
 
-# @app.route('/api/select_download_location', methods=['POST'])
-# def select_download_location():
-#     # This might involve server-side handling of file system interactions. 
-#     # For now, we'll just return a static path as an example.
-#     return jsonify({"download_location": "/path/to/download/folder"})
+
+@app.route('/api/update_client_state', methods=['POST'])
+def update_client_state():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+
+    print(f"Received client state settings: {data}")
+
+    # Extract the data, Process and store the settings
+    vlm.lastLimits.bitrate    = data.get('audioBitrate')
+    vlm.lastLimits.resolution = data.get('videoResolution')
+    vlm.lastLimits.fps        = data.get('fpsValue')
+    vlm.theme                 = data.get('currentTheme')
+    vlm.localSaveDir          = data.get('downloadLocation')
+
+    # Return a success response
+    return jsonify({"message": "Client state settings updated successfully"}), 200
 
 if __name__ == '__main__':
     app.run(debug=True, port=80)

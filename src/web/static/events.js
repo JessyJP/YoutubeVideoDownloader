@@ -1,25 +1,24 @@
 import { 
     analyzeURLtext,
-    // getAudioBitrateList, 
-    // getVideoResolutionList, 
-    // getFPSValueList, 
+    postClientStateSettings
     // downloadVideo, 
     // playVideoPreview, 
     // selectDownloadLocation
-    // Import other necessary functions
 } from './api.js';
 
 import { switchTheme } from './functions.js';
 
 import TableManager from './TableManager.js';
 
-// ====================================
+// ==========================================================================================
 // Page main event handling
 
 // Start checking on page load
 window.addEventListener("load", () => {
+    // Set the default theme
     const defaultTheme = 'dark-theme'
     switchTheme(defaultTheme);
+    
     // This is for last
     tableManager.checkAndUpdateState();
 });
@@ -29,7 +28,7 @@ window.addEventListener("unload", () => {
     tableManager.checkModeFlag = false;
 });
 
-//  =======================================================
+//  ==========================================================================================
 
 // Instantiate TableManager only once
 const tableManager = new TableManager();
@@ -39,7 +38,7 @@ function onUserInteraction() {
     tableManager.checkAndUpdateState();
 }
 
-//  =======================================================
+//  ==========================================================================================
 // User event handling 
 
 // Analyze Button Event Listener
@@ -90,68 +89,8 @@ document.getElementById("location-btn").addEventListener("click", async () => {
     onUserInteraction();
 });
 
-
-// window.addEventListener("load", async () => {
-//     // Existing load event logic
-//     tableManager.checkAndUpdateState();
-
-//     // Additional logic to populate drop-downs
-//     try {
-//         const audioBitrateList = await getAudioBitrateList();
-//         const videoResolutionList = await getVideoResolutionList();
-//         const fpsValueList = await getFPSValueList();
-
-//         populateDropdown("audio-limiter", audioBitrateList, "kbps");
-//         populateDropdown("video-limiter", videoResolutionList, "p");
-//         populateDropdown("fps-limiter", fpsValueList, "fps");
-//     } catch (error) {
-//         console.error("Error populating dropdowns: ", error);
-//     }
-// });
-
-// function populateDropdown(elementId, items, unit) {
-//     const dropdown = document.getElementById(elementId);
-//     items.forEach(item => {
-//         let option = document.createElement("option");
-//         option.value = item;
-//         option.text = `${item} ${unit}`;
-//         dropdown.appendChild(option);
-//     });
-// }
-
-
-// window.addEventListener("load", async () => {
-//     const audioBitrateList = await getAudioBitrateList();
-//     const videoResolutionList = await getVideoResolutionList();
-//     const fpsValueList = await getFPSValueList();
-
-//     // Populate the drop-downs
-//     const audioLimiter = document.getElementById("audio-limiter");
-//     audioBitrateList.forEach(bitrate => {
-//         let option = document.createElement("option");
-//         option.value = bitrate;
-//         option.text = `${bitrate} kbps`;
-//         audioLimiter.appendChild(option);
-//     });
-
-//     const videoLimiter = document.getElementById("video-limiter");
-//     videoResolutionList.forEach(resolution => {
-//         let option = document.createElement("option");
-//         option.value = resolution;
-//         option.text = `${resolution}p`;
-//         videoLimiter.appendChild(option);
-//     });
-
-//     const fpsLimiter = document.getElementById("fps-limiter");
-//     fpsValueList.forEach(fps => {
-//         let option = document.createElement("option");
-//         option.value = fps;
-//         option.text = `${fps} fps`;
-//         fpsLimiter.appendChild(option);
-//     });
-// });
-
-
+// ==========================================================================================
+// Update client state settings
 document.getElementById("theme-btn").addEventListener("click", () => {
     // Determine the new theme based on the current one
     const currentTheme = document.body.className;
@@ -159,7 +98,13 @@ document.getElementById("theme-btn").addEventListener("click", () => {
 
     // Switch to the new theme
     switchTheme(newTheme);
-
+    // Update the client state after switching the theme
+    postClientStateSettings(); 
     // Trigger state check
     onUserInteraction();
 });
+document.getElementById("download-location").addEventListener("change", postClientStateSettings);
+// Attach event listeners to dropdowns
+document.getElementById("audio-limiter").addEventListener("change", postClientStateSettings);
+document.getElementById("video-limiter").addEventListener("change", postClientStateSettings);
+document.getElementById("fps-limiter").addEventListener("change", postClientStateSettings);
