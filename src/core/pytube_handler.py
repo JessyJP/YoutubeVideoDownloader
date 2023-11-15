@@ -165,6 +165,7 @@ class VideoInfo(YouTube):
 
     def process_downloads_combine_keep(self, limits, output_dir, outputExt=".mkv"):
         strOut = f"Process Entry Download: ";
+        output_dir = os.path.abspath(output_dir)
         temp_path = self.make_tmp_dir(output_dir)
         self.log("Create temporary directory: "+temp_path)
 

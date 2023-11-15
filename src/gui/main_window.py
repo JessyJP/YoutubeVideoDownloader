@@ -981,10 +981,10 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     # ------ Callbacks and companion functions for Download, location and properties handling   -------
 
     def get_download_location(self):
-        outputdir = self.download_location_entry.get()
-        if outputdir == "" or not os.path.isdir(outputdir):
+        outputdir = os.path.abspath( self.download_location_entry.get() )
+        if not os.path.isdir(outputdir):
             self.open_select_location_dialog()
-            outputdir = self.download_location_entry.get()
+            outputdir = os.path.abspath( self.download_location_entry.get() )
             if outputdir == "":
                 self.setUiDispStatus("Please select download location!")
                 return None
