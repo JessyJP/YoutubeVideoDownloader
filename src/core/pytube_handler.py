@@ -355,12 +355,14 @@ class LimitsAndPriority:
     #end
 
     def setLimitsToMax(self):
+        # Internal conversion method
         self.bitrate = "max kbps"
         self.resolution = "max p"
         self.fps = propToInt(self.fps,"max fps")
     #end
 
     def to_numeric(self):
+        # Internal conversion method
         self.bitrate = propToInt(self.bitrate,"kbps")
         self.resolution = propToInt(self.resolution,"p")
         self.fps = propToInt(self.fps,"fps")
