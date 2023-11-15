@@ -20,6 +20,7 @@ sys.path.append(project_root)
 from src.core.common import add_module_paths
 add_module_paths(source_dir)
 
+from src.core.common import audio_bitrate_list, video_resolution_list, fps_value_list
 from src.core.video_list_manager import VideoListManager
 from src.core.pytube_handler import LimitsAndPriority, VideoInfo
 
@@ -100,15 +101,6 @@ class WebWrapper(VideoListManager):
     #end
 
     def getLimitsDropdownValuesAndLastSelection(self) -> Dict[str, Union[List[str], str]]:
-        # Define base values
-        base_audio_bitrates = ["max", 384, 320, 256, 192, 160, 128, 96, 64]
-        base_video_resolutions = ["max", 15360, 7680, 4320, 2160, 1440, 1080, 720, 480, 360, 240, 144]
-        base_fps_values = ["max", 240, 120, 60, 50, 48, 30, 25, 24, 15]
-
-        # Generate lists with units
-        audio_bitrate_list = [f"{bitrate} kbps" if bitrate != "max" else "max kbps" for bitrate in base_audio_bitrates]
-        video_resolution_list = [f"{resolution}p" if resolution != "max" else "max p" for resolution in base_video_resolutions]
-        fps_value_list = [f"{fps} fps" if fps != "max" else "max fps" for fps in base_fps_values]
 
         # # Retrieve or set default last selected values
         # self.lastLimits.bitrate = session.get('last_bitrate', audio_bitrate_list[0])
@@ -203,8 +195,6 @@ def video_info_to_dict(vItem: VideoInfo) -> dict:
 vlm = WebWrapper("R:/")
 app = Flask(__name__)
 app.secret_key = 'my_session_secret_key'  # Set a secret key for session management
-
-thread = None
 
 #==============================================================================
 ## ---------- Router api calls ----------
@@ -307,6 +297,10 @@ def update_client_state():
     # Return a success response
     return jsonify({"message": "Client state settings updated successfully"}), 200
 
-if __name__ == '__main__':
+
+def main():
     app.run(debug=True, port=80)
+
+if __name__ == '__main__':
+    main()
 #end
