@@ -1,3 +1,26 @@
+"""
+YouTube Video Downloader
+Copyright (C) 2023 JessyJP
+
+Author: JessyJP
+Date: April 7, 2023
+Description: This script downloads YouTube videos in the specified quality or allows the user to select a quality from the available streams.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
+# Imports
 import os
 import shutil
 import subprocess
@@ -69,6 +92,7 @@ def main():
     print("Preparing to package the Python script as a standalone executable file...")
     print("="*73)
     
+    # Create the executable
     cmd = f'python -m PyInstaller "{MAIN_SCRIPT_PATH}" --onefile --icon "{ICON_PATH}"'
     cmd += ' --noconsole'
     # cmd += ' --splash "./images/IconProjects/pngaaa.com-4933843.png"'
