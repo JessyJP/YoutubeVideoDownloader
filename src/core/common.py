@@ -41,6 +41,17 @@ isDeployed = getattr(sys, "frozen", False)
 import logging
 logger = logging.getLogger(__name__)
 
+## ================================= Quality definitions =================================
+
+# Define base values
+base_audio_bitrates = ["max", 384, 320, 256, 192, 160, 128, 96, 64]
+base_video_resolutions = ["max", 15360, 7680, 4320, 2160, 1440, 1080, 720, 480, 360, 240, 144]
+base_fps_values = ["max", 240, 120, 60, 50, 48, 30, 25, 24, 15]
+
+# Generate lists with units
+audio_bitrate_list = [f"{bitrate} kbps" if bitrate != "max" else "max kbps" for bitrate in base_audio_bitrates]
+video_resolution_list = [f"{resolution}p" if resolution != "max" else "max p" for resolution in base_video_resolutions]
+fps_value_list = [f"{fps} fps" if fps != "max" else "max fps" for fps in base_fps_values]
 
 ## ================================= Module management functions =================================
 # Ensure all required modules are installed.
