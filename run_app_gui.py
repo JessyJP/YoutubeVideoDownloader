@@ -19,7 +19,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import os
+import os, sys
 from src.core.common import add_module_paths
 
 # Determine the root of your project (one level up from this script)
@@ -36,6 +36,7 @@ add_module_paths(source_dir)
 from src.YouTubeDownloader import main  
 
 if __name__ == '__main__':
+    sys.argv = [__file__, '--gui']
     main()
 
 # NOTE: if running this script returns an error, just run "YouTubeDownloader.py" directly
