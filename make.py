@@ -34,9 +34,11 @@ IS_LINUX_OR_MAC = PLATFORM in ["Linux", "Darwin"]
 
 # Specify all the directories, filenames, and other constants here
 MAIN_SCRIPT_PATH = "./src/YouTubeDownloader.py"
+GUI_SCRIPT_PATH = "./src/YouTubeDownloaderGUI.py"
 ICON_PATH = "./images/window_icon.ico"
 SPLASH_PATH = "./images/IconProjects/pngaaa.com-4933843.png"
 OUTPUT_EXE_NAME = "YouTubeDownloader" + (".exe" if IS_WINDOWS else "")
+OUTPUT_GUI_EXE_NAME = "YouTubeDownloaderGUI" + (".exe" if IS_WINDOWS else "")
 SPEC_NAME = "YouTubeDownloader.spec"
 ZIP_NAME = "YouTubeDownloader.zip"
 DIST_DIR = "dist"
@@ -87,6 +89,10 @@ def main():
         os.remove(OUTPUT_EXE_NAME)
         print(f"{OUTPUT_EXE_NAME} file removed.")
 
+    if os.path.exists(OUTPUT_GUI_EXE_NAME):
+        os.remove(OUTPUT_GUI_EXE_NAME)
+        print(f"{OUTPUT_GUI_EXE_NAME} file removed.")
+
     # ============ Step 2: ============
     print("="*73)
     print("Preparing to package the Python script as a standalone executable file...")
@@ -98,10 +104,17 @@ def main():
     # cmd += ' --splash "./images/IconProjects/pngaaa.com-4933843.png"'
     run_command(cmd)
     
+    # Create GUI only executable 
+    cmd = f'python -m PyInstaller "{GUI_SCRIPT_PATH}" --onefile --icon "{ICON_PATH}"'
+    cmd += ' --noconsole'
+    # cmd += ' --splash "./images/IconProjects/pngaaa.com-4933843.png"'
+    run_command(cmd)
+
     # ============ Step 3: ============
     print("="*73)
     print("Moving the executable file from the 'dist' directory to the current directory...")
     shutil.move(os.path.join(DIST_DIR, OUTPUT_EXE_NAME), ".")
+    shutil.move(os.path.join(DIST_DIR, OUTPUT_GUI_EXE_NAME), ".")
     print("Done")
 
     # ============ Step 4: ============
@@ -110,7 +123,7 @@ def main():
     # ============ Step 5: ============
     print("="*73)
     print(f"Creating a {ZIP_NAME} containing the executable file and other resources...")
-    create_zip(ZIP_NAME, [OUTPUT_EXE_NAME] + RESOURCES)
+    create_zip(ZIP_NAME, [OUTPUT_EXE_NAME, OUTPUT_GUI_EXE_NAME] + RESOURCES)
     print("Done")
 
     print("="*73)
