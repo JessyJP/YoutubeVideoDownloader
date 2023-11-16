@@ -318,15 +318,31 @@ class VideoListManager:
     # These functions are provisioned to be overwritten by the child classes for UI updates.
     # They are not compulsory to implement. They are not necessary for this class but serve as insertion points for the child classes.
 
+    # NOTE: This is the value compute part of the function. 
+    # The display part needs to be implemented by overwriting this function 
+    # and first calling (this) the parent function.
+    def update_progressbar(self, index_in: int, total_in :int, task_level):
+        global index, total
+        if total_in == 0:
+            return;
+        #end
+        if task_level == 0:
+            index = index_in
+            total = total_in
+            # Update the progress bar for the main task
+            progressValue = (index / total) * 100
+        else:
+            progressValue = 100 * ( index +  (index_in/total_in) )/ total 
+        #end
+        return progressValue
+    #end
+
     def getUiDispStatus(self):
         # Interface provision 
         return ""
 
     def setUiDispStatus(self, msg: str = ""):
         # Interface provision 
-        pass
-
-    def update_progressbar(self, index_in: int, total_in :int, task_level):
         pass
 
     def enable_UI_elements_after_analysis(self):

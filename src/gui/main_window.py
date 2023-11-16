@@ -48,6 +48,7 @@ import shutil
 import pyperclip
 import configparser
 import inspect
+# TODO: check the imports for redundancy or unused ones
 
 
 ## Main Application window
@@ -1043,18 +1044,9 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
     # NOTE:Overwrite this function from the parent class interface
     def update_progressbar(self, index_in: int, total_in :int, task_level):
-        global index, total
-        if total_in == 0:
-            return;
-        #end
-        if task_level == 0:
-            index = index_in
-            total = total_in
-            # Update the progress bar for the main task
-            progressValue = (index / total) * 100
-        else:
-            progressValue = 100 * ( index +  (index_in/total_in) )/ total 
-        #end
+        # Call the parent to compute the progress value
+        progressValue = super().update_progressbar(index_in, total_in, task_level)
+        # Assign the value
         self.progress_bar["value"]  = progressValue
 
         # TODO: a bit redundant
