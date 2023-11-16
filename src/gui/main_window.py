@@ -28,7 +28,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ## Import modules
 import os
 import sys
-from time import sleep
 import threading
 import subprocess
 import shlex
@@ -939,42 +938,6 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             else:
                 self.tree.delete(item)
             #end
-        #end
-    #end
-
-    # NOTE:Overwrite this function from the parent class interface
-    diagnostics_thread = None;# Static variable
-    def updateUiDistStatus_in_multithread_mode(self, interval=0.1):
-        # Only if the thread is not running
-        if self.diagnostics_thread is None or not self.diagnostics_thread.is_alive():
-            def diagnostic_message(stats):
-                message = (
-                    f"URL thread check(s) Total: {stats['total_threads']}    "
-                    f"Active: {stats['active_threads']}    "
-                    f"Completed: {stats['successful_threads']}    "
-                    f"Errors: {stats['errored_threads']}    "
-                )
-                return message
-            #end
-            def display_diagnostics_thread(interval):
-                while True:
-                    stats = AnalysisThread.get_multithread_stats()
-                    self.setUiDispStatus(diagnostic_message(stats))
-                    sleep(interval)
-
-                    # Break condition: All threads from AnalysisThread are finished
-                    if len(AnalysisThread.get_active_threads(AnalysisThread.threads)) == 0:
-                        break
-                    #end
-                #end
-
-                # Set self.diagnostics_thread to None when it's done
-                self.diagnostics_thread = None
-                AnalysisThread.reset_threads()
-            #end
-
-            self.diagnostics_thread = AnalysisThread(target=display_diagnostics_thread, args=(interval,), daemon=True)
-            self.diagnostics_thread.start()
         #end
     #end
 

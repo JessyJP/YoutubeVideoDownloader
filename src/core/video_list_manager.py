@@ -31,6 +31,7 @@ from typing import List, Union
 from core.download_options import DownloadProgress
 from core.pytube_handler import LimitsAndPriority, VideoInfo
 import shutil
+from time import sleep
 
 from core.custom_thread import AnalysisThread
 from core.validation_methods import checkForValidYoutubeURLs, is_valid_youtube_channel, is_valid_youtube_playlist
@@ -226,6 +227,42 @@ class VideoListManager:
         #end
     #end
     
+    # This function handles the diagnostic update in a separate thread
+    diagnostics_thread = None;# Static variable
+    def updateUiDistStatus_in_multithread_mode(self, interval=0.1):
+        # Only if the thread is not running
+        if self.diagnostics_thread is None or not self.diagnostics_thread.is_alive():
+            def diagnostic_message(stats):
+                message = (
+                    f"URL thread check(s) Total: {stats['total_threads']}    "
+                    f"Active: {stats['active_threads']}    "
+                    f"Completed: {stats['successful_threads']}    "
+                    f"Errors: {stats['errored_threads']}    "
+                )
+                return message
+            #end
+            def display_diagnostics_thread(interval):
+                while True:
+                    stats = AnalysisThread.get_multithread_stats()
+                    self.setUiDispStatus(diagnostic_message(stats))
+                    sleep(interval)
+
+                    # Break condition: All threads from AnalysisThread are finished
+                    if len(AnalysisThread.get_active_threads(AnalysisThread.threads)) == 0:
+                        break
+                    #end
+                #end
+
+                # Set self.diagnostics_thread to None when it's done
+                self.diagnostics_thread = None
+                AnalysisThread.reset_threads()
+            #end
+
+            self.diagnostics_thread = AnalysisThread(target=display_diagnostics_thread, args=(interval,), daemon=True)
+            self.diagnostics_thread.start()
+        #end
+    #end
+
     ## --------------------------- Video info download ----------------------------------------
 
     def video_item_process_download(self, item: VideoInfo, limits: LimitsAndPriority, outputdir: str, outputExt: str):
@@ -287,10 +324,6 @@ class VideoListManager:
 
     def setUiDispStatus(self, msg: str = ""):
         # Interface provision 
-        pass
-
-    def updateUiDistStatus_in_multithread_mode(self):
-        # Interface provision for diagnostic output
         pass
 
     def update_progressbar(self, index_in: int, total_in :int, task_level):
