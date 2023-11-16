@@ -56,16 +56,41 @@ def run_cli(args):
             print("Video List Manager CLI is initialized!")
         #end
 
+        # NOTE:Overwrite this function from the parent class interface
         def getUiDispStatus(self) -> str:
             # Interface provision 
             return self.statusMsg
         #end
 
+        # NOTE:Overwrite this function from the parent class interface
         def setUiDispStatus(self, msg: str = ""):
             # In the GUI this was used to update the status bar at the bottom,
             # but here it can serve a more comprehensive purpose to update the client.
             self.statusMsg = msg
             print(msg)
+        #end
+
+        # NOTE:Overwrite this function from the parent class interface
+        def update_progressbar(self, index_in: int, total_in :int, task_level):
+            # Call the parent to compute the progress value
+            progressValue = super().update_progressbar(index_in, total_in, task_level)
+
+            def display_progress_bar(progress, width=50):
+                """
+                Displays a text-based progress bar in the terminal.
+
+                :param progress: The progress percentage (0 to 100).
+                :param width: The width of the progress bar in characters.
+                """
+                filled_length = int(width * progress // 100)
+                bar = '█' * filled_length + '-' * (width - filled_length)
+                print(f'\rProgress: |{bar}| {progress:.2f}%\n', end='\r')
+
+                # Print a new line when the progress is complete
+                if progress >= 100:
+                    print()
+
+            display_progress_bar(progressValue)
         #end
 
         def getLimitsAndPriorityFromInputArguments(self, args) -> LimitsAndPriority:
