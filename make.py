@@ -100,7 +100,7 @@ def main():
     
     # Create the executable
     cmd = f'python -m PyInstaller "{MAIN_SCRIPT_PATH}" --onefile --icon "{ICON_PATH}"'
-    cmd += ' --noconsole'
+    # cmd += ' --noconsole'
     # cmd += ' --splash "./images/IconProjects/pngaaa.com-4933843.png"'
     run_command(cmd)
     
