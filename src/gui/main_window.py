@@ -37,6 +37,7 @@ from core.custom_thread import AnalysisThread
 from core.pytube_handler import LimitsAndPriority, VideoInfo
 from core.video_list_manager import VideoListManager
 from core.download_options import *
+from core.common import audio_bitrate_list as BitrateList, video_resolution_list as ResolutionList, fps_value_list as FPSList
 # GUI imports
 import tkinter as tk
 from tkinter import ttk, filedialog
@@ -316,9 +317,9 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         # self.download_limiter_label = ttk.Label(frame, text="Download limiters:")
         # self.download_limiter_label.grid(column=0, row=2, sticky=(tk.W, tk.E), padx=(60, 0))
 
-        audio_bitrate_list = [self.config.get("DownloadSettings", "audio_bitrate"), "max kbps", "384 kbps", "320 kbps", "256 kbps", "192 kbps", "160 kbps", "128 kbps", "96 kbps", "64 kbps"]
-        video_resolution_list = [self.config.get("DownloadSettings", "video_bitrate"), "max p", "15360p", "7680p", "4320p", "2160p", "1440p", "1080p", "720p", "480p", "360p", "240p", "144p"]
-        fps_value_list = [self.config.get("DownloadSettings", "fps"), "max fps", "240 fps", "120 fps", "60 fps", "50 fps", "48 fps", "30 fps", "25 fps", "24 fps", "15 fps"]
+        audio_bitrate_list = [self.config.get("DownloadSettings", "audio_bitrate")]+ BitrateList
+        video_resolution_list = [self.config.get("DownloadSettings", "video_bitrate")] + ResolutionList
+        fps_value_list = [self.config.get("DownloadSettings", "fps")] + FPSList
 
         self.dropdown_audio_limiter_selection = tk.StringVar(value=audio_bitrate_list[0])
         self.dropdown_video_limiter_selection = tk.StringVar(value=video_resolution_list[0])
