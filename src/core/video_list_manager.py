@@ -229,7 +229,7 @@ class VideoListManager:
     
     # This function handles the diagnostic update in a separate thread
     diagnostics_thread = None;# Static variable
-    def updateUiDistStatus_in_multithread_mode(self, interval=0.1):
+    def updateUiDistStatus_in_multithread_mode(self, interval=0.01):
         # Only if the thread is not running
         if self.diagnostics_thread is None or not self.diagnostics_thread.is_alive():
             def diagnostic_message(stats):
@@ -245,6 +245,10 @@ class VideoListManager:
                 while True:
                     stats = AnalysisThread.get_multithread_stats()
                     self.setUiDispStatus(diagnostic_message(stats))
+                    self.update_progressbar(
+                            index_in=stats['successful_threads']+stats['errored_threads'],
+                            total_in=stats['total_threads'], 
+                            task_level=0)
                     sleep(interval)
 
                     # Break condition: All threads from AnalysisThread are finished
@@ -258,7 +262,7 @@ class VideoListManager:
                 AnalysisThread.reset_threads()
             #end
 
-            self.diagnostics_thread = AnalysisThread(target=display_diagnostics_thread, args=(interval,), daemon=True)
+            self.diagnostics_thread = threading.Thread(target=display_diagnostics_thread, args=(interval,), daemon=True)
             self.diagnostics_thread.start()
         #end
     #end
