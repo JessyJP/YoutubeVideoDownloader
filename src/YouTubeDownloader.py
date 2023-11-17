@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 ## Imports
 import os
-os.system("title Don't mind the LOG window")
+os.system("title Don't mind the Youtube Downloader LOG window!")
 import argparse
 import ctypes
 # import gui.splashscreen
