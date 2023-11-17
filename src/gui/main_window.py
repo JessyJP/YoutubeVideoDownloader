@@ -899,7 +899,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
     #end
 
-    # NOTE:Overwrite this function from the parent class interface
+    # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def import_valid_Youtube_videos_from_textOrURL_list(self, text, use_analysis_multithreading, recursiveCheckOfURLcontent_mode=0):
         VideoListManager.import_valid_Youtube_videos_from_textOrURL_list(self, text, use_analysis_multithreading, recursiveCheckOfURLcontent_mode)
         # To finish up, enable the UIelements after the analysis
@@ -910,7 +910,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
     #end
 
-    # NOTE: this function overwrites the parent implementation
+    # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def process_url(self, url, use_analysis_multithreading, recursiveCheckOfURLcontent_mode):
         # Add this an interrupt that can be activated from the gui
         if self.cancel_flag:
@@ -922,7 +922,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         VideoListManager.process_url(self, url, use_analysis_multithreading, recursiveCheckOfURLcontent_mode)
     #end
 
-    # NOTE: this function overwrites the parent implementation
+    # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     # Get the current URLs in the tree view and video IDs
     def getURL_videoIDList(self):# TODO it's best to extract that from the self.getVideoList()
         current_url_entries = set()
@@ -934,7 +934,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         return current_url_entries, current_video_ids
     #end
 
-    # NOTE: this function overwrites the parent implementation
+    # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def addItem(self, vi_item):
         super().addItem(vi_item)
         self.tree.insert("", "end", values=vi_item.as_tuple())
@@ -943,7 +943,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         # current_video_ids.add(vi_item.video_id) # NOTE: effective placeholder because it's not inserted or  returned
     #end
 
-    # NOTE: this function overwrites the parent implementation
+    # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def remove_duplicate_items(self):
         super().remove_duplicate_items()
         # Get the current video IDs in the tree view
@@ -1050,12 +1050,12 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     # to update status & progress as well as cancel the procedure
 
     # Set/get pair functions for diagnostic output in above the progress bar
-    # NOTE:Overwrite this function from the parent class interface
+    # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def getUiDispStatus(self):
         return self.status_bar_label.cget("text")
     #end
     
-    # NOTE:Overwrite this function from the parent class interface
+    # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def setUiDispStatus(self, msg: str = ""):# TODO: funcCall may be obsolete in the future
         self.status_bar_label.config(text=msg)
         self.progress_bar_msg.set(msg)# TODO: may be redundant 
@@ -1063,7 +1063,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.tree.update_idletasks();# Update the GUI
     #end
 
-    # NOTE:Overwrite this function from the parent class interface
+    # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def update_progressbar(self, index_in: int, total_in :int, task_level):
         # Call the parent to compute the progress value
         progressValue = super().update_progressbar(index_in, total_in, task_level)
@@ -1076,7 +1076,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.update()  # Refresh the window to show the progress
     #end
 
-    # NOTE:Overwrite this function from the parent class
+    # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def updateVideoItemUIDownloadState(self, videoItem,  download_status=None):        
         # Get the associated item
         ui_item = self.get_tree_view_UI_item_by_video_info(videoItem)

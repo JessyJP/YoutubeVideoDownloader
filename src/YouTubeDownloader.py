@@ -56,13 +56,13 @@ def run_cli(args):
             print("Video List Manager CLI is initialized!")
         #end
 
-        # NOTE:Overwrite this function from the parent class interface
+        # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
         def getUiDispStatus(self) -> str:
             # Interface provision 
             return self.statusMsg
         #end
 
-        # NOTE:Overwrite this function from the parent class interface
+        # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
         def setUiDispStatus(self, msg: str = ""):
             # In the GUI this was used to update the status bar at the bottom,
             # but here it can serve a more comprehensive purpose to update the client.
@@ -70,7 +70,7 @@ def run_cli(args):
             print(msg)
         #end
 
-        # NOTE:Overwrite this function from the parent class interface
+        # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
         def update_progressbar(self, index_in: int, total_in :int, task_level):
             # Call the parent to compute the progress value
             progressValue = super().update_progressbar(index_in, total_in, task_level)
