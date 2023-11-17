@@ -85,7 +85,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
         # Flagging variable
         self.cancel_flag = False #TODO: check if this is needed in the download manager
-        self.download_in_progress_flag = False
+        self.download_in_progress_flag = False# TODO: maybe have to rename this flag to process_running flag instead
 
         # Some settings
         self.COLUMN_INDEX_URL = 1  # Assuming the URL is the 2nd -1 column in the tree view
@@ -880,12 +880,25 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             # Reset just in case
             self.reset_cancel_flag()  
             # Disable the download button if it's not already disabled
-            self.download_button.config(state='disabled')
+            # TODO: overall the disable/enable configuration should be rechecked and tested for consistency
+            self.download_button.config(state='disabled')# TODO: may be redundant here.
+            self.disable_UI_elements_during_download()# TODO: this is for download but also works.
             # Get the threading mode flag
             use_analysis_multithreading = self.config.getboolean("General", "multithread_analyse_procedure")
             # Make and start an analysis thread
             t = threading.Thread(target=self.import_valid_Youtube_videos_from_textOrURL_list, args=(text, use_analysis_multithreading))
             t.start()
+        #end
+    #end
+
+    # NOTE:Overwrite this function from the parent class interface
+    def import_valid_Youtube_videos_from_textOrURL_list(self, text, use_analysis_multithreading, recursiveCheckOfURLcontent_mode=0):
+        VideoListManager.import_valid_Youtube_videos_from_textOrURL_list(self, text, use_analysis_multithreading, recursiveCheckOfURLcontent_mode)
+        # To finish up, enable the UIelements after the analysis
+        if recursiveCheckOfURLcontent_mode == 0:  # This checks the recursion mode
+            # Enable any ui elements
+            self.download_button.config(state='normal')# TODO: if this is removed from this class and only implemented in the child
+            self.enable_UI_elements_after_download()
         #end
     #end
 
@@ -1055,11 +1068,6 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.update()  # Refresh the window to show the progress
     #end
 
-    # NOTE:Overwrite this function from the parent class interface
-    def enable_UI_elements_after_analysis(self):
-        self.download_button.config(state='normal')
-    #end
-    
     # NOTE:Overwrite this function from the parent class
     def updateVideoItemUIDownloadState(self, videoItem,  download_status=None):        
         # Get the associated item

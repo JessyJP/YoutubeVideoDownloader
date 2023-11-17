@@ -182,8 +182,6 @@ class VideoListManager:
             self.setUiDispStatus("URL import and Analysis is Complete!")  # Clear the diagnostic output
             # self.setUiDispStatus("");# Clear the diagnostic output #TODO: select one
             self.update_progressbar(N, N, recursiveCheckOfURLcontent_mode)
-            # Enable any ui elements
-            self.enable_UI_elements_after_analysis()
         #end
     #end
 
@@ -346,10 +344,6 @@ class VideoListManager:
         return ""
 
     def setUiDispStatus(self, msg: str = ""):
-        # Interface provision 
-        pass
-
-    def enable_UI_elements_after_analysis(self):
         # Interface provision 
         pass
 
