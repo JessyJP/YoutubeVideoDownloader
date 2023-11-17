@@ -361,5 +361,7 @@ class VideoListManager:
 
     # TODO: this function could be renamed and somewhat reimplemented. 
     def updateVideoItemUIDownloadState(self, videoItem, download_status=None):
-        # Interface provision 
+        # Interface provision but by default: 
+        # Also update the global download progress
+        self.update_download_progress()
         pass
