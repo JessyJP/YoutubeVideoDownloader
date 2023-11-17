@@ -11,7 +11,7 @@ args.append('--cli')
 
 # Output dir
 # args.append("--output R:/") #"./output/"
-args.append("-o R:/") #"./output/"
+args.append(r"-o R:/") #"./output/"
 
 # quality  = "max"
 args.append("-c")
@@ -25,9 +25,9 @@ args.append("https://www.youtube.com/watch?v=7n16Yw51xkI&list=PLLgJJsrdwhPxa6-02
 args.append("https://www.youtube.com/watch?v=77GWlSiwKI4" )
 args.append('''https://www.youtube.com/watch?v=77GWlSiwKI4
             https://www.youtube.com/watch?v=DNsLLrCgK0U
-            qweqr123    
+            random_string_1234    
             https://www.youtube.com/playlist?list=PLbpi6ZahtOH6GomiNz1MJDa2aQOeFiMKH
-            qeweqwe
+            random_string_aaaaaaaaaaaaaaaaaaaa
             ''')
 args.append("https://www.youtube.com/watch?v=7n16Yw51xkI&list=PLLgJJsrdwhPxa6-02-CeHW8ocwSwl2jnu")
 args.append("https://www.youtube.com/playlist?list=PLbpi6ZahtOH6GomiNz1MJDa2aQOeFiMKH")
