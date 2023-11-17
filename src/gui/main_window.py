@@ -1091,16 +1091,6 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.update_download_progress()
     #end
 
-    def update_download_progress(self):
-        # Global GUI update while downloading
-        N = len(self.getVideoList())
-        count_done          = sum(1 for video_info in self.getVideoList() if video_info.download_status == DownloadProgress.DONE)
-        count_in_progress   = sum(1 for video_info in self.getVideoList() if video_info.download_status == DownloadProgress.IN_PROGRESS)# TODO: this could be implemented different, so that percentage is included, basically this has to be ignored and calculated as total - the other 2
-        count_error         = sum(1 for video_info in self.getVideoList() if video_info.download_status == DownloadProgress.ERROR)
-        self.update_progressbar(count_done+count_error,N,0)
-        self.setUiDispStatus(f"Processing {N} item(s): Completed downloads {count_done} of {N}      Still in progress = {count_in_progress}, Errors = {count_error}!")
-    #end
-
     def cancel_operation_flagON(self, event=None):
         self.cancel_flag = True
         msg = "Cancel the currently running operation!";
