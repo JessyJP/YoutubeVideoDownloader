@@ -3,11 +3,15 @@ import subprocess
 # Variables
 scriptName = './src/YouTubeDownloader.py';
 args = []
-args.append('--cli')
 
 # Select mode
-# args.append('--web')
+args.append('--cli')
 # args.append('--gui')
+# args.append('--web')
+
+# Threading modes
+args.append('--enable-analysis-threading')
+args.append('--enable-download-threading')
 
 # Output dir
 # args.append("--output R:/") #"./output/"
@@ -15,7 +19,7 @@ args.append("-o")
 args.append("R:/") #"./output/"
 
 # quality  = "max"
-args.append("-c")
+# args.append("-c")
 
 # Arguments URL(s)
 args.append("https://www.youtube.com/watch?v=6TWJaFD6R2s")
@@ -42,5 +46,5 @@ command.append(['python', scriptName,*args ])
 
 # Execute the command
 for cmd in command:
-    subprocess.run(cmd,shell=True)
+    subprocess.run(cmd)
 
