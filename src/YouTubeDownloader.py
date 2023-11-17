@@ -123,7 +123,7 @@ def run_cli(args):
     # Parameters for Analysis
     use_multithreading_analysis = False
     # Parameters for Download
-    process_via_multithreading = True  
+    process_via_multithreading = False  
     
     input_text = "\n".join(args.urls) 
 
