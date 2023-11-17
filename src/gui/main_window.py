@@ -466,6 +466,8 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             popup.add_command(label="Keep Info:       Toggle Add/Remove "+INFO_SYMBOL,        command=lambda: self.change_download_status(INFO_SYMBOL), state=_state)
             popup.add_command(label="Keep Comments:   Toggle Add/Remove "+COMMENTS_SYMBOL,    command=lambda: self.change_download_status(COMMENTS_SYMBOL), state=_state)
             popup.add_command(label="Clear All Keeps",   command=lambda: self.change_download_status_clearall(), state=_state)
+            popup.add_separator()
+            popup.add_command(label="Remove Selected Entries",   command=lambda: self.remove_table_entry_selection(), state=_state)
 
             # Add a separator and the copy_selected_entries section
             popup.add_separator()
@@ -739,7 +741,10 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
     #end
 
-    def remove_table_entry(self, event=None):
+    def remove_table_entry_selection(self, event=None):
+        if self.active_process_flag:
+            return
+        #end
         selected_items = self.tree.selection()
 
         for item in selected_items:
