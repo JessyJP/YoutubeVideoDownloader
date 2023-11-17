@@ -130,11 +130,12 @@ This is relevant when there are a lot of links/text/channels inserted at the sam
   - This will make it easier for proper terminal use implementation. 
   - There should be an option for straight through command user and interactive terminal use.
 - [ ] Final file size reporting should be corrected and make more accurate and reflect the latest changes.
-- [ ] Better error handling, proper cancellation (and cleanup) and abrupt exit thread handling and cleanup should be implemented (especially for the windowed GUI mode).
+- [ ] Better error handling, proper cancellation (and clean-up) and abrupt exit thread handling and clean-up should be implemented (especially for the windowed GUI mode).
 - [ ] Speed and GUI responsiveness should also be improved.
 - [ ] Bugfix: Sometimes not all videos are properly extracted from a playlist
 - [ ] Add a playlist column in the main window
 - [ ] There should be a LOG file option in the settings menu
+- [ ] The cancel operation should be revaluated. Any bugs should be fixed for both download and analysis.
 
 ## Potential Features
 - [ ] Webpage/Forum or some kind of marketing strategy for outreach to more users
