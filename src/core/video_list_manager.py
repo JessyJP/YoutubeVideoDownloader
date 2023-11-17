@@ -338,7 +338,7 @@ class VideoListManager:
     def update_progressbar(self, index_in: int, total_in :int, task_level):
         global index, total
         if total_in == 0:
-            return;
+            return 0;# Default value
         #end
         if task_level == 0:
             index = index_in
