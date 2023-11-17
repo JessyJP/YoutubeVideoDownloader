@@ -20,6 +20,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
+from cli.ConsoleProgressbar import ConsoleProgressbarChecker, make_progress_bar_str
 from core.video_list_manager import VideoListManager
 from core.pytube_handler import LimitsAndPriority
 
@@ -28,6 +29,7 @@ class VideoListManagerCLI(VideoListManager):
         super().__init__()
         # This status string is for updating the current process status
         self.statusMsg = "Ready!"
+        self._consoleProgressbarChecker = ConsoleProgressbarChecker()
     
         self.lastLimits = LimitsAndPriority() # TODO: might not be needed
         print("Video List Manager CLI is initialized!")
@@ -44,6 +46,7 @@ class VideoListManagerCLI(VideoListManager):
         # In the GUI this was used to update the status bar at the bottom,
         # but here it can serve a more comprehensive purpose to update the client.
         self.statusMsg = msg
+        self._consoleProgressbarChecker.log_output(msg)
         print(msg)
     #end
 
@@ -51,23 +54,13 @@ class VideoListManagerCLI(VideoListManager):
     def update_progressbar(self, index_in: int, total_in :int, task_level):
         # Call the parent to compute the progress value
         progressValue = super().update_progressbar(index_in, total_in, task_level)
-
-        def display_progress_bar(progress, width=72):
-            """
-            Displays a text-based progress bar in the terminal.
-
-            :param progress: The progress percentage (0 to 100).
-            :param width: The width of the progress bar in characters.
-            """
-            filled_length = int(width * progress // 100)
-            bar = '█' * filled_length + '-' * (width - filled_length)
-            print(f'\rProgress: |{bar}| {progress:.2f}%\n', end='\r')
-
-            # Print a new line when the progress is complete
-            if progress >= 100:
-                print()
-
-        display_progress_bar(progressValue)
+        progress_bar_str = make_progress_bar_str(progressValue,64)
+        # NOTE: we can simply print the progress_bar_str but it's more fancy to replace it
+        if progressValue == 100:
+            print(progress_bar_str)
+        else:
+            self._consoleProgressbarChecker.update_progress(progress_bar_str)
+        #end
     #end
 
     def getLimitsAndPriorityFromInputArguments(self, args) -> LimitsAndPriority:
