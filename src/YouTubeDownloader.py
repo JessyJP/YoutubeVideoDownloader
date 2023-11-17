@@ -125,7 +125,7 @@ def run_cli(args):
     # Parameters for Download
     process_via_multithreading = True  # TODO:NOTE maybe this parameter should be controllable via the CLI
     
-    input_text = "\n".join(args.urls) 
+    input_text = " ".join(args.urls)
 
     vlm.setUiDispStatus("Analysis started")
     vlm.import_valid_Youtube_videos_from_textOrURL_list( 
