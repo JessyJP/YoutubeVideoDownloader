@@ -214,9 +214,9 @@ def main():
         run_web_service(web_args)
     elif mode_args.gui:
         # The gui mode is called
-        if isDeployed and os_name == 'Windows':
-            hide_console()
-        #end    
+        # if isDeployed and os_name == 'Windows':
+        #     hide_console()
+        # #end    
         
         # GUI main function
         from gui.main_window import main_runGUI
