@@ -42,5 +42,5 @@ command.append(['python', scriptName,*args ])
 
 # Execute the command
 for cmd in command:
-    subprocess.run(cmd)
+    subprocess.run(cmd,shell=True)
 
