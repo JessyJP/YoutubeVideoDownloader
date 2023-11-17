@@ -18,29 +18,6 @@
             </a>
         </div>
 
-        <table id="video-list">
-            <thead>
-                <tr>
-                    <th>Index</th>
-                    <th>Download Status</th>
-                    <th>Watch URL</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Length</th>
-                    <th>Description</th>
-                    <th>Publish Date</th>
-                    <th>Views</th>
-                    <th>Thumbnail URL</th>
-                    <th>Rating</th>
-                    <th>Video ID</th>
-                    <th>Quality</th>
-                    <th>File Size (MB)</th>
-                </tr>
-            </thead>            
-            <tbody>
-                <!-- Rows of data will go here -->
-            </tbody>
-        </table>
         <div class="controls">
             <label for="url-entry">Video Watch URL(s)  -  Playlist URL(s)  -  Channel URL(s)  -  Text containing URL(s):</label>
             <input type="text" id="url-entry" placeholder="Enter video URL">
@@ -81,6 +58,29 @@
         <div class="diagnostic-output">
             <textarea id="diagnostic-text" placeholder="Diagnostic output..." readonly></textarea> <!-- Diagnostic Text Field -->
         </div>
+        <table id="video-list">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Download Status</th>
+                    <th>Watch URL</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Length</th>
+                    <th>Description</th>
+                    <th>Publish Date</th>
+                    <th>Views</th>
+                    <th>Thumbnail URL</th>
+                    <th>Rating</th>
+                    <th>Video ID</th>
+                    <th>Quality</th>
+                    <th>File Size (MB)</th>
+                </tr>
+            </thead>            
+            <tbody>
+                <!-- Rows of data will go here -->
+            </tbody>
+        </table>
     </div>
     
     <script type="module" src="{{ url_for('static', filename='events.js') }}"></script>
