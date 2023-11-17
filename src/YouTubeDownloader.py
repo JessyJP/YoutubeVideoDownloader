@@ -121,9 +121,9 @@ def run_cli(args):
     # Output format definition
     outputExt = ".mkv"
     # Parameters for Analysis
-    use_multithreading_analysis = True # TODO:NOTE maybe this parameter should be controllable via the CLI
+    use_multithreading_analysis = args.enable_analysis_threading
     # Parameters for Download
-    process_via_multithreading = True  # TODO:NOTE maybe this parameter should be controllable via the CLI
+    process_via_multithreading = args.enable_download_threading
     
     input_text = " ".join(args.urls)
 
@@ -177,6 +177,10 @@ def main():
     mode_parser.add_argument("--web", action="store_true", help="Run as web service")
     mode_parser.add_argument("--cli", action="store_true", help="Run in CLI (command line interface) mode")
 
+    # Analysis multithreading argument
+    mode_parser.add_argument("-eat", "--enable-analysis-threading", action="store_true", help="Enable multithreading for URL analysis")
+    # Download multithreading argument
+    mode_parser.add_argument("-edt", "--enable-download-threading", action="store_true", help="Enable multithreading for downloading videos")
     # Parse known args for the mode
     mode_args, options_argv = mode_parser.parse_known_args()
 
@@ -205,13 +209,20 @@ def main():
     web_parser = argparse.ArgumentParser(description="YouTube video downloader - Web Service mode")
     # Output directory as an optional argument
     web_parser.add_argument("-o", "--output", default=".", help="Output directory (default: current directory)")
+    # Add argument for remote storage
+    web_parser.add_argument("-rs", "--remote-storage", type=str, help="Remote storage URL or path")
+    # Add Web Service-specific arguments
+    web_parser.add_argument("-p", "--port", type=int, default=8080, help="Port for the web service")
 
+    ## ======== Select a mode ========
     if mode_args.cli:
         cli_args  = cli_parser.parse_args(options_argv)
+        cli_args  = argparse.Namespace(**{**vars(mode_args), **vars(cli_args)})
         run_cli(cli_args)
     elif mode_args.web:
         web_args = web_parser.parse_args(options_argv)
-        run_web_service(web_args)
+        web_dict = argparse.Namespace(**{**vars(mode_args), **vars(web_args)})
+        run_web_service(web_dict)
     elif mode_args.gui:
         # The gui mode is called
         # if isDeployed and os_name == 'Windows':
