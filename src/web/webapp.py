@@ -90,24 +90,6 @@ class WebWrapper(VideoListManager):
         #end
     #end
 
-    # NOTE:Overwrite this function from the parent class interface
-    def getUiDispStatus(self) -> str:
-        # Interface provision 
-        return self.statusMsg
-    #end
-
-    # NOTE:Overwrite this function from the parent class interface
-    def setUiDispStatus(self, msg: str = ""):
-        # In the GUI this was used to update the status bar at the bottom,
-        # but here it can serve a more comprehensive purpose to update the client.
-        self.statusMsg = msg
-    #end
-
-    # NOTE:Overwrite this function from the parent class interface
-    def update_progressbar(self, index_in: int, total_in :int, task_level):
-        # Call the parent to compute the progress value
-        self.statusProgressValue = super().update_progressbar(index_in, total_in, task_level)
-
     def getLimitsDropdownValuesAndLastSelection(self) -> Dict[str, Union[List[str], str]]:
 
         # # Retrieve or set default last selected values
@@ -153,6 +135,25 @@ class WebWrapper(VideoListManager):
         # TODO here we can just implement the list directly but the input might come from a env variable hance why we parse strings
         limits_and_priority.to_numeric()
         return limits_and_priority
+    #end
+
+    # NOTE:Overwrite this function from the parent class interface
+    def getUiDispStatus(self) -> str:
+        # Interface provision 
+        return self.statusMsg
+    #end
+
+    # NOTE:Overwrite this function from the parent class interface
+    def setUiDispStatus(self, msg: str = ""):
+        # In the GUI this was used to update the status bar at the bottom,
+        # but here it can serve a more comprehensive purpose to update the client.
+        self.statusMsg = msg
+    #end
+
+    # NOTE:Overwrite this function from the parent class interface
+    def update_progressbar(self, index_in: int, total_in :int, task_level):
+        # Call the parent to compute the progress value
+        self.statusProgressValue = super().update_progressbar(index_in, total_in, task_level)
     #end
 #end
 
