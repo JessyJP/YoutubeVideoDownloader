@@ -121,9 +121,9 @@ def run_cli(args):
     # Output format definition
     outputExt = ".mkv"
     # Parameters for Analysis
-    use_multithreading_analysis = False
+    use_multithreading_analysis = True # TODO:NOTE maybe this parameter should be controllable via the CLI
     # Parameters for Download
-    process_via_multithreading = False  
+    process_via_multithreading = True  # TODO:NOTE maybe this parameter should be controllable via the CLI
     
     input_text = "\n".join(args.urls) 
 

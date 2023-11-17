@@ -228,7 +228,7 @@ class VideoListManager:
         #end
     #end
     
-    def updateUiDistStatus_in_multithread_mode(self, interval=0.01):
+    def updateUiDistStatus_in_multithread_mode(self, interval=0.01):# TODO: Could add this as a class variable so that it can be controlled
         # TODO: This could be redesigned such that it gets diagnostic message function which takes the relevant numbers. 
         # Only if the thread is not running
         if self.diagnostics_thread is None or not self.diagnostics_thread.is_alive():
@@ -289,7 +289,7 @@ class VideoListManager:
         self.updateVideoItemUIDownloadState(item)
     #end
 
-    ## Process methods
+    ## Process the download entries method
     def downloadAllVideoItems(self, process_via_multithreading: bool, limits: LimitsAndPriority, outputDir: str, outputExt: str):
         # Create a list to hold thread objects
         download_threads = []
