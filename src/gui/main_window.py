@@ -465,7 +465,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             popup.add_command(label="Keep Thumbnail:   Toggle Add/Remove "+THUMBNAIL_SYMBOL,   command=lambda: self.change_download_status(THUMBNAIL_SYMBOL), state=_state)
             popup.add_command(label="Keep Info:       Toggle Add/Remove "+INFO_SYMBOL,        command=lambda: self.change_download_status(INFO_SYMBOL), state=_state)
             popup.add_command(label="Keep Comments:   Toggle Add/Remove "+COMMENTS_SYMBOL,    command=lambda: self.change_download_status(COMMENTS_SYMBOL), state=_state)
-            popup.add_command(label="Clear All Keeps",   command=lambda: self.change_download_status_clearall())
+            popup.add_command(label="Clear All Keeps",   command=lambda: self.change_download_status_clearall(), state=_state)
 
             # Add a separator and the copy_selected_entries section
             popup.add_separator()
