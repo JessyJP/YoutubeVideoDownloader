@@ -101,6 +101,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
                 pass
                 # thread.terminate() #TODO: more work needed here
                 # thread.join()
+                # TODO: reevaluate the abrupt or normal shutdown procedure
             #end
         #end
 
@@ -882,7 +883,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             # Disable the download button if it's not already disabled
             # TODO: overall the disable/enable configuration should be rechecked and tested for consistency
             self.download_button.config(state='disabled')# TODO: may be redundant here.
-            self.disable_UI_elements_during_download()# TODO: this is for download but also works.
+            self.disable_UI_elements_during_download()# TODO: this is for download but also works, but will give incorrect label, i.e. "cancel download"
             # Get the threading mode flag
             use_analysis_multithreading = self.config.getboolean("General", "multithread_analyse_procedure")
             # Make and start an analysis thread

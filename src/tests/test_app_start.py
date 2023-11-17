@@ -11,7 +11,8 @@ args.append('--cli')
 
 # Output dir
 # args.append("--output R:/") #"./output/"
-args.append(r"-o R:/") #"./output/"
+args.append("-o")
+args.append("R:/") #"./output/"
 
 # quality  = "max"
 args.append("-c")
