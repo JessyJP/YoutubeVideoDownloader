@@ -7,3 +7,10 @@ export function switchTheme(newTheme) {
         document.body.className = 'light-theme';
     }
 }
+
+function updateProgressBar(progress) {
+    var progressBar = document.getElementById("progress-bar");
+    progressBar.style.width = progress + '%';
+    progressBar.innerText = progress + '%';
+}
+

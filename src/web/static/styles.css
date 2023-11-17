@@ -165,3 +165,38 @@ button:disabled {
     cursor: not-allowed;
     /* Again, remove the height property unless it's necessary */
 }
+
+/* =============== Progressbar =============== */
+
+/* Progress Bar Styles */
+.progress-container {
+    width: 100%; /* Full width */
+    background-color: #ddd; /* Light grey background */
+    border-radius: 4px; /* Rounded corners */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); /* Inner shadow for depth (optional) */
+    margin-top: 20px; /* Space above the progress bar */
+}
+
+.progress-bar {
+    height: 20px; /* Height of the progress bar */
+    background-color: var(--button-bg); /* Use the button background color */
+    border-radius: 4px; /* Rounded corners */
+    width: 0%; /* Initial width of 0% */
+    transition: width 0.4s ease; /* Smooth transition for width changes */
+    text-align: center; /* Center text inside the progress bar */
+    line-height: 20px; /* Align text vertically */
+    color: white; /* Text color */
+}
+
+/* Example of additional classes for different progress bar colors */
+.progress-bar-success {
+    background-color: #28a745; /* Green for success */
+}
+
+.progress-bar-warning {
+    background-color: #ffc107; /* Yellow for warning */
+}
+
+.progress-bar-danger {
+    background-color: #dc3545; /* Red for danger */
+}
