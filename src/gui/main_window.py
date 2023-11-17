@@ -32,7 +32,6 @@ import threading
 import subprocess
 import shlex
 # Core imports
-from core.custom_thread import AnalysisThread
 from core.pytube_handler import LimitsAndPriority, VideoInfo
 from core.video_list_manager import VideoListManager
 from core.download_options import *

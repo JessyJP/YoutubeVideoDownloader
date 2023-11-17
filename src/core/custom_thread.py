@@ -24,18 +24,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import threading
 
 ## ================================= Multithreading functions =================================
-class AnalysisThread(threading.Thread):
-    threads = []
+class CustomThread(threading.Thread):
+    threads = []# TODO: this could potentially be implemented with a tag/label to indicate the groups
+    # TODO:NOTE: or it could be implemented such that this stores the threads for a specific period of time.
+    #... and is not using a static variable (list) to hold the thread handles.
 
     def __init__(self, *args, **kwargs):
-        super(AnalysisThread, self).__init__(*args, **kwargs)
+        super(CustomThread, self).__init__(*args, **kwargs)
         self.exception = None
         self.exitcode = 0
-        AnalysisThread.threads.append(self)
+        CustomThread.threads.append(self)
 
     def run(self):
         try:
-            super(AnalysisThread, self).run()
+            super(CustomThread, self).run()
         except Exception as e:
             self.exception = e
             self.exitcode = 1

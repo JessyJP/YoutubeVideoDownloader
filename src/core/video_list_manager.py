@@ -33,13 +33,16 @@ from core.pytube_handler import LimitsAndPriority, VideoInfo
 import shutil
 from time import sleep
 
-from core.custom_thread import AnalysisThread
+from core.custom_thread import CustomThread # TODO:NOTE could be named "CustomThreading" too
 from core.validation_methods import checkForValidYoutubeURLs, is_valid_youtube_channel, is_valid_youtube_playlist
 from core.url_text_processor import extract_URL_list_from_text, get_html_content, get_video_urls_from_playlist, get_videos_and_playlists_from_Channel
 from core.url_text_processor import get_video_info_item_from_url
 
 # TODO: some functions could be expanded with a union of various video info classes if other library interfaces are implemented
 class VideoListManager:
+    # This function handles the diagnostic update in a separate thread
+    diagnostics_thread = None;# Static variable
+    # Class constructor
     def __init__(self):        
         # Video Info list
         self.infoList: List[VideoInfo] = []
@@ -155,7 +158,7 @@ class VideoListManager:
             # Run in Single thread or multithread mode
             if use_analysis_multithreading: 
                 self.updateUiDistStatus_in_multithread_mode();               
-                t = AnalysisThread(target=self.process_url, args=(url, use_analysis_multithreading, recursiveCheckOfURLcontent_mode))
+                t = CustomThread(target=self.process_url, args=(url, use_analysis_multithreading, recursiveCheckOfURLcontent_mode))
                 t.start()
                 analysisThreads.append(t)                
             else:
@@ -225,9 +228,8 @@ class VideoListManager:
         #end
     #end
     
-    # This function handles the diagnostic update in a separate thread
-    diagnostics_thread = None;# Static variable
     def updateUiDistStatus_in_multithread_mode(self, interval=0.01):
+        # TODO: This could be redesigned such that it gets diagnostic message function which takes the relevant numbers. 
         # Only if the thread is not running
         if self.diagnostics_thread is None or not self.diagnostics_thread.is_alive():
             def diagnostic_message(stats):
@@ -241,7 +243,7 @@ class VideoListManager:
             #end
             def display_diagnostics_thread(interval):
                 while True:
-                    stats = AnalysisThread.get_multithread_stats()
+                    stats = CustomThread.get_multithread_stats()
                     self.setUiDispStatus(diagnostic_message(stats))
                     self.update_progressbar(
                             index_in=stats['successful_threads']+stats['errored_threads'],
@@ -249,15 +251,15 @@ class VideoListManager:
                             task_level=0)
                     sleep(interval)
 
-                    # Break condition: All threads from AnalysisThread are finished
-                    if len(AnalysisThread.get_active_threads(AnalysisThread.threads)) == 0:
+                    # Break condition: All threads from CustomThread are finished
+                    if len(CustomThread.get_active_threads(CustomThread.threads)) == 0:
                         break
                     #end
                 #end
 
                 # Set self.diagnostics_thread to None when it's done
                 self.diagnostics_thread = None
-                AnalysisThread.reset_threads()
+                CustomThread.reset_threads()
             #end
 
             self.diagnostics_thread = threading.Thread(target=display_diagnostics_thread, args=(interval,), daemon=True)
