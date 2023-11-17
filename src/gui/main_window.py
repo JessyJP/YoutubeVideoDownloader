@@ -84,7 +84,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
         # Flagging variable
         self.cancel_flag = False #TODO: check if this is needed in the download manager
-        self.download_in_progress_flag = False# TODO: maybe have to rename this flag to process_running flag instead
+        self.active_process_flag = False# TODO: maybe have to rename this flag to process_running flag instead
 
         # Some settings
         self.COLUMN_INDEX_URL = 1  # Assuming the URL is the 2nd -1 column in the tree view
@@ -447,7 +447,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             popup.add_command(label=f"{selected_items_count} item(s) selected", state='disabled')
             popup.add_separator()
 
-            if self.download_in_progress_flag:
+            if self.active_process_flag:
                 _state="disabled"
             else:
                 _state="normal"
@@ -876,7 +876,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
     # Intermediate method to run the import operation in a separate thread
     def import_youtube_videos_threaded(self, text):
-        if self.download_in_progress_flag == False:
+        if self.active_process_flag == False:
             # Reset just in case
             self.reset_cancel_flag()  
             # Disable the download button if it's not already disabled
@@ -997,7 +997,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     #end
 
     def download_all_entries_callback(self):
-        if self.download_in_progress_flag == False:
+        if self.active_process_flag == False:
             t = threading.Thread(target=self.download_all_entries_thread, args=())
             t.start()
         else:
@@ -1104,7 +1104,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     #end
 
     def disable_UI_elements_during_download(self):
-        self.download_in_progress_flag = True
+        self.active_process_flag = True
         self.update_progressbar(0,len(self.getVideoList()),0)
         self.setUiDispStatus(f"Starting Download of {len(self.getVideoList())} item(s) now!")
 
@@ -1130,7 +1130,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     #end
 
     def enable_UI_elements_after_download(self):
-        self.download_in_progress_flag = False
+        self.active_process_flag = False
         self.reset_cancel_flag()
 
         # Enable the input URL text field
