@@ -1138,6 +1138,8 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
         # Change the download button text to cancel
         self.download_button.config(text=self.theme["texts"]["download_cancel_button"])
+        #TODO:NOTE: maybe it would be good for this pair of functions to be more general and have a 3rd button that will be the cancel button
+        # ... this way the cancel, analysis and download button will always have easy and predictable enable/disable switching pattern 
     #end
 
     def enable_UI_elements_after_download(self):
