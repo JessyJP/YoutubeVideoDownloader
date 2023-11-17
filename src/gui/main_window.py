@@ -392,6 +392,9 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
     #end
 
     def on_settings_button_click(self, event):
+        if self.active_process_flag:
+            return
+        #end
         icon_path = f"{self.theme['global']['directories']['icons']}{self.theme['icons']['settings_button_click']}"
         click_icon = tk.PhotoImage(file=icon_path)
         self.settings_button.config(image=click_icon)
@@ -1125,6 +1128,9 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.dropdown_video_limiter.config(state='disabled')
         self.dropdown_fps_limiter.config(state='disabled')
 
+        # Disable the settings button
+        self.settings_button.config(state='disabled')
+
         # Change the download button text to cancel
         self.download_button.config(text=self.theme["texts"]["download_cancel_button"])
     #end
@@ -1145,10 +1151,13 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         # Enable the download location text field
         self.download_location_entry.config(state='normal')
 
-        # Re-enable the limiter dropdowns
+        # Enable the limiter dropdowns
         self.dropdown_audio_limiter.config(state='normal')
         self.dropdown_video_limiter.config(state='normal')
         self.dropdown_fps_limiter.config(state='normal')
+
+        # Enable the settings button
+        self.settings_button.config(state='normal')
 
         # Revert the download button text to the original
         self.download_button.config(text=self.theme["texts"]["download_button"])
