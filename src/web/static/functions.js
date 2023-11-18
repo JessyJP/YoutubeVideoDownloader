@@ -13,4 +13,3 @@ export function updateProgressBar(progress) {
     progressBar.style.width = progress + '%';
     progressBar.innerText = progress + '%';
 }
-

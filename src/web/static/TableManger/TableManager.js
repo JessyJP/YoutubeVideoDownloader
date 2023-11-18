@@ -3,13 +3,16 @@ import {
     getState,
     getStatusMsg,
     getProgressbarValue
-} from './api.js';
-import { updateProgressBar } from "./functions.js"
+} from '../api.js';
+import { updateProgressBar } from "../functions.js"
 import {
      VideoItem, 
      assignUrlClickListener, 
      assignTitleClickListener 
     } from "./VideoItem.js";
+
+import ColumnManager from './ColumnManager.js';
+
 
 class TableManager {
     constructor() {
@@ -20,6 +23,8 @@ class TableManager {
         this.idleCheckCounter = 0;
         this.maxIdleChecks = 10;
         this.checkModeFlag = false;
+        // Initialize the column handler
+        this.columnManager = new ColumnManager();
     }
 
     async checkAndUpdateState() {

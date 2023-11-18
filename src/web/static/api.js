@@ -1,4 +1,4 @@
-import { VideoItem } from "./VideoItem.js";
+import { VideoItem } from "./TableManger/VideoItem.js";
 
 const API_PROXY = "http://localhost:80";  // Replace with your actual IP and port.
 

@@ -66,26 +66,20 @@
         <table id="video-list">
             <thead>
                 <tr>
-                    <th>Index</th>
-                    <th>Download Status</th>
-                    <th>Watch URL</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Length</th>
-                    <th>Description</th>
-                    <th>Publish Date</th>
-                    <th>Views</th>
-                    <th>Thumbnail URL</th>
-                    <th>Rating</th>
-                    <th>Video ID</th>
-                    <th>Quality</th>
-                    <th>File Size (MB)</th>
+                    <!-- Table headers will be dynamically added here -->
                 </tr>
             </thead>            
             <tbody>
                 <!-- Rows of data will go here -->
             </tbody>
         </table>
+        
+        <div id="contextMenu" class="context-menu" style="display:none;">
+            <ul>
+                <!-- Context menu items will be dynamically added here -->
+            </ul>
+        </div>
+        
     </div>
     
     <script type="module" src="{{ url_for('static', filename='events.js') }}"></script>

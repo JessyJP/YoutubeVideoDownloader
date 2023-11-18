@@ -10,7 +10,7 @@ import {
 
 import { switchTheme } from './functions.js';
 
-import TableManager from './TableManager.js';
+import TableManager from './TableManger/TableManager.js';
 
 // ==========================================================================================
 // Page main event handling
