@@ -47,6 +47,28 @@ async function getStatusMsg() {
     }
 }
 
+async function getProgressbarValue() {
+    const url = `${API_PROXY}/api/getProgressbarValue`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return await response.text();
+    } catch (error) {
+        console.error("Error in getProgressbarValue: ", error);
+        return "0%"; // Return an empty string in case of an error
+    }
+}
+
 async function getVideoItemList() {
     const url = `${API_PROXY}/api/getVideoItemList`;
 
@@ -179,6 +201,7 @@ async function clearItemSelectionByID(videoIds) {
 export {
     getState,
     getStatusMsg,
+    getProgressbarValue,
     getVideoItemList,
     analyzeURLtext,
     downloadVideoList,

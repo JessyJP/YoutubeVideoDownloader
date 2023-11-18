@@ -1,8 +1,10 @@
 import {
     getVideoItemList,
     getState,
-    getStatusMsg
+    getStatusMsg,
+    getProgressbarValue
 } from './api.js';
+import { updateProgressBar } from "./functions.js"
 import { VideoItem } from "./VideoItem.js";
 
 class TableManager {
@@ -47,10 +49,12 @@ class TableManager {
     async updateUI() {
         const currentState = await getState();
         const currentStatusMsg = await getStatusMsg();
-        
+        const currentProgressValue = await getProgressbarValue()
+
         // Update status text and UI elements based on the current state
         this.setUIElementsByState(currentState);
         this.statusOutput.textContent = currentStatusMsg;
+        updateProgressBar(currentProgressValue)
 
         // Update the video list table 
         try {

@@ -8,8 +8,8 @@ export function switchTheme(newTheme) {
     }
 }
 
-function updateProgressBar(progress) {
-    var progressBar = document.getElementById("progress-bar");
+export function updateProgressBar(progress) {
+    var progressBar = document.getElementById("progress-bar-id");
     progressBar.style.width = progress + '%';
     progressBar.innerText = progress + '%';
 }

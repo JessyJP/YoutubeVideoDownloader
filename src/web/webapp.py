@@ -234,6 +234,12 @@ def getState():
 def getStatusMsg():
     return vlm.statusMsg  # Assuming this is a string
 
+@app.route('/api/getProgressbarValue', methods=['GET'])
+def getProgressbarValue():
+    # Assuming you want to keep two decimal places
+    return format(vlm.statusProgressValue, '.2f')
+
+
 @app.route('/api/getVideoItemList', methods=['GET'])
 def getVideoItemList():
     jsonList = []
