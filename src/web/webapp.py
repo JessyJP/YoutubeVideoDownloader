@@ -147,7 +147,6 @@ class WebWrapper(VideoListManager):
 
             # Set the download directory
             self.tmpOutputDir = normalized_path
-            print(f"Output directory set to [{self.tmpOutputDir}]")
 
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def getUiDispStatus(self) -> str:
@@ -325,9 +324,20 @@ def update_client_state():
     return jsonify({"message": "Client state settings updated successfully"}), 200
 
 
-def main(port:int=80, output_dir:str=''):
+def main(port:int=80, output_dir:str='',
+         use_multithreading_analysis:bool = False,
+         process_via_multithreading:bool = False ):
+
+    vlm.use_multithreading_analysis = use_multithreading_analysis
+    vlm.process_via_multithreading = process_via_multithreading  
     vlm.setDownloadDir(output_dir)
-    print(f"Port set to: [{port}]")
+
+    prefix = " -- Param: "
+    print(f"{prefix}Use multithreading analysis set to: [{use_multithreading_analysis}]")
+    print(f"{prefix}Use process download and mux via multithreading set to: [{process_via_multithreading}]")
+    print(f"{prefix}Port set to: [{port}]")
+    print(f"{prefix}Output directory set to [{output_dir}]")
+
     app.run(debug=True, port=port)
 
 if __name__ == '__main__':

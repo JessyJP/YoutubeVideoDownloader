@@ -90,7 +90,9 @@ def run_cli(args):
 
 def run_web_service(args):
     from web.webapp import main as webapp_main
-    webapp_main(port=args.port,output_dir=args.output)
+    webapp_main(port=args.port,output_dir=args.output,
+                use_multithreading_analysis=args.enable_analysis_threading,
+                process_via_multithreading=args.enable_download_threading)
 #end
 
 ## Main function and also a command line parsing tool
