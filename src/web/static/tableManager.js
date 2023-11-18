@@ -82,25 +82,29 @@ class TableManager {
 
     setUIElementsByState(currentState) {
         // Example: disable/enable buttons based on the state
-        const analyzeBtn = document.getElementById('analyze-btn'); // Assuming this is your analyze button
-        const downloadBtn = document.getElementById('download-btn'); // Assuming this is your download button
+        const analyzeBtn = document.getElementById('analyze-btn'); 
+        const downloadBtn = document.getElementById('download-btn'); 
+        const clearItemsBtn = document.getElementById('clear-items-btn'); 
         // Similarly, get other buttons like 'set path'
 
         if (currentState === 'ANALYSIS') {
             analyzeBtn.disabled = true;
             downloadBtn.disabled = true;
+            clearItemsBtn.disabled = true;
             // analyzeBtn.classList.add("disabled-button");
             // downloadBtn.classList.add("disabled-button");
             // Set other buttons as needed
         } else if (currentState === 'DOWNLOAD') {
             analyzeBtn.disabled = true;
             downloadBtn.disabled = true;
+            clearItemsBtn.disabled = true;
             // analyzeBtn.classList.add("disabled-button");
             // downloadBtn.classList.add("disabled-button");
             // Set other buttons as needed
         } else {
             analyzeBtn.disabled = false;
             downloadBtn.disabled = false;
+            clearItemsBtn.disabled = false;
             // analyzeBtn.classList.remove("disabled-button");
             // downloadBtn.classList.remove("disabled-button");
             // Set other buttons as needed
