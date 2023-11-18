@@ -57,7 +57,7 @@ class WebWrapper(VideoListManager):
         self.use_multithreading_analysis = False
         # Parameters for Download
         self.process_via_multithreading = True  
-        self.tmpOutputDir = default_tmp_dir 
+        self.tmpOutputDir = default_tmp_dir # TODO: maybe it shouldn't be assigned but the construction should happen in main
         self.outputExt = ".mkv"
 
         # Frontend client settings state
@@ -136,6 +136,18 @@ class WebWrapper(VideoListManager):
         limits_and_priority.to_numeric()
         return limits_and_priority
     #end
+
+    def setDownloadDir(self, download_dir):
+            # Normalize the path to avoid issues with different OS path formats
+            normalized_path = os.path.normpath(download_dir)
+
+            # Check if the path exists
+            if not os.path.exists(normalized_path):
+                raise FileNotFoundError(f"The specified path does not exist: {normalized_path}")
+
+            # Set the download directory
+            self.tmpOutputDir = normalized_path
+            print(f"Output directory set to [{self.tmpOutputDir}]")
 
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def getUiDispStatus(self) -> str:
@@ -307,8 +319,10 @@ def update_client_state():
     return jsonify({"message": "Client state settings updated successfully"}), 200
 
 
-def main():
-    app.run(debug=True, port=80)
+def main(port:int=80, output_dir:str=''):
+    vlm.setDownloadDir(output_dir)
+    print(f"Port set to: [{port}]")
+    app.run(debug=True, port=port)
 
 if __name__ == '__main__':
     main()
