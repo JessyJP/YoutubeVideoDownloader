@@ -200,3 +200,17 @@ button:disabled {
 .progress-bar-danger {
     background-color: #dc3545; /* Red for danger */
 }
+
+
+/* =============== Table thumbnail =============== */
+
+.thumbnail-image {
+    width: 60px; /* Initial width, adjust as needed */
+    height: auto; /* Maintain aspect ratio */
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.thumbnail-image:hover {
+    transform: scale(5); /* Enlarge the image on hover */
+    cursor: pointer; /* Change cursor to indicate clickable */
+}

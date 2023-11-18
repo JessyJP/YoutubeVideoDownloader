@@ -5,7 +5,11 @@ import {
     getProgressbarValue
 } from './api.js';
 import { updateProgressBar } from "./functions.js"
-import { VideoItem } from "./VideoItem.js";
+import {
+     VideoItem, 
+     assignUrlClickListener, 
+     assignTitleClickListener 
+    } from "./VideoItem.js";
 
 class TableManager {
     constructor() {
@@ -77,6 +81,16 @@ class TableManager {
                 row.innerHTML = video.toTableRow(index);
             });
         }
+
+        // Attach event listeners to all links
+        const linksWatch = document.querySelectorAll('[data-watch-url]');
+        // links.forEach(link => {  assignUrlClickListener(link)  });
+        linksWatch.forEach(assignUrlClickListener);
+
+        // Attach event listeners to all links
+        const linksTitle = document.querySelectorAll('[data-title-url]');
+        // linksTitle.forEach(link => {  assignTitleClickListener(link)  });
+        linksTitle.forEach(assignTitleClickListener);
     }
 
 
