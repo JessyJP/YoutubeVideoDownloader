@@ -46,6 +46,7 @@ class VideoListManager:
     def __init__(self):        
         # Video Info list
         self.infoList: List[VideoInfo] = []
+        self.diagnostic_refresh_interval = 0.25# TODO a moderate value to be adjusted
 
     def getVideoList(self):
         return self.infoList;
@@ -157,7 +158,7 @@ class VideoListManager:
         for url in URLs_toCheck:
             # Run in Single thread or multithread mode
             if use_analysis_multithreading: 
-                self.updateUiDistStatus_in_multithread_mode();               
+                self.updateUiDistStatus_in_multithread_mode(self.diagnostic_refresh_interval);               
                 t = CustomThread(target=self.process_url, args=(url, use_analysis_multithreading, recursiveCheckOfURLcontent_mode))
                 t.start()
                 analysisThreads.append(t)                
@@ -244,11 +245,11 @@ class VideoListManager:
             def display_diagnostics_thread(interval):
                 while True:
                     stats = CustomThread.get_multithread_stats()
-                    self.setUiDispStatus(diagnostic_message(stats))
                     self.update_progressbar(
                             index_in=stats['successful_threads']+stats['errored_threads'],
                             total_in=stats['total_threads'], 
                             task_level=0)
+                    self.setUiDispStatus(diagnostic_message(stats))
                     sleep(interval)
 
                     # Break condition: All threads from CustomThread are finished
