@@ -275,7 +275,7 @@ def downloadVideoList():
                         outputExt=vlm.outputExt)
     
     vlm.processState = ProcessRoutine.IDLE
-    return jsonify({"download": "download_path"})
+    return jsonify({"download": "download_path"}) , 202
 
 @app.route('/api/clearItemSelectionByID', methods=['POST'])
 def clearItemSelectionByID():
@@ -292,9 +292,9 @@ def clearItemSelectionByID():
                 print(f"Item with ID {id} not found.")
                 # Handle the case where the item is not found
 
-        return jsonify({"message": "Items cleared successfully"})
+        return jsonify({"message": "Items cleared successfully"}), 200
     else:
-        return jsonify({"message": f"Processing [{vlm.processState}] is currently running!"})
+        return jsonify({"message": f"Processing [{vlm.processState}] is currently running!"}), 200
     #end
 #end
 
@@ -326,7 +326,7 @@ def update_client_state():
     vlm.localSaveDir          = data.get('downloadLocation')
 
     # Return a success response
-    return jsonify({"message": "Client state settings updated successfully"}), 200
+    return jsonify({"message": "Server: Client state settings updated successfully"}), 200
 
 
 def main(port:int=80, output_dir:str='',
