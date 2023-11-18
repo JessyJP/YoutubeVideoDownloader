@@ -305,7 +305,7 @@ def clearItemSelectionByID():
 #     return jsonify({"message": "Video is playing"})
 
 
-@app.route('/api/update_client_state', methods=['GET'])
+@app.route('/api/update_client_state', methods=['POST'])
 def update_client_state():
     data = request.get_json()
     if not data:
