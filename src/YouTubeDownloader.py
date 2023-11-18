@@ -90,7 +90,7 @@ def run_cli(args):
 
 def run_web_service(args):
     from web.webapp import main as webapp_main
-    webapp_main()
+    webapp_main(port=args.port,output_dir=args.output)
 #end
 
 ## Main function and also a command line parsing tool
@@ -135,10 +135,12 @@ def main():
     web_parser = argparse.ArgumentParser(description="YouTube video downloader - Web Service mode")
     # Output directory as an optional argument
     web_parser.add_argument("-o", "--output", default=".", help="Output directory (default: current directory)")
+    # web_parser.add_argument("-o", "--output", required=True, help="Output directory (default: current directory)")
+    # TODO: one of the 2 options has to be selected. Either compulsory or having a default
     # Add argument for remote storage
     web_parser.add_argument("-rs", "--remote-storage", type=str, help="Remote storage URL or path")
     # Add Web Service-specific arguments
-    web_parser.add_argument("-p", "--port", type=int, default=8080, help="Port for the web service")
+    web_parser.add_argument("-p", "--port", type=int, default=80, help="Port for the web service")
 
     ## ======== Select a mode ========
     if mode_args.cli:
