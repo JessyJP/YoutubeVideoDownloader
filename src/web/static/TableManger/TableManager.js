@@ -21,7 +21,8 @@ class TableManager {
         this.updateInterval = null;
         // The auto-update parameters
         this.idleCheckCounter = 0;
-        this.maxIdleChecks = 10;
+        this.maxIdleChecks = 12;
+        this.refreshTimeout = 250;//ms
         this.checkModeFlag = false;
         this.viewMode = 'table'; // Default view mode
         // Initialize the column handler
@@ -51,7 +52,7 @@ class TableManager {
             }
 
             this.updateUI();
-            await new Promise(resolve => setTimeout(resolve, 500)); // Wait for 500 ms
+            await new Promise(resolve => setTimeout(resolve, this.refreshTimeout)); // Wait for this.refreshTimeout ms
         }
     }
 
@@ -71,8 +72,12 @@ class TableManager {
 
         // Update the video list table 
         try {
-            const videoList = await getVideoItemList();
+            let videoList = await getVideoItemList();
+            videoList = this.transferSelection(this.videoItems, videoList)
+            // videoList = this.transferSelectionFromDom(videoList)
             this.populateTable(videoList);
+            // Store the video list after transferring the selection
+            this.videoItems = videoList
         } catch (error) {
             console.error("Error fetching video list: ", error);
         }
@@ -81,28 +86,24 @@ class TableManager {
     populateTable(videoList) {
         const columnState = this.columnManager.getColumnState();
         this.videoListTableBody.innerHTML = ''; // Clear existing rows
-
+    
         if (videoList.length === 0) {
             const row = this.videoListTableBody.insertRow();
             row.innerHTML = `<td colspan="15" style="text-align:center;">No videos found</td>`;
         } else {
             videoList.forEach((video, index) => {
-                const row = this.videoListTableBody.insertRow();
-                row.innerHTML = video.toTableRow(index, columnState);
+                const rowElement = video.toTableRow(index, columnState);
+                this.videoListTableBody.appendChild(rowElement); // Append the row element directly
             });
         }
-
+    
         // Attach event listeners to all links
-        const linksWatch = document.querySelectorAll('[data-watch-url]');
-        // links.forEach(link => {  assignUrlClickListener(link)  });
+        const linksWatch = this.videoListTableBody.querySelectorAll('[data-watch-url]');
         linksWatch.forEach(assignUrlClickListener);
-
-        // Attach event listeners to all links
-        const linksTitle = document.querySelectorAll('[data-title-url]');
-        // linksTitle.forEach(link => {  assignTitleClickListener(link)  });
+    
+        const linksTitle = this.videoListTableBody.querySelectorAll('[data-title-url]');
         linksTitle.forEach(assignTitleClickListener);
     }
-
 
     setUIElementsByState(currentState) {
         // Example: disable/enable buttons based on the state
@@ -134,6 +135,48 @@ class TableManager {
             // Set other buttons as needed
         }
     }
+
+    transferSelection(videoListFrom, videoListTo) {
+        // Check if videoListFrom is undefined or empty
+        if (!videoListFrom || videoListFrom.length === 0) {
+            return videoListTo;
+        }
+    
+        // Loop over the videoListTo array
+        videoListTo.forEach(toItem => {
+            // Find the corresponding item in the videoListFrom array
+            const fromItem = videoListFrom.find(item => item.video_id === toItem.video_id);
+    
+            // If a matching item is found, transfer the selection state
+            if (fromItem) {
+                toItem.itemIsSelected = fromItem.itemIsSelected;
+            }
+        });
+    
+        return videoListTo;
+    }
+    //NOTE:TODO: one of the 2 methods will be redundant
+    transferSelectionFromDom(videoListTo) {
+        // Check if this.videoItems is undefined or empty
+        if (!this.videoItems || this.videoItems.length === 0) {
+            return videoListTo;
+        }
+    
+        // Loop over the videoListTo array
+        videoListTo.forEach(toItem => {
+            // Find the corresponding item in this.videoItems array
+            const fromItem = this.videoItems.find(item => item.video_id === toItem.video_id);
+    
+            // If a matching item is found, transfer the selection state
+            if (fromItem) {
+                toItem.itemIsSelected = fromItem.itemIsSelected;
+            }
+        });
+    
+        return videoListTo;
+    }
+    
+
 }
 
 export default TableManager;

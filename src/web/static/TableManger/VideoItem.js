@@ -13,6 +13,10 @@ export class VideoItem {
         this.video_id = videoData.video_id;
         this.quality_str = videoData.quality_str;
         this.video_size_mb = videoData.video_size_mb != null ? videoData.video_size_mb.toString() : 'N/A';
+        // Extra argument
+        this.itemIsSelected = false;
+        // Bind the handleRowClick method to the class instance
+        this.handleRowClick = this.handleRowClick.bind(this);
     }
 
     toTableRowDefault(index) {
@@ -35,8 +39,12 @@ export class VideoItem {
     }
 
 
-    toTableRow(index, columnState) {
+    toTableRow(index, columnState, itemIsSelected = undefined) {
         let rowHTML = '';
+        // Check if itemIsSelected is a boolean before assigning
+        if (typeof itemIsSelected === 'boolean') {
+            this.itemIsSelected = itemIsSelected;
+        }
 
         // Sort the columnState by order before building the row
         columnState.sort((a, b) => a.order - b.order);
@@ -91,9 +99,31 @@ export class VideoItem {
             }
         });
 
-        return `<tr>${rowHTML}</tr>`;
+        // Create the table row element
+        const row = document.createElement('tr');
+        row.innerHTML = rowHTML;
+        row.dataset.videoId = this.video_id;
+        row.className = this.itemIsSelected ? 'item-selected' : '';
+
+        // Attach the handleRowClick method as an event listener
+        row.addEventListener('click', this.handleRowClick); // Corrected here
+
+        return row; // Return the row element directly
     }
 
+    handleRowClick(event) {
+        // Ignore clicks on links or other interactive elements
+        if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT') {
+            return;
+        }
+
+        // Toggle the selection state
+        this.itemIsSelected = !this.itemIsSelected;
+
+        // Update the UI for this row
+        const row = event.currentTarget;
+        row.classList.toggle('item-selected', this.itemIsSelected);
+    }
 }
 
 
