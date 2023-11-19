@@ -24,7 +24,7 @@ class TableManager {
         this.maxIdleChecks = 10;
         this.checkModeFlag = false;
         // Initialize the column handler
-        this.columnManager = new ColumnManager();
+        this.columnManager = new ColumnManager(this.checkAndUpdateState.bind(this));
     }
 
     async checkAndUpdateState() {
@@ -75,6 +75,7 @@ class TableManager {
     }
 
     populateTable(videoList) {
+        const columnState = this.columnManager.getColumnState();
         this.videoListTableBody.innerHTML = ''; // Clear existing rows
 
         if (videoList.length === 0) {
@@ -83,7 +84,7 @@ class TableManager {
         } else {
             videoList.forEach((video, index) => {
                 const row = this.videoListTableBody.insertRow();
-                row.innerHTML = video.toTableRow(index);
+                row.innerHTML = video.toTableRow(index, columnState);
             });
         }
 

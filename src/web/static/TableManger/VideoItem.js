@@ -15,26 +15,7 @@ export class VideoItem {
         this.video_size_mb = videoData.video_size_mb != null ? videoData.video_size_mb.toString() : 'N/A';
     }
 
-    // toTableRow(index) {
-    //     return `
-    //         <td>${index + 1}</td>
-    //         <td>${this.download_status}</td>
-    //         <td>${this.watch_url}</td>
-    //         <td>${this.title}</td>
-    //         <td>${this.author}</td>
-    //         <td>${this.length}</td>
-    //         <td>${this.description}</td>
-    //         <td>${this.publish_date}</td>
-    //         <td>${this.views}</td>
-    //         <td>${this.thumbnail_url}</td>
-    //         <td>${this.rating}</td>
-    //         <td>${this.video_id}</td>
-    //         <td>${this.quality_str}</td>
-    //         <td>${this.video_size_mb}</td>
-    //     `;
-    // }
-
-    toTableRow(index) {
+    toTableRowDefault(index) {
         return `
             <td>${index + 1}</td>
             <td>${this.download_status}</td>
@@ -42,7 +23,6 @@ export class VideoItem {
             <td><a href="#" data-title-url="${this.watch_url}">${this.title}</a></td>
             <td>${this.author}</td>
             <td>${this.length}</td>
-            <td>--</td>
             <td>${this.publish_date}</td>
             <td>${this.views}</td>
             <td><img src="${this.thumbnail_url}" class="thumbnail-image"></td>
@@ -50,8 +30,70 @@ export class VideoItem {
             <td>${this.video_id}</td>
             <td>${this.quality_str}</td>
             <td>${this.video_size_mb}</td>
+            <td>${this.description}</td>
         `;
     }
+
+
+    toTableRow(index, columnState) {
+        let rowHTML = '';
+
+        // Sort the columnState by order before building the row
+        columnState.sort((a, b) => a.order - b.order);
+
+        columnState.forEach(column => {
+            if (column.isVisible) {
+                switch (column.label) {
+                    case 'Index':
+                        rowHTML += `<td>${index + 1}</td>`;
+                        break;
+                    case 'Download Status':
+                        rowHTML += `<td>${this.download_status}</td>`;
+                        break;
+                    case 'Watch URL':
+                        rowHTML += `<td><a href="#" data-watch-url="${this.watch_url}">${this.watch_url}</a></td>`;
+                        break;
+                    case 'Title':
+                        rowHTML += `<td><a href="#" data-title-url="${this.watch_url}">${this.title}</a></td>`;
+                        break;
+                    case 'Author':
+                        rowHTML += `<td>${this.author}</td>`;
+                        break;
+                    case 'Length':
+                        rowHTML += `<td>${this.length}</td>`;
+                        break;
+                    case 'Description':
+                        rowHTML += `<td>${this.description}</td>`;
+                        break;
+                    case 'Publish Date':
+                        rowHTML += `<td>${this.publish_date}</td>`;
+                        break;
+                    case 'Views':
+                        rowHTML += `<td>${this.views}</td>`;
+                        break;
+                    case 'Thumbnail URL':
+                        rowHTML += `<td><img src="${this.thumbnail_url}" class="thumbnail-image"></td>`;
+                        break;
+                    case 'Rating':
+                        rowHTML += `<td>${this.rating}</td>`;
+                        break;
+                    case 'Video ID':
+                        rowHTML += `<td>${this.video_id}</td>`;
+                        break;
+                    case 'Quality':
+                        rowHTML += `<td>${this.quality_str}</td>`;
+                        break;
+                    case 'File Size (MB)':
+                        rowHTML += `<td>${this.video_size_mb}</td>`;
+                        break;
+                    // Add cases for any other columns you might have
+                }
+            }
+        });
+
+        return `<tr>${rowHTML}</tr>`;
+    }
+
 }
 
 

@@ -1,9 +1,11 @@
 class ColumnManager {
     // ============= Initialization methods =============
-    constructor() {
+    constructor(callbackOnVisibilityChange) {
         this.table = document.getElementById('video-list');
         this.contextMenu = document.getElementById('contextMenu');
         this.columns = [];
+        // External callback 
+        this.onVisibilityChange = callbackOnVisibilityChange;
         // Initialize a default configuration
         this.defaultTableConfiguration();
         // TODO: this could be potentially overwritten here if on startup we load another configuration in the future
@@ -33,9 +35,12 @@ class ColumnManager {
 
     populateTableHeaders() {
         const headerRow = this.table.createTHead().insertRow(0);
-        this.columns.forEach(column => {
+        this.columns.forEach((column, index) => {
             const th = document.createElement('th');
             th.textContent = column.label;
+            if (!column.isVisible) {
+                th.style.display = 'none';
+            }
             headerRow.appendChild(th);
         });
     }
@@ -94,6 +99,17 @@ class ColumnManager {
             }
         });
         this.columns[columnIndex].isVisible = isVisible;
+        // Call the external callback
+        this.onVisibilityChange()
+    }
+
+    updateColumnOrder(newOrder) {//TODO:NOTE this method is currently inactive
+        // newOrder is an array of column labels in the new order
+        this.columns.sort((a, b) => newOrder.indexOf(a.label) - newOrder.indexOf(b.label));
+        // Update the order property
+        this.columns.forEach((column, index) => {
+            column.order = index;
+        });
     }
 
     // ============= Get/Set handling methods =============
@@ -105,6 +121,14 @@ class ColumnManager {
     getVisibilityByLabel(label) {
         const column = this.columns.find(column => column.label === label);
         return column ? column.isVisible : null;
+    }
+
+    getColumnState() {
+        return this.columns.map(column => ({
+            label: column.label,
+            isVisible: column.isVisible,
+            order: column.order
+        }));
     }
 }
 
