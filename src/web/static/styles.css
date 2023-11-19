@@ -1,3 +1,11 @@
+/* ================================= Define variables ================================= */
+:root {
+    --default-margin: 20px;
+    --default-padding: 10px;
+    --default-gap: 10px;
+    /* ... other variables ... */
+}
+
 /* ================================= Colour themes ================================= */
 :root {
     /* Default theme - Dark theme */
@@ -16,6 +24,9 @@
     --context-menu-border: #dfdfdf;
     --context-menu-hover-bg: #f5f5f5;
     --context-menu-box-shadow: 1px 1px 2px #cfcfcf;
+    --link-color: #0095ff;
+    --link-hover-color: #0077cc;
+    --row-selected-bg: rgba(255, 255, 255, 0.566)/* Light theme */
 }
 
 /* Dark theme colors (now set as default) */
@@ -38,9 +49,12 @@
     --context-menu-border: #555;
     --context-menu-hover-bg: #444;
     --context-menu-box-shadow: 1px 1px 2px #555;
+    /* --link-color: #0095ff; */
+    /* --link-hover-color: #0077cc; */
+    --row-selected-bg: rgb(255, 0, 0); /* Dark theme */
 }
 
-/* ================================= Main CSS Element ================================= */
+/* ======================= Main CSS Element - Basic Layout and Structure ======================= */
 .header {
     display: flex;
     flex-direction: column;
@@ -82,28 +96,7 @@ body {
     justify-content: flex-start;
 }
 
-/* ================================= Format CSS elements ================================= */
-
-#video-list {
-    width: 100%;
-    border-collapse: collapse;
-    overflow-x: auto; /* Enable horizontal scrolling for large tables */
-}
-
-#video-list th, #video-list td {
-    border: 1px solid var(--table-border-color);
-    padding: 8px;
-    text-align: left;
-    word-wrap: break-word; /* allow long content to wrap */
-}
-
-#video-list th {
-    background-color: var(--table-header-bg);
-}
-
-#video-list tr:nth-child(even) {
-    background-color: var(--table-row-bg); /* zebra-striping for table rows */
-}
+/* ================================= Control Elements CSS elements ================================= */
 
 .controls, .settings-row {
     display: flex;
@@ -146,6 +139,21 @@ select {
     cursor: pointer;
 }
 
+.controls2 {
+    display: flex;
+    justify-content: flex-start; /* Aligns children to the left */
+    gap: 10px; /* Optional: adds space between buttons */
+}
+
+button:disabled, .disabled-button {
+    background-color: #ccc; /* Gray background for disabled buttons */
+    color: #666; /* Darker text for disabled buttons */
+    cursor: not-allowed; /* Cursor indicates that the item is not available */
+    /* Remove the height property unless you specifically need it */
+}
+
+/* =============== Diagnostic output  Styles =============== */
+
 /* Styles for the diagnostic output area */
 .diagnostic-output {
     width: 98%;
@@ -157,28 +165,7 @@ select {
     resize: vertical; /* Allow vertical resizing */
 }
 
-.controls2 {
-    display: flex;
-    justify-content: flex-start; /* Aligns children to the left */
-    gap: 10px; /* Optional: adds space between buttons */
-}
-
-button:disabled {
-    background-color: #ccc; /* Gray background for disabled buttons */
-    color: #666; /* Darker text for disabled buttons */
-    cursor: not-allowed; /* Cursor indicates that the item is not available */
-    /* Remove the height property unless you specifically need it */
-}
-
-/* If you are using a class to indicate disabled state, use this */
-.disabled-button {
-    background-color: #ccc;
-    color: #666;
-    cursor: not-allowed;
-    /* Again, remove the height property unless it's necessary */
-}
-
-/* =============== Progressbar =============== */
+/* ======================= Progress Bar Styles ======================= */
 
 /* Progress Bar Styles */
 .progress-container {
@@ -213,8 +200,30 @@ button:disabled {
     background-color: #dc3545; /* Red for danger */
 }
 
+/* ================================= Video Item Element Styles ================================= */
 
-/* =============== Table thumbnail =============== */
+#video-list {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-x: auto; /* Enable horizontal scrolling for large tables */
+}
+
+#video-list th, #video-list td {
+    border: 1px solid var(--table-border-color);
+    padding: 8px;
+    text-align: left;
+    word-wrap: break-word; /* allow long content to wrap */
+}
+
+#video-list th {
+    background-color: var(--table-header-bg);
+}
+
+#video-list tr:nth-child(even) {
+    background-color: var(--table-row-bg); /* zebra-striping for table rows */
+}
+
+/* =============== Table thumbnail Styling =============== */
 
 .thumbnail-image {
     width: 60px; /* Initial width, adjust as needed */
@@ -251,4 +260,9 @@ button:disabled {
 
 .context-menu ul li:hover {
     background-color: var(--context-menu-hover-bg);
+}
+
+/* =============== Table item selection context menu =============== */
+.item-selected {
+    color: #ef1c1c;
 }
