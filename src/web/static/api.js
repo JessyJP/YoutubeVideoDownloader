@@ -2,6 +2,7 @@ import { VideoItem } from "./TableManger/VideoItem.js";
 
 const API_PROXY = "http://localhost:80";  // Replace with your actual IP and port.
 
+// ============= GET state GET methods ============= 
 
 async function getState() {
     const url = `${API_PROXY}/api/getState`;
@@ -92,33 +93,7 @@ async function getVideoItemList() {
     }
 }
 
-async function analyzeURLtext(url_text) {
-    postClientStateSettings()// Update the latest client settings
-    console.log("Analyze API call made : ["+url_text+"]");
-    const response = await fetch(`${API_PROXY}/api/analyzeURLtext`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url: url_text }),
-    });
-    
-    return await response.json();
-}
-
-async function downloadVideoList() {
-    postClientStateSettings()// Update the latest client settings
-    console.log("Download API call started");
-    const response = await fetch(`${API_PROXY}/api/downloadVideoList`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(),
-    });
-
-    return await response.json();
-}
+// ============= SET state POST methods ============= 
 
 async function postClientStateSettings() {
     // Collect current values from dropdowns and other settings
@@ -157,7 +132,6 @@ async function postClientStateSettings() {
     }
 }
 
-
 async function clearItemSelectionByID(videoIds) {
     console.log("Clearing items with IDs: ", videoIds);
 
@@ -180,6 +154,37 @@ async function clearItemSelectionByID(videoIds) {
     }
 }
 
+// ============= POST methods for processing =============
+
+async function analyzeURLtext(url_text) {
+    postClientStateSettings()// Update the latest client settings
+    console.log("Analyze API call made : ["+url_text+"]");
+    const response = await fetch(`${API_PROXY}/api/analyzeURLtext`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: url_text }),
+    });
+    
+    return await response.json();
+}
+
+async function downloadVideoList() {
+    postClientStateSettings()// Update the latest client settings
+    console.log("Download API call started");
+    const response = await fetch(`${API_PROXY}/api/downloadVideoList`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(),
+    });
+
+    return await response.json();
+}
+
+// ============= UNUSED methods =============
 
 // async function playVideoPreview(videoPath) {
 //     const response = await fetch(`${API_PROXY}/api/play_video_preview`, {
@@ -189,7 +194,6 @@ async function clearItemSelectionByID(videoIds) {
 //         },
 //         body: JSON.stringify({ video_path: videoPath }),
 //     });
-
 //     return await response.json();
 // }
 
@@ -203,10 +207,10 @@ export {
     getStatusMsg,
     getProgressbarValue,
     getVideoItemList,
+    postClientStateSettings,
+    clearItemSelectionByID,
     analyzeURLtext,
     downloadVideoList,
     // playVideoPreview,
     // selectDownloadLocation,
-    postClientStateSettings,
-    clearItemSelectionByID,
 };
