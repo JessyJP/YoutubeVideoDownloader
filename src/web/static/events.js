@@ -130,3 +130,10 @@ document.getElementById("download-location").addEventListener("change", postClie
 document.getElementById("audio-limiter").addEventListener("change", postClientStateSettings);
 document.getElementById("video-limiter").addEventListener("change", postClientStateSettings);
 document.getElementById("fps-limiter").addEventListener("change", postClientStateSettings);
+
+// ==========================================================================================
+document.getElementById('viewMode').addEventListener('change', (event) => {
+    const selectedViewMode = event.target.value;
+    tableManager.viewMode = viewMode;
+    onUserInteraction();
+});

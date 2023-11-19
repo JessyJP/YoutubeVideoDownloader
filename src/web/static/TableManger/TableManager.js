@@ -23,8 +23,12 @@ class TableManager {
         this.idleCheckCounter = 0;
         this.maxIdleChecks = 10;
         this.checkModeFlag = false;
+        this.viewMode = 'table'; // Default view mode
         // Initialize the column handler
         this.columnManager = new ColumnManager(this.checkAndUpdateState.bind(this));
+        // Store temp states
+        this.videoItems = [];
+        this.selection  = [];
     }
 
     async checkAndUpdateState() {

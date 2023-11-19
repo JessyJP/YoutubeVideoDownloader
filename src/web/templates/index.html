@@ -27,6 +27,17 @@
                 <img src="{{ url_for('static', filename='images/configuration_gear_icon_normal.png') }}" alt="Settings Icon">
             </button>
             <button type="button" id="theme-btn">Theme</button> <!-- Theme Button -->
+
+            <!-- Place this in the appropriate part of your HTML structure -->
+            <div class="view-mode-selector">
+                <label for="viewMode">View Mode:</label>
+                <select id="viewMode">
+                    <option value="table">Table View</option>
+                    <option value="card">Card View</option>
+                    <!-- Add more options as needed -->
+                </select>
+            </div>
+
             <button type="button" id="play-btn">Play Preview Selection Locally</button>
             
             <select id="audio-limiter">
