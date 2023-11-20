@@ -5,11 +5,7 @@ import {
     getProgressbarValue
 } from '../api.js';
 import { updateProgressBar } from "../functions.js"
-import {
-     VideoItem, 
-     assignUrlClickListener, 
-     assignTitleClickListener 
-    } from "./VideoItem.js";
+import VideoItem from './VideoItem.js';
 
 import ColumnManager from './ColumnManager.js';
 
@@ -101,13 +97,6 @@ class TableManager {
                 }
             });
         }
-    
-        // Attach event listeners to all links
-        const linksWatch = this.videoListTableBody.querySelectorAll('[data-watch-url]');
-        linksWatch.forEach(assignUrlClickListener);
-    
-        const linksTitle = this.videoListTableBody.querySelectorAll('[data-title-url]');
-        linksTitle.forEach(assignTitleClickListener);
     }
 
     setUIElementsByState(currentState) {

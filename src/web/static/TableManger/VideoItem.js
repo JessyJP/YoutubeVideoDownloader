@@ -1,4 +1,4 @@
-export class VideoItem {
+class VideoItem {
     constructor(videoData) {
         this.download_status = videoData.download_status;
         this.watch_url = videoData.watch_url;
@@ -106,9 +106,20 @@ export class VideoItem {
         row.className = this.itemIsSelected ? 'item-selected' : '';
 
         // Attach the handleRowClick method as an event listener
-        row.addEventListener('click', this.handleRowClick); // Corrected here
+        row.addEventListener('click', this.handleRowClick);
 
-        return row; // Return the row element directly
+        // Attach URL click handlers
+        const watchLink = row.querySelector('[data-watch-url]');
+        if (watchLink) {
+            watchLink.addEventListener('click', this.handleUrlClick);
+        }
+
+        const titleLink = row.querySelector('[data-title-url]');
+        if (titleLink) {
+            titleLink.addEventListener('click', this.handleUrlClick);
+        }
+
+        return row;
     }
 
     toGridCard(index, columnState) {
@@ -184,8 +195,21 @@ export class VideoItem {
         
         // Attach the handleRowClick method as an event listener
         card.addEventListener('click', this.handleRowClick);
-    
-        return card; // Return the card element directly
+
+        // Attach URL click handler
+        const watchLink = card.querySelector('[data-watch-url]');
+        if (watchLink) {
+            watchLink.addEventListener('click', this.handleUrlClick);
+        }
+
+        return card;
+    }
+
+    handleUrlClick(event) {
+        event.preventDefault();
+        const url = event.currentTarget.getAttribute('data-watch-url') || event.currentTarget.getAttribute('data-title-url');
+        console.log('URL clicked:', url);
+        window.open(url, '_blank');
     }
     
     
@@ -205,24 +229,4 @@ export class VideoItem {
     }
 }
 
-
-export function assignUrlClickListener(link) {
-    link.addEventListener('click', (event) => {
-        event.preventDefault();
-        const url = link.getAttribute('data-watch-url');
-        console.log('Link clicked:', url);
-        window.open(url, '_blank');
-    });
-}
-
-
-export function assignTitleClickListener(link) {
-    link.addEventListener('click', (event) => {
-        event.preventDefault();
-        const url = link.getAttribute('data-title-url');
-        console.log('Title link clicked:', url);
-        // Handle the title URL click event here
-        // For example, you might want to open the URL in a new tab
-        window.open(url, '_blank');
-    });
-}
+export default VideoItem;
