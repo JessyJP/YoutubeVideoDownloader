@@ -1,4 +1,5 @@
 import VideoItem from "./TableManger/VideoItem.js";
+import {getClientSettingsConfiguration}from "./functions.js"
 
 const API_PROXY = "http://localhost:80";  // Replace with your actual IP and port.
 
@@ -85,7 +86,7 @@ async function getVideoItemList() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const videoItemsData = await response.json();
+        const videoItemsData = await response.json();// NOTE: this is directly exported as array of objects
         return videoItemsData.map(videoData => new VideoItem(videoData));
     } catch (error) {
         console.error("Error in getVideoItemList: ", error);
@@ -96,24 +97,9 @@ async function getVideoItemList() {
 // ============= SET state POST methods ============= 
 
 async function postClientStateSettings(tableManager) {
-    // Collect current values from dropdowns and other settings
-    const audioBitrate = document.getElementById('audio-limiter').value;
-    const videoResolution = document.getElementById('video-limiter').value;
-    const fpsValue = document.getElementById('fps-limiter').value;
-    const currentTheme = document.body.className; // Assuming the theme is stored in the body's className
-    const downloadLocation = document.getElementById('download-location').value; // Assuming there's an input field for this
+    const clientStateSettings = getClientSettingsConfiguration();
 
-    // Create a JSON object with these values
-    const clientStateSettings = {
-        audioBitrate,
-        videoResolution,
-        fpsValue,
-        currentTheme,
-        downloadLocation
-    };
-
-    console.log("Posting client state settings: ");
-    console.log(clientStateSettings);
+    console.log("Posting client state settings: ", clientStateSettings);
 
     // Send this object to the backend
     const response = await fetch(`${API_PROXY}/api/update_client_state`, {

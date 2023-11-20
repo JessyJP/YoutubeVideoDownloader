@@ -1,3 +1,22 @@
+export function getClientStateSettings() {
+    const audioBitrate = document.getElementById('audio-limiter').value;
+    const videoResolution = document.getElementById('video-limiter').value;
+    const fpsValue = document.getElementById('fps-limiter').value;
+    const currentTheme = document.body.className; // Or other logic to get the current theme
+
+    // If there's an input field for download location
+    // const downloadLocation = document.getElementById('download-location').value;
+
+    return {
+        audioBitrate,
+        videoResolution,
+        fpsValue,
+        currentTheme,
+        // downloadLocation
+    };
+}
+
+
 export function switchTheme(newTheme) {
     console.log("Set the theme to: [" + newTheme + "]");
 
