@@ -13,6 +13,7 @@ import ColumnManager from './ColumnManager.js';
 class TableManager {
     constructor() {
         this.videoListTableBody = document.getElementById('video-list').querySelector('tbody');
+        this.gridContainer = document.getElementById('grid-container');
         this.statusOutput = document.getElementById('diagnostic-text'); // Assuming you have this element for status messages
         this.updateInterval = null;
         // The auto-update parameters
@@ -21,6 +22,7 @@ class TableManager {
         this.refreshTimeout = 250;//ms
         this.checkModeFlag = false;
         this.viewMode = 'table'; // Default view mode
+        this.maxGridCardsPerRow = 2; // Maximum number of grid cards per row
         // Initialize the column handler
         this.columnManager = new ColumnManager(this.checkAndUpdateState.bind(this));
         // Store temp states
@@ -80,24 +82,46 @@ class TableManager {
 
     populateTable(videoList) {
         const columnState = this.columnManager.getColumnState();
-        this.videoListTableBody.innerHTML = ''; // Clear existing rows
+    
+        // Clear existing rows for table view
+        this.videoListTableBody.innerHTML = ''; 
+        // Clear existing grid elements
+        this.gridContainer.innerHTML = ''; 
     
         if (videoList.length === 0) {
             const row = this.videoListTableBody.insertRow();
             row.innerHTML = `<td colspan="15" style="text-align:center;">No videos found</td>`;
-        } else {
+            return;
+        }
+
+        if (this.viewMode === 'table') {
+            // Show table and hide grid
+            document.getElementById('video-list').style.display = '';
+            this.gridContainer.style.display = 'none';
+    
             videoList.forEach((video, index) => {
-                if (this.viewMode == 'table'){
-                    const rowElement = video.toTableRow(index, columnState);
-                    this.videoListTableBody.appendChild(rowElement); // Append the row element directly
-                }
-                if (this.viewMode == 'grid'){
-                    const gridElement = video.toGridCard(index, columnState);
-                    this.videoListTableBody.appendChild(gridElement); // Append the row element directly
-                }
+                const rowElement = video.toTableRow(index, columnState);
+                this.videoListTableBody.appendChild(rowElement);
             });
+        } else if (this.viewMode === 'grid') {
+            // Show grid and hide table
+            document.getElementById('video-list').style.display = 'none';
+            this.gridContainer.style.display = '';
+    
+            videoList.forEach((video, index) => {
+                const gridElement = video.toGridCard(index, columnState);
+                this.gridContainer.appendChild(gridElement);
+            });
+
+            this.adjustGridLayout();
         }
     }
+
+    adjustGridLayout() {
+        this.gridContainer.style.gridTemplateColumns = `repeat(${this.maxGridCardsPerRow}, 1fr)`;
+        this.gridContainer.style.gap = `var(--default-gap)`;
+    }
+    
 
     setUIElementsByState(currentState) {
         // Example: disable/enable buttons based on the state

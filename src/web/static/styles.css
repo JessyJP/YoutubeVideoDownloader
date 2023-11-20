@@ -332,7 +332,12 @@ button:disabled, .disabled-button {
     text-decoration: underline;
 }
 
-.video-rating {
+/* .video-rating { */
     /* Additional styling for the rating */
-}
+/* } */
 
+/* =============== Video Item grid card container =============== */
+#grid-container {
+    display: grid;
+    /* Other styles... */
+}
