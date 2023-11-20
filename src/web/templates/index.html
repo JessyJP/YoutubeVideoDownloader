@@ -4,28 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Downloader GUI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <!-- Favicon -->
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
 </head>
 <body>
     <div class="app-window">
-        <!-- Logo and Title as Link -->
-        <div class="header">
+        <!-- ============== Logo and Title as Link section ============== -->
+        <div class="title-and-logo-header">
             <a href="https://github.com/JessyJP/YoutubeVideoDownloader" target="_blank">
                 <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
                 <h1 class="title">Video Downloader GUI</h1>
             </a>
         </div>
-
-        <div class="controls">
-            <label for="url-entry">Video Watch URL(s)  -  Playlist URL(s)  -  Channel URL(s)  -  Text containing URL(s):</label>
-            <input type="text" id="url-entry" placeholder="Enter video URL">
+        
+        <!-- ============== Control section ============== -->
+        <label class="controls-panel" for="url-entry">Video Watch URL(s)  -  Playlist URL(s)  -  Channel URL(s)  -  Text containing URL(s):</label>
+        <div class="controls-panel">
+            <input  type="text"   id="url-entry" placeholder="Enter video URL">
+            <button type="button" id="analyze-btn">Analyze</button>
+            <button type="button" id="download-btn">Download</button> <!-- Download Button -->
         </div>
-        <div class="settings-row">
-            <button type="button" id="settings-btn">
+
+        <div class="controls-panel">
+            <!-- <button type="button" id="settings-btn">
                 <img src="{{ url_for('static', filename='images/configuration_gear_icon_normal.png') }}" alt="Settings Icon">
-            </button>
+            </button> -->
             <button type="button" id="theme-btn">Theme</button> <!-- Theme Button -->
 
             <!-- Place this in the appropriate part of your HTML structure -->
@@ -38,34 +42,43 @@
                 </select>
             </div>
 
-            <button type="button" id="play-btn">Play Preview Selection Locally</button>
+        <!-- </div> -->
+        
+        <!-- <div class="controls-panel"> -->
             
             <select id="audio-limiter">
                 {% for bitrate in audio_bitrate_list %}
-                    <option value="{{ bitrate }}" {% if bitrate == last_bitrate %}selected{% endif %}>{{ bitrate }}</option>
+                <option value="{{ bitrate }}" {% if bitrate == last_bitrate %}selected{% endif %}>{{ bitrate }}</option>
                 {% endfor %}
             </select>
-
+            
             <select id="video-limiter">
                 {% for resolution in video_resolution_list %}
-                    <option value="{{ resolution }}" {% if resolution == last_resolution %}selected{% endif %}>{{ resolution }}</option>
+                <option value="{{ resolution }}" {% if resolution == last_resolution %}selected{% endif %}>{{ resolution }}</option>
                 {% endfor %}
             </select>
-
+            
             <select id="fps-limiter">
                 {% for fps in fps_value_list %}
-                    <option value="{{ fps }}" {% if fps == last_fps %}selected{% endif %}>{{ fps }}</option>
+                <option value="{{ fps }}" {% if fps == last_fps %}selected{% endif %}>{{ fps }}</option>
                 {% endfor %}
             </select>
 
-            <button type="button" id="location-btn">Select Download Location</button>
-            <div class="controls2">
-                <button type="button" id="analyze-btn">Analyze</button>
-                <button type="button" id="download-btn">Download</button> <!-- Download Button -->
-                <button type="button" id="clear-items-btn">Clear Items</button> <!-- Download Button -->
-            </div>
-            <input type="text" id="download-location" placeholder="Download location">
+        <!-- </div> -->
+        
+        <!-- <div class="controls-panel"> -->
+            <button type="button" id="clear-items-btn">Clear Items</button> <!-- Download Button -->
+            <!-- TODO:  THIS button should be put in the context menu -->
         </div>
+        
+        <!-- <div class="controls-panel"> -->
+            <!-- <input  type="text" id="download-location" placeholder="Download location"> -->
+            <!-- <button type="button" id="location-btn">Select Download Location</button> -->
+            <!-- <button type="button" id="play-btn">Play Preview Selection Locally</button> -->
+        <!-- </div> -->
+
+        <!-- ============== Diagnostic output section ============== -->
+
         <div class="diagnostic-output">
             <textarea id="diagnostic-text" placeholder="Diagnostic output..." readonly></textarea> <!-- Diagnostic Text Field -->
         </div>
@@ -73,6 +86,8 @@
         <div class="progress-container">
             <div id="progress-bar-id" class="progress-bar" style="width: 0%;">0%</div>
         </div>     
+
+        <!-- ============== Item Display section ============== -->
 
         <table id="video-list">
             <thead>

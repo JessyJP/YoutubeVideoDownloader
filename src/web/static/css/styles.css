@@ -3,15 +3,15 @@
     --default-margin: 20px;
     --default-padding: 10px;
     --default-gap: 10px;
-    /* ... other variables ... */
+    /* ... other variables ... TODO:NOTE: check if those are actually needed*/
 }
 
 /* ================================= Colour themes ================================= */
 [data-theme="dark-theme"] {
     /* Default theme - Dark theme */
+    --app-window-bg: #222;
     --background-color: #333;
     --text-color: #f4f4f4;
-    --app-window-bg: #222;
     --table-header-bg: #444;
     --table-row-bg: #383838;
     --table-border-color: #555;
@@ -34,9 +34,9 @@
 
 /* Light theme colors */
 [data-theme="light-theme"] {
+    --app-window-bg: #fff;
     --background-color: #f4f4f4;
     --text-color: #333;
-    --app-window-bg: #fff;
     --table-header-bg: #f2f2f2;
     --table-row-bg: #f9f9f9;
     --table-border-color: #ddd;
@@ -55,31 +55,11 @@
 }
 
 /* ======================= Main CSS Element - Basic Layout and Structure ======================= */
-.header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center; /* Center-align the text */
-    margin: 20px 0; /* Adjust top and bottom margin as needed */
-}
-
-.logo {
-    max-width: 150px; /* Adjust as needed */
-    height: auto;
-    margin-bottom: 10px; /* Space between logo and title */
-}
-
-.title {
-    color: var(--text-color);
-    margin: 0; /* Remove default margin */
-}
-
 body {
     font-family: Arial, sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
-    margin: 0;
+    margin: 20px;
     padding: 0;
 }
 
@@ -96,22 +76,54 @@ body {
     justify-content: flex-start;
 }
 
-/* ================================= Control Elements CSS elements ================================= */
-
-.controls, .settings-row {
+/* ======================= Title and logo styling ======================= */
+.title-and-logo-header {
     display: flex;
-    flex-wrap: wrap; /* allows items to wrap to the next line */
+    flex-direction: column;
     align-items: center;
-    margin-top: 20px;
-    gap: 10px;
+    justify-content: center;
+    text-align: center; /* Center-align the text */
+    margin: 20px 0; /* Adjust top and bottom margin as needed */
 }
 
-.controls input, .diagnostic-output textarea, #url-entry, #download-location, #diagnostic-text {
+.title {
+    color: var(--text-color);
+    margin: 0; /* Remove default margin */
+}
+
+
+.logo {
+    max-width: 150px; /* Adjust as needed */
+    height: auto;
+    margin-bottom: 10px; /* Space between logo and title */
+}
+
+
+/* ================================= Control Panel Elements CSS elements ================================= */
+
+.controls-panel {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px; /* Spacing between elements */
+    margin: 3px;
+}
+
+ .diagnostic-output textarea, #url-entry, #diagnostic-text {
     padding: 10px;
     border: 1px solid var(--input-border-color);
     border-radius: 4px;
     width: 100%;
 }
+.controls-panel #url-entry , #diagnostic-text, .diagnostic-output textarea{
+    flex-grow: 1; /* Allow input to grow and fill space */
+    min-width: 150px; /* Minimum width for the input */
+    padding: 10px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 4px;
+}
+
+/* ================================= Button Elements CSS elements ================================= */
 
 button {
     padding: 10px 20px;
@@ -127,6 +139,12 @@ button:hover {
     background-color: var(--button-hover-bg);
 }
 
+button:disabled, .disabled-button {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
 #settings-btn img, #theme-btn img {
     width: 20px;
     height: 20px;
@@ -139,18 +157,12 @@ select {
     cursor: pointer;
 }
 
-.controls2 {
+.url-entry-group {
     display: flex;
-    justify-content: flex-start; /* Aligns children to the left */
-    gap: 10px; /* Optional: adds space between buttons */
+    align-items: right;
+    gap: 10px; /* Adjust gap between elements as needed */
 }
 
-button:disabled, .disabled-button {
-    background-color: #ccc; /* Gray background for disabled buttons */
-    color: #666; /* Darker text for disabled buttons */
-    cursor: not-allowed; /* Cursor indicates that the item is not available */
-    /* Remove the height property unless you specifically need it */
-}
 
 /* =============== Diagnostic output  Styles =============== */
 
