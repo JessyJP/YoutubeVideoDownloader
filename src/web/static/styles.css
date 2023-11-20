@@ -7,7 +7,7 @@
 }
 
 /* ================================= Colour themes ================================= */
-:root {
+[data-theme="dark-theme"] {
     /* Default theme - Dark theme */
     --background-color: #333;
     --text-color: #f4f4f4;
@@ -33,7 +33,7 @@
 /* No need for a separate .dark-theme selector since these are now the default */
 
 /* Light theme colors */
-.light-theme {
+[data-theme="light-theme"] {
     --background-color: #f4f4f4;
     --text-color: #333;
     --app-window-bg: #fff;
