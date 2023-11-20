@@ -120,7 +120,8 @@ document.getElementById("clear-items-btn").addEventListener("click", async () =>
 // ==========================================================================================
 // Update client state settings
 document.getElementById("theme-btn").addEventListener("click", () => {
-    // Determine the new theme based on the current one
+    // Determine the new theme based on the current theme
+    // TODO: NOTE his could also be done based on the current button state
     const currentTheme = document.querySelector("html").getAttribute("data-theme");
     const newTheme = currentTheme === 'dark-theme' ? 'light-theme' : 'dark-theme';
 
