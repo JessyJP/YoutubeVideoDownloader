@@ -95,7 +95,7 @@ async function getVideoItemList() {
 
 // ============= SET state POST methods ============= 
 
-async function postClientStateSettings() {
+async function postClientStateSettings(tableManager) {
     // Collect current values from dropdowns and other settings
     const audioBitrate = document.getElementById('audio-limiter').value;
     const videoResolution = document.getElementById('video-limiter').value;

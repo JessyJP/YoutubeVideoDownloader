@@ -1,11 +1,11 @@
 import { 
+    getVideoItemList,
     analyzeURLtext,
     downloadVideoList,
     postClientStateSettings,
     clearItemSelectionByID,
     // playVideoPreview, 
     // selectDownloadLocation
-    getVideoItemList
 } from './api.js';
 
 import { switchTheme } from './functions.js';
@@ -121,15 +121,18 @@ document.getElementById("theme-btn").addEventListener("click", () => {
     // Switch to the new theme
     switchTheme(newTheme);
     // Update the client state after switching the theme
-    postClientStateSettings(); 
+    postClientStateSettings(tableManager); 
     // Trigger state check
     onUserInteraction();
 });
-document.getElementById("download-location").addEventListener("change", postClientStateSettings);
-// Attach event listeners to dropdowns
-document.getElementById("audio-limiter").addEventListener("change", postClientStateSettings);
-document.getElementById("video-limiter").addEventListener("change", postClientStateSettings);
-document.getElementById("fps-limiter").addEventListener("change", postClientStateSettings);
+document.getElementById("download-location").addEventListener("change", () => postClientStateSettings(tableManager));
+
+document.getElementById("audio-limiter").addEventListener("change", () => postClientStateSettings(tableManager));
+
+document.getElementById("video-limiter").addEventListener("change", () => postClientStateSettings(tableManager));
+
+document.getElementById("fps-limiter").addEventListener("change", () => postClientStateSettings(tableManager));
+
 
 // ==========================================================================================
 document.getElementById('viewMode').addEventListener('change', (event) => {
