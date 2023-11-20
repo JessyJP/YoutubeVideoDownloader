@@ -83,33 +83,33 @@ document.getElementById("clear-items-btn").addEventListener("click", async () =>
 });
 
 
-document.getElementById("play-btn").addEventListener("click", async () => {
-    // TODO: still unfinished
-    const videoPath = 'path/to/selected/video'; // Implement the mechanism to get the selected video path
-    try {
-        const data = await playVideoPreview(videoPath);
-        if (data.message) {
-            alert(data.message);
-        }
-    } catch (error) {
-        console.error("Error playing video preview: ", error);
-        alert("Failed to play video preview.");
-    }
-    onUserInteraction();
-});
+// document.getElementById("play-btn").addEventListener("click", async () => {
+//     // TODO: still unfinished
+//     const videoPath = 'path/to/selected/video'; // Implement the mechanism to get the selected video path
+//     try {
+//         const data = await playVideoPreview(videoPath);
+//         if (data.message) {
+//             alert(data.message);
+//         }
+//     } catch (error) {
+//         console.error("Error playing video preview: ", error);
+//         alert("Failed to play video preview.");
+//     }
+//     onUserInteraction();
+// });
 
-document.getElementById("location-btn").addEventListener("click", async () => {
-    // TODO: still unfinished
-    try {
-        const locationData = await selectDownloadLocation();
-        const inputLocation = document.getElementById("download-location");
-        inputLocation.value = locationData.download_location;
-    } catch (error) {
-        console.error("Error selecting download location: ", error);
-        alert("Failed to select download location.");
-    }
-    onUserInteraction();
-});
+// document.getElementById("location-btn").addEventListener("click", async () => {
+//     // TODO: still unfinished
+//     try {
+//         const locationData = await selectDownloadLocation();
+//         const inputLocation = document.getElementById("download-location");
+//         inputLocation.value = locationData.download_location;
+//     } catch (error) {
+//         console.error("Error selecting download location: ", error);
+//         alert("Failed to select download location.");
+//     }
+//     onUserInteraction();
+// });
 
 // ==========================================================================================
 // Update client state settings
@@ -125,7 +125,7 @@ document.getElementById("theme-btn").addEventListener("click", () => {
     // Trigger state check
     onUserInteraction();
 });
-document.getElementById("download-location").addEventListener("change", () => postClientStateSettings(tableManager));
+// document.getElementById("download-location").addEventListener("change", () => postClientStateSettings(tableManager));
 
 document.getElementById("audio-limiter").addEventListener("change", () => postClientStateSettings(tableManager));
 
