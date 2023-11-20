@@ -12,21 +12,22 @@ import ColumnManager from './ColumnManager.js';
 
 class ItemManager {
     constructor() {
+        // HTML Element handles
         this.videoListTableBody = document.getElementById('video-list').querySelector('tbody');
         this.gridContainer = document.getElementById('grid-container');
         this.statusOutput = document.getElementById('diagnostic-text'); // Assuming you have this element for status messages
-        this.updateInterval = null;
-        // The auto-update parameters
-        this.idleCheckCounter = 0;
-        this.maxIdleChecks = 12;
-        this.refreshTimeout = 250;//ms
-        this.checkModeFlag = false;
-        this.viewMode = 'table'; // Default view mode
-        this.maxGridCardsPerRow = 2; // Maximum number of grid cards per row
-        // Initialize the column handler
+        // Initialize the column handler/manager
         this.columnManager = new ColumnManager(this.checkAndUpdateState.bind(this));
-        // Store temp states
+        // Video items storing array for
         this.videoItems = [];
+        // The auto-update internal variables
+        this.checkModeFlag = false;
+        this.idleCheckCounter = 0;
+        // The auto-update parameters
+        this.refreshTimeout = 250;// Default interval between refreshes ms in IDLE
+        this.maxIdleChecks = 12;// Default maximum number of refreshes when server in IDLE 
+        this.viewMode = 'table'; // Default view mode
+        this.maxGridCardsPerRow = 2; // Default Maximum number of grid cards per row
     }
 
     async checkAndUpdateState() {
@@ -71,8 +72,8 @@ class ItemManager {
         try {
             let videoList = await getVideoItemList();
             videoList = this.transferSelection(this.videoItems, videoList)
-            // videoList = this.transferSelectionFromDom(videoList)
-            this.populateTable(videoList);
+            // Display the items which populates the display container
+            this.displayItems(videoList);
             // Store the video list after transferring the selection
             this.videoItems = videoList
         } catch (error) {
@@ -80,7 +81,7 @@ class ItemManager {
         }
     }
 
-    populateTable(videoList) {
+    displayItems(videoList) {
         const columnState = this.columnManager.getColumnState();
     
         // Clear existing rows for table view
@@ -118,11 +119,13 @@ class ItemManager {
     }
 
     adjustGridLayout() {
+        //TODO: if not going to be used externally just inline the method content
         this.gridContainer.style.gridTemplateColumns = `repeat(${this.maxGridCardsPerRow}, 1fr)`;
         this.gridContainer.style.gap = `var(--default-gap)`;
     }
     
 
+    // When the server is performing processing, certain elements will be disabled in the UI
     setUIElementsByState(currentState) {
         // Example: disable/enable buttons based on the state
         const analyzeBtn = document.getElementById('analyze-btn'); 
@@ -173,27 +176,6 @@ class ItemManager {
     
         return videoListTo;
     }
-    //NOTE:TODO: one of the 2 methods will be redundant
-    transferSelectionFromDom(videoListTo) {
-        // Check if this.videoItems is undefined or empty
-        if (!this.videoItems || this.videoItems.length === 0) {
-            return videoListTo;
-        }
-    
-        // Loop over the videoListTo array
-        videoListTo.forEach(toItem => {
-            // Find the corresponding item in this.videoItems array
-            const fromItem = this.videoItems.find(item => item.video_id === toItem.video_id);
-    
-            // If a matching item is found, transfer the selection state
-            if (fromItem) {
-                toItem.itemIsSelected = fromItem.itemIsSelected;
-            }
-        });
-    
-        return videoListTo;
-    }
-    
 
 }
 
