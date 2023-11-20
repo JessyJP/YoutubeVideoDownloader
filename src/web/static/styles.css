@@ -24,7 +24,7 @@
     --context-menu-border: #dfdfdf;
     --context-menu-hover-bg: #f5f5f5;
     --context-menu-box-shadow: 1px 1px 2px #cfcfcf;
-    --link-color: #0095ff;
+    --link-color: #a5d2f2;
     --link-hover-color: #0077cc;
     --row-selected-bg: rgba(255, 255, 255, 0.566)/* Light theme */
 }
@@ -49,8 +49,8 @@
     --context-menu-border: #555;
     --context-menu-hover-bg: #444;
     --context-menu-box-shadow: 1px 1px 2px #555;
-    /* --link-color: #0095ff; */
-    /* --link-hover-color: #0077cc; */
+    --link-color: #0095ff;
+    --link-hover-color: #0077cc;
     --row-selected-bg: rgb(255, 0, 0); /* Dark theme */
 }
 
@@ -222,6 +222,31 @@ button:disabled, .disabled-button {
 #video-list tr:nth-child(even) {
     background-color: var(--table-row-bg); /* zebra-striping for table rows */
 }
+
+/* ================================= Video Item Row Hover Styles ================================= */
+
+#video-list tr {
+    transition: transform 0.3s ease; /* Smooth transition for scaling */
+}
+
+#video-list tr:hover {
+    transform: scale(1.005); /* Slightly enlarge the row on hover */
+    background-color: var(--table-row-hover-bg); /* Optional: change background color on hover */
+}
+
+/* =============== Table link Styling =============== */
+
+#video-list a {
+    color: var(--link-color);
+    text-decoration: none; /* Optional: removes underline from links */
+    transition: color 0.2s; /* Smooth transition for color change */
+}
+
+#video-list a:hover, #video-list a:focus {
+    color: var(--link-hover-color);
+    text-decoration: underline; /* Optional: adds underline on hover/focus */
+}
+
 
 /* =============== Table thumbnail Styling =============== */
 
