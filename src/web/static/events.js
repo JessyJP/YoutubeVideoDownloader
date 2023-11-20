@@ -8,7 +8,10 @@ import {
     // selectDownloadLocation
 } from './api.js';
 
-import { switchTheme } from './functions.js';
+import { getClientDeviceInfo,
+    // printDeviceInfo, 
+    switchTheme 
+} from './functions.js';
 
 import TableManager from './TableManger/TableManager.js';
 
@@ -17,6 +20,9 @@ import TableManager from './TableManger/TableManager.js';
 
 // Start checking on page load
 window.addEventListener("load", () => {
+    const deviceInfo = getClientDeviceInfo();
+    // printDeviceInfo(deviceInfo)
+
     // Set the default theme
     const defaultTheme = 'dark-theme'
     switchTheme(defaultTheme);
