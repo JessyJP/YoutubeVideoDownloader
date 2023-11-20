@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Downloader GUI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-checkbox.css') }}">
     <!-- Favicon -->
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" type="image/x-icon">
 </head>
@@ -30,7 +31,7 @@
             <!-- <button type="button" id="settings-btn">
                 <img src="{{ url_for('static', filename='images/configuration_gear_icon_normal.png') }}" alt="Settings Icon">
             </button> -->
-            <button type="button" id="theme-btn">Theme</button> <!-- Theme Button -->
+            <input  type="checkbox" class="theme-checkbox" id="theme-btn">
 
             <!-- Place this in the appropriate part of your HTML structure -->
             <div class="view-mode-selector">
