@@ -134,6 +134,6 @@ document.getElementById("fps-limiter").addEventListener("change", postClientStat
 // ==========================================================================================
 document.getElementById('viewMode').addEventListener('change', (event) => {
     const selectedViewMode = event.target.value;
-    tableManager.viewMode = viewMode;
+    tableManager.viewMode = selectedViewMode;
     onUserInteraction();
 });

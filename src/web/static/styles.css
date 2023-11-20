@@ -287,7 +287,52 @@ button:disabled, .disabled-button {
     background-color: var(--context-menu-hover-bg);
 }
 
-/* =============== Table item selection context menu =============== */
+/* =============== Table item selection for context menu =============== */
 .item-selected {
     color: #ef1c1c;
 }
+
+/* =============== Video Item grid card =============== */
+.video-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: var(--default-gap);
+}
+
+.video-thumbnail {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.video-info {
+    padding: var(--default-padding);
+}
+
+.video-title {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.video-author, .video-length, .video-description, .video-meta, .video-actions {
+    font-size: 0.9em;
+    margin: 5px 0;
+}
+
+.video-watch-link {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.video-watch-link:hover {
+    text-decoration: underline;
+}
+
+.video-rating {
+    /* Additional styling for the rating */
+}
+

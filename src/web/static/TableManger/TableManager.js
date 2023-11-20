@@ -29,7 +29,6 @@ class TableManager {
         this.columnManager = new ColumnManager(this.checkAndUpdateState.bind(this));
         // Store temp states
         this.videoItems = [];
-        this.selection  = [];
     }
 
     async checkAndUpdateState() {
@@ -92,8 +91,14 @@ class TableManager {
             row.innerHTML = `<td colspan="15" style="text-align:center;">No videos found</td>`;
         } else {
             videoList.forEach((video, index) => {
-                const rowElement = video.toTableRow(index, columnState);
-                this.videoListTableBody.appendChild(rowElement); // Append the row element directly
+                if (this.viewMode == 'table'){
+                    const rowElement = video.toTableRow(index, columnState);
+                    this.videoListTableBody.appendChild(rowElement); // Append the row element directly
+                }
+                if (this.viewMode == 'grid'){
+                    const gridElement = video.toGridCard(index, columnState);
+                    this.videoListTableBody.appendChild(gridElement); // Append the row element directly
+                }
             });
         }
     

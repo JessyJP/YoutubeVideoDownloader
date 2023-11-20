@@ -111,6 +111,85 @@ export class VideoItem {
         return row; // Return the row element directly
     }
 
+    toGridCard(index, columnState) {
+        let thumbnailHTML = '';
+        let titleHTML = '';
+        let authorHTML = '';
+        let lengthHTML = '';
+        let descriptionHTML = '';
+        let viewsHTML = '';
+        let publishDateHTML = '';
+        let watchLinkHTML = '';
+        let ratingHTML = '';
+    
+        // Sort the columnState by order before building the card
+        columnState.sort((a, b) => a.order - b.order);
+    
+        columnState.forEach(column => {
+            if (column.isVisible) {
+                switch (column.label) {
+                    case 'Thumbnail URL':
+                        thumbnailHTML = `<img src="${this.thumbnail_url}" class="video-thumbnail" alt="Thumbnail">`;
+                        break;
+                    case 'Title':
+                        titleHTML = `<h3 class="video-title">${this.title}</h3>`;
+                        break;
+                    case 'Author':
+                        authorHTML = `<p class="video-author">${this.author}</p>`;
+                        break;
+                    case 'Length':
+                        lengthHTML = `<p class="video-length">${this.length}</p>`;
+                        break;
+                    case 'Description':
+                        descriptionHTML = `<p class="video-description">${this.description}</p>`;
+                        break;
+                    case 'Views':
+                        viewsHTML = `<span class="video-views">${this.views} views</span>`;
+                        break;
+                    case 'Publish Date':
+                        publishDateHTML = `<span class="video-publish-date">${this.publish_date}</span>`;
+                        break;
+                    case 'Watch URL':
+                        watchLinkHTML = `<a href="#" class="video-watch-link" data-watch-url="${this.watch_url}">Watch</a>`;
+                        break;
+                    case 'Rating':
+                        ratingHTML = `<span class="video-rating">${this.rating}</span>`;
+                        break;
+                    // Add cases for any other columns you might have
+                }
+            }
+        });
+            
+        // Create the grid card element
+        const card = document.createElement('div');
+        card.classList.add('video-card');
+        card.dataset.videoId = this.video_id;
+        card.innerHTML = `
+            ${thumbnailHTML}
+            <div class="video-info">
+                ${titleHTML}
+                ${authorHTML}
+                ${lengthHTML}
+                ${descriptionHTML}
+                <div class="video-meta">
+                    ${viewsHTML}
+                    ${publishDateHTML}
+                </div>
+                <div class="video-actions">
+                    ${watchLinkHTML}
+                    ${ratingHTML}
+                </div>
+            </div>
+        `;
+        
+        // Attach the handleRowClick method as an event listener
+        card.addEventListener('click', this.handleRowClick);
+    
+        return card; // Return the card element directly
+    }
+    
+    
+
     handleRowClick(event) {
         // Ignore clicks on links or other interactive elements
         if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT') {
