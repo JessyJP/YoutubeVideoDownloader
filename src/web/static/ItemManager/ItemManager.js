@@ -10,7 +10,7 @@ import VideoItem from './VideoItem.js';
 import ColumnManager from './ColumnManager.js';
 
 
-class TableManager {
+class ItemManager {
     constructor() {
         this.videoListTableBody = document.getElementById('video-list').querySelector('tbody');
         this.gridContainer = document.getElementById('grid-container');
@@ -197,4 +197,4 @@ class TableManager {
 
 }
 
-export default TableManager;
+export default ItemManager;

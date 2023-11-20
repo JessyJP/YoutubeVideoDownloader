@@ -13,7 +13,7 @@ import { getClientDeviceInfo,
     switchTheme 
 } from './functions.js';
 
-import TableManager from './TableManger/TableManager.js';
+import ItemManager from './ItemManager/ItemManager.js';
 
 // ==========================================================================================
 // Page main event handling
@@ -38,8 +38,8 @@ window.addEventListener("unload", () => {
 
 //  ==========================================================================================
 
-// Instantiate TableManager only once
-const tableManager = new TableManager();
+// Instantiate ItemManager only once
+const tableManager = new ItemManager();
 
 // Function to handle button clicks
 function onUserInteraction() {
