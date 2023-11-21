@@ -1,5 +1,5 @@
 import VideoItem from "./ItemManager/VideoItem.js";
-import {getClientSettingsConfiguration}from "./functions.js"
+import {getClientUiSettingsConfiguration}from "./functions.js"
 
 const API_PROXY = "http://localhost:80";  // Replace with your actual IP and port.
 
@@ -97,7 +97,7 @@ async function getVideoItemList() {
 // ============= SET state POST methods ============= 
 
 async function postClientStateSettings(itemManager) {
-    const clientStateSettings = getClientSettingsConfiguration();
+    const clientStateSettings = getClientUiSettingsConfiguration();
 
     console.log("Posting client state settings: ", clientStateSettings);
 
