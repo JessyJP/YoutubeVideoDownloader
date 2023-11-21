@@ -94,27 +94,66 @@ async function getVideoItemList() {
     }
 }
 
+
+async function getClientStateSettings() {
+    try {
+        const response = await fetch(`${API_PROXY}/api/update_client_state`, {
+            method: 'GET'
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Received client state settings from server:", data);
+
+        // Here you would use the data to update your client state
+        // For example:
+        // if (data.uiSettings) {
+        //     if (data.uiSettings.currentTheme) {
+        //         switchTheme(data.uiSettings.currentTheme);
+        //     }
+        //     if (data.uiSettings.viewMode) {
+        //         setCurrentViewMode(data.uiSettings.viewMode);
+        //     }
+        // }
+
+        return data;
+    } catch (error) {
+        console.error("Failed to fetch client state settings:", error);
+        // Handle the error appropriately
+    }
+}
+
+
 // ============= SET state POST methods ============= 
 
 async function postClientStateSettings(itemManager) {
     const clientStateSettings = getClientUiSettingsConfiguration();
+    const columnVisibilityConfig = itemManager.columnManager.getAllColumnsVisibility();
 
-    console.log("Posting client state settings: ", clientStateSettings);
+    const combinedSettings = {
+        uiSettings: clientStateSettings,
+        columnVisibility: columnVisibilityConfig
+    };
 
-    // Send this object to the backend
+    console.log("Posting combined client UI state and column visibility settings:", combinedSettings);
+
+    // Send this combined object to the backend
     const response = await fetch(`${API_PROXY}/api/update_client_state`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(clientStateSettings)
+        body: JSON.stringify(combinedSettings)
     });
 
     // Check the response from the server
     if (response.ok) {
-        console.log("Client state settings updated successfully.");
+        console.log("Client state and column visibility settings updated successfully.");
     } else {
-        console.error("Failed to update client state settings.");
+        console.error("Failed to update client state and column visibility settings.");
     }
 }
 
@@ -193,6 +232,7 @@ export {
     getStatusMsg,
     getProgressbarValue,
     getVideoItemList,
+    getClientStateSettings,
     postClientStateSettings,
     removeItemsSelectedByID,
     analyzeURLtext,

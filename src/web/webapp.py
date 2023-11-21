@@ -61,8 +61,7 @@ class WebWrapper(VideoListManager):
         self.outputExt = ".mkv"
 
         # Frontend client settings state
-        self.theme = "dark"
-        self.localSaveDir = ""
+        self.clientState = dict()
         self.lastLimits = LimitsAndPriority()
         print("WebWrapper is initialized")
     #end
@@ -310,20 +309,46 @@ def removeItemsSelectedByID():
 #     return jsonify({"message": "Video is playing"})
 
 
+@app.route('/api/update_client_state', methods=['GET'])
+def get_update_client_state():
+    # Construct the state to be sent
+    state = {
+        'uiSettings': {
+            # The limiters are handled from the class state
+            'audioBitrate': vlm.lastLimits.bitrate,
+            'videoResolution': vlm.lastLimits.resolution,
+            'fpsValue': vlm.lastLimits.fps,
+            # The rest are stored in a dictionary
+            'currentTheme': vlm.clientState.get('theme'),
+            'viewMode': vlm.clientState.get('viewMode')
+        },
+        'columnVisibility': vlm.clientState.get('columnVisibility', {})
+    }
+
+    # Return the state as a JSON response
+    return jsonify(state)
+
+
 @app.route('/api/update_client_state', methods=['POST'])
-def update_client_state():
+def post_update_client_state():
     data = request.get_json()
     if not data:
         return jsonify({"error": "No data provided"}), 400
 
     print(f"Received client state settings: {data}")
 
-    # Extract the data, Process and store the settings
+    # Extract and store the basic download limit settings
     vlm.lastLimits.bitrate    = data.get('audioBitrate')
     vlm.lastLimits.resolution = data.get('videoResolution')
     vlm.lastLimits.fps        = data.get('fpsValue')
-    vlm.theme                 = data.get('currentTheme')
-    vlm.localSaveDir          = data.get('downloadLocation')
+
+    # Extract and store the UI settings and column visibility in clientState
+    uiSettings = data.get('uiSettings', {})
+    columnVisibility = data.get('columnVisibility', {})
+
+    vlm.clientState['theme'] = uiSettings.get('currentTheme')
+    vlm.clientState['viewMode'] = uiSettings.get('viewMode')
+    vlm.clientState['columnVisibility'] = columnVisibility
 
     # Return a success response
     return jsonify({"message": "Server: Client state settings updated successfully"}), 200
