@@ -85,14 +85,11 @@ document.getElementById("download-btn").addEventListener("click", async () => {
 
 // Clear Items Button Event Listener
 document.getElementById("clear-items-btn").addEventListener("click", async () => {
-    // TODO: LAZY SELECTION the selection has to be acquired here and passed to the function 
-    const videoList = await getVideoItemList();
-    // TODO: generally there should be a selection of items
-    // TODO: in this case we are doing a lazy all
-    const videoIds = videoList.map(video => video.video_id); // Extract video IDs
-
+    // Get the ID array of the selected items 
+    const selectionVideoIDs = tableManager.getSelectedItemIds();
+    console.log("Selected item IDs:"+selectionVideoIDs);
     // Call downloadVideoList and handle the response
-    const response = await removeItemsSelectedByID(videoIds);
+    const response = await removeItemsSelectedByID(selectionVideoIDs);
     console.log(response.message);
     // Optionally, update the UI or perform additional actions based on the response
     onUserInteraction();

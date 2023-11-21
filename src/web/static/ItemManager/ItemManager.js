@@ -179,6 +179,15 @@ class ItemManager {
         return videoListTo;
     }
 
+    // Get functions for the item selections
+    getSelectedItems() {
+        return this.videoItems.filter(item => item.itemIsSelected);
+    }
+
+    getSelectedItemIds() {
+        return this.getSelectedItems().map(item => item.video_id);
+    }
+
 }
 
 export default ItemManager;
