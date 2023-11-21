@@ -24,7 +24,7 @@ class ItemManager {
         this.checkModeFlag = false;
         this.idleCheckCounter = 0;
         // The auto-update parameters
-        this.refreshTimeout = 250;// Default interval between refreshes ms in IDLE
+        this.refreshTimeoutFactor = 50;// Default interval between refreshes ms in IDLE
         this.maxIdleChecks = 12;// Default maximum number of refreshes when server in IDLE 
         this.viewMode = 'table'; // Default view mode
         this.maxGridCardsPerRow = 2; // Default Maximum number of grid cards per row
@@ -50,12 +50,16 @@ class ItemManager {
             }
 
             this.updateUI();
-            await new Promise(resolve => setTimeout(resolve, this.refreshTimeout)); // Wait for this.refreshTimeout ms
+            await this.delay(this.refreshTimeoutFactor*this.idleCheckCounter); // Update a few times with increasing delay
         }
     }
 
     resetIdleCheckCounter() {
         this.idleCheckCounter = 0;
+    }
+
+    async delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     async updateUI() {
