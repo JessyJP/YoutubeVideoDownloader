@@ -11,10 +11,24 @@ import {
 import { 
     getClientDeviceInfo,
     printDeviceInfo, 
-    switchTheme 
+    getCurrentTheme,
+    switchTheme,
+    adjustGridBasedOnDevice
 } from './functions.js';
 
 import ItemManager from './ItemManager/ItemManager.js';
+
+//  ==========================================================================================
+// Instantiate ItemManager only once
+const tableManager = new ItemManager();
+
+// Function to handle button clicks
+function onUserInteraction() {
+    // Post the latest state to the server
+    postClientStateSettings(tableManager);
+    // Get back the latest update from the server
+    tableManager.checkAndUpdateState();
+}
 
 // ==========================================================================================
 // Page main event handling
@@ -37,15 +51,10 @@ window.addEventListener("unload", () => {
     tableManager.checkModeFlag = false;
 });
 
-//  ==========================================================================================
+window.addEventListener('resize', () => {
+    adjustGridBasedOnDevice(tableManager);
+});
 
-// Instantiate ItemManager only once
-const tableManager = new ItemManager();
-
-// Function to handle button clicks
-function onUserInteraction() {
-    tableManager.checkAndUpdateState();
-}
 
 //  ==========================================================================================
 // User event handling 
@@ -117,34 +126,34 @@ document.getElementById("clear-items-btn").addEventListener("click", async () =>
 //     }
 //     onUserInteraction();
 // });
+// 
+// document.getElementById("download-location").addEventListener("change", () => onUserInteraction());
 
 // ==========================================================================================
 // Update client state settings
 document.getElementById("theme-btn").addEventListener("click", () => {
     // Determine the new theme based on the current theme
     // TODO: NOTE his could also be done based on the current button state
-    const currentTheme = document.querySelector("html").getAttribute("data-theme");
+    const currentTheme = getCurrentTheme()
     const newTheme = currentTheme === 'dark-theme' ? 'light-theme' : 'dark-theme';
 
     // Switch to the new theme
     switchTheme(newTheme);
-    // Update the client state after switching the theme
-    postClientStateSettings(tableManager); 
     // Trigger state check
     onUserInteraction();
 });
-// document.getElementById("download-location").addEventListener("change", () => postClientStateSettings(tableManager));
 
-document.getElementById("audio-limiter").addEventListener("change", () => postClientStateSettings(tableManager));
-
-document.getElementById("video-limiter").addEventListener("change", () => postClientStateSettings(tableManager));
-
-document.getElementById("fps-limiter").addEventListener("change", () => postClientStateSettings(tableManager));
-
-
-// ==========================================================================================
 document.getElementById('viewMode').addEventListener('change', (event) => {
-    const selectedViewMode = event.target.value;
-    tableManager.viewMode = selectedViewMode;
+    tableManager.viewMode = event.target.value;
+    adjustGridBasedOnDevice(tableManager);
     onUserInteraction();
 });
+
+
+document.getElementById("audio-limiter").addEventListener("change", () => onUserInteraction());
+
+document.getElementById("video-limiter").addEventListener("change", () => onUserInteraction());
+
+document.getElementById("fps-limiter").addEventListener("change", () => onUserInteraction());
+
+// ==========================================================================================

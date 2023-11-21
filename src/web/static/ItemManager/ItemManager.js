@@ -16,6 +16,10 @@ class ItemManager {
         this.videoListTableBody = document.getElementById('video-list').querySelector('tbody');
         this.gridContainer = document.getElementById('grid-container');
         this.statusOutput = document.getElementById('diagnostic-text'); // Assuming you have this element for status messages
+        // Elements for state control
+        this.analyzeBtn = document.getElementById('analyze-btn'); 
+        this.downloadBtn = document.getElementById('download-btn'); 
+        this.clearItemsBtn = document.getElementById('clear-items-btn'); 
         // Initialize the column handler/manager
         this.columnManager = new ColumnManager(this.checkAndUpdateState.bind(this));
         // Video items storing array for
@@ -118,45 +122,39 @@ class ItemManager {
                 this.gridContainer.appendChild(gridElement);
             });
 
-            this.adjustGridLayout();
+            this.adjustGridLayout(this.maxGridCardsPerRow);
         }
     }
 
-    adjustGridLayout() {
-        //TODO: if not going to be used externally just inline the method content
-        this.gridContainer.style.gridTemplateColumns = `repeat(${this.maxGridCardsPerRow}, 1fr)`;
+    adjustGridLayout(maxGridCardsPerRow) {
+        this.gridContainer.style.gridTemplateColumns = `repeat(${maxGridCardsPerRow}, 1fr)`;
         this.gridContainer.style.gap = `var(--default-gap)`;
+        this.maxGridCardsPerRow = maxGridCardsPerRow;
     }
     
 
     // When the server is performing processing, certain elements will be disabled in the UI
-    setUIElementsByState(currentState) {
-        // Example: disable/enable buttons based on the state
-        const analyzeBtn = document.getElementById('analyze-btn'); 
-        const downloadBtn = document.getElementById('download-btn'); 
-        const clearItemsBtn = document.getElementById('clear-items-btn'); 
-        // Similarly, get other buttons like 'set path'
-
+    setUIElementsByState(currentState) {        
         if (currentState === 'ANALYSIS') {
-            analyzeBtn.disabled = true;
-            downloadBtn.disabled = true;
-            clearItemsBtn.disabled = true;
-            // analyzeBtn.classList.add("disabled-button");
-            // downloadBtn.classList.add("disabled-button");
+            this.analyzeBtn.disabled = true;
+            this.downloadBtn.disabled = true;
+            this.clearItemsBtn.disabled = true;
+            // this.analyzeBtn.classList.add("disabled-button");
+            // this.downloadBtn.classList.add("disabled-button");
             // Set other buttons as needed
         } else if (currentState === 'DOWNLOAD') {
-            analyzeBtn.disabled = true;
-            downloadBtn.disabled = true;
-            clearItemsBtn.disabled = true;
-            // analyzeBtn.classList.add("disabled-button");
-            // downloadBtn.classList.add("disabled-button");
+            this.analyzeBtn.disabled = true;
+            this.downloadBtn.disabled = true;
+            this.clearItemsBtn.disabled = true;
+            // this.analyzeBtn.classList.add("disabled-button");
+            // this.downloadBtn.classList.add("disabled-button");
             // Set other buttons as needed
         } else {
-            analyzeBtn.disabled = false;
-            downloadBtn.disabled = false;
-            clearItemsBtn.disabled = false;
-            // analyzeBtn.classList.remove("disabled-button");
-            // downloadBtn.classList.remove("disabled-button");
+            this.analyzeBtn.disabled = false;
+            this.downloadBtn.disabled = false;
+            this.clearItemsBtn.disabled = false;
+            // this.analyzeBtn.classList.remove("disabled-button");
+            // this.downloadBtn.classList.remove("disabled-button");
             // Set other buttons as needed
         }
     }

@@ -143,7 +143,7 @@ async function clearItemSelectionByID(videoIds) {
 // ============= POST methods for processing =============
 
 async function analyzeURLtext(url_text) {
-    postClientStateSettings()// Update the latest client settings
+    // Update the latest client settings. Assume  postClientStateSettings(itemManager) is called just prior
     console.log("Analyze API call made : ["+url_text+"]");
     const response = await fetch(`${API_PROXY}/api/analyzeURLtext`, {
         method: 'POST',
@@ -157,7 +157,7 @@ async function analyzeURLtext(url_text) {
 }
 
 async function downloadVideoList() {
-    postClientStateSettings()// Update the latest client settings
+    // Update the latest client settings. Assume  postClientStateSettings(itemManager) is called just prior
     console.log("Download API call started");
     const response = await fetch(`${API_PROXY}/api/downloadVideoList`, {
         method: 'POST',
