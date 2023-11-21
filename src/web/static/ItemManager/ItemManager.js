@@ -82,7 +82,7 @@ class ItemManager {
     }
 
     displayItems(videoList) {
-        const columnState = this.columnManager.getColumnState();
+        const columnState = this.columnManager.getAllColumnsVisibility();
     
         // Clear existing rows for table view
         this.videoListTableBody.innerHTML = ''; 

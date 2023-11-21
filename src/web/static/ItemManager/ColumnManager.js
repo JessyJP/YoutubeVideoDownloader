@@ -84,7 +84,7 @@ class ColumnManager {
             if (checkbox) {
                 checkbox.checked = column.isVisible;
                 checkbox.addEventListener('change', () => {
-                    this.toggleColumnVisibility(index, checkbox.checked);
+                    this.setColumnVisibility(index, checkbox.checked);
                 });
             }
         });
@@ -92,15 +92,28 @@ class ColumnManager {
 
     // ============= Event handling methods =============
 
-    toggleColumnVisibility(columnIndex, isVisible) {
+    setColumnVisibility(columnIndex, isVisible) {
+        // Check if columnIndex is valid
+        if (columnIndex < 0 || columnIndex >= this.columns.length) {
+            console.error("Invalid column index");
+            return;
+        }
+        
+        if (this.columns[columnIndex].isVisible === isVisible) {
+            return; // No change in visibility
+        }
+    
         Array.from(this.table.rows).forEach(row => {
             if (row.cells[columnIndex]) {
                 row.cells[columnIndex].style.display = isVisible ? '' : 'none';
             }
         });
         this.columns[columnIndex].isVisible = isVisible;
-        // Call the external callback
-        this.onVisibilityChange()
+
+        // Call the external callback if any
+        if (this.onVisibilityChange) {
+            this.onVisibilityChange();
+        }
     }
 
     updateColumnOrder(newOrder) {//TODO:NOTE this method is currently inactive
@@ -113,22 +126,46 @@ class ColumnManager {
     }
 
     // ============= Get/Set handling methods =============
-
-    getAllLabels() {
-        return this.columns.map(column => column.label);
-    }
-
     getVisibilityByLabel(label) {
         const column = this.columns.find(column => column.label === label);
         return column ? column.isVisible : null;
     }
 
-    getColumnState() {
+    getAllColumnsVisibility() {
         return this.columns.map(column => ({
             label: column.label,
             isVisible: column.isVisible,
             order: column.order
         }));
+    }
+
+    updateColumnManagerState(data) {
+        let newState;
+    
+        if (typeof data === 'string') {
+            try {
+                newState = JSON.parse(data);
+            } catch (error) {
+                console.error("Invalid JSON format");
+                return;
+            }
+        } else if (typeof data === 'object' && Array.isArray(data)) {
+            newState = data;
+        } else {
+            console.error("Invalid data type");
+            return;
+        }
+    
+        newState.forEach(state => {
+            const column = this.columns.find(column => column.label === state.label);
+            if (column) {
+                const columnIndex = this.columns.indexOf(column);
+                // Compare current state with new state
+                if (column.isVisible !== state.isVisible) {
+                    this.setColumnVisibility(columnIndex, state.isVisible);
+                }
+            }
+        });
     }
 }
 
