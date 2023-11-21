@@ -3,7 +3,7 @@ import {
     analyzeURLtext,
     downloadVideoList,
     postClientStateSettings,
-    clearItemSelectionByID,
+    removeItemsSelectedByID,
     // playVideoPreview, 
     // selectDownloadLocation
 } from './api.js';
@@ -92,7 +92,7 @@ document.getElementById("clear-items-btn").addEventListener("click", async () =>
     const videoIds = videoList.map(video => video.video_id); // Extract video IDs
 
     // Call downloadVideoList and handle the response
-    const response = await clearItemSelectionByID(videoIds);
+    const response = await removeItemsSelectedByID(videoIds);
     console.log(response.message);
     // Optionally, update the UI or perform additional actions based on the response
     onUserInteraction();

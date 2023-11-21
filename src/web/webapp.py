@@ -277,8 +277,8 @@ def downloadVideoList():
     vlm.processState = ProcessRoutine.IDLE
     return jsonify({"download": "download_path"}) , 202
 
-@app.route('/api/clearItemSelectionByID', methods=['POST'])
-def clearItemSelectionByID():
+@app.route('/api/removeItemsSelectedByID', methods=['POST'])
+def removeItemsSelectedByID():
     if vlm.processState == ProcessRoutine.IDLE:
         data = request.json
         video_ids = data.get('videoIds', [])

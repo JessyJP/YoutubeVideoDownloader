@@ -118,11 +118,11 @@ async function postClientStateSettings(itemManager) {
     }
 }
 
-async function clearItemSelectionByID(videoIds) {
+async function removeItemsSelectedByID(videoIds) {
     console.log("Clearing items with IDs: ", videoIds);
 
     // Send this list of IDs to the backend
-    const response = await fetch(`${API_PROXY}/api/clearItemSelectionByID`, {
+    const response = await fetch(`${API_PROXY}/api/removeItemsSelectedByID`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -194,7 +194,7 @@ export {
     getProgressbarValue,
     getVideoItemList,
     postClientStateSettings,
-    clearItemSelectionByID,
+    removeItemsSelectedByID,
     analyzeURLtext,
     downloadVideoList,
     // playVideoPreview,
