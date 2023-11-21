@@ -8,8 +8,9 @@ import {
     // selectDownloadLocation
 } from './api.js';
 
-import { getClientDeviceInfo,
-    // printDeviceInfo, 
+import { 
+    getClientDeviceInfo,
+    printDeviceInfo, 
     switchTheme 
 } from './functions.js';
 
@@ -21,7 +22,7 @@ import ItemManager from './ItemManager/ItemManager.js';
 // Start checking on page load
 window.addEventListener("load", () => {
     const deviceInfo = getClientDeviceInfo();
-    // printDeviceInfo(deviceInfo)
+    printDeviceInfo(deviceInfo)
 
     // Set the default theme
     const defaultTheme = 'dark-theme'
