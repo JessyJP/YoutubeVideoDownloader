@@ -2,7 +2,8 @@ import {
     getVideoItemList,
     getState,
     getStatusMsg,
-    getProgressbarValue
+    getProgressbarValue,
+    postClientStateSettings
 } from '../api.js';
 import { updateProgressBar } from "../functions.js"
 import VideoItem from './VideoItem.js';
@@ -21,7 +22,7 @@ class ItemManager {
         this.downloadBtn = document.getElementById('download-btn'); 
         this.clearItemsBtn = document.getElementById('clear-items-btn'); 
         // Initialize the column handler/manager
-        this.columnManager = new ColumnManager(this.checkAndUpdateState.bind(this));
+        this.columnManager = new ColumnManager(this.checkAndUpdateState.bind(this), postClientStateSettings.bind(null, this));
         // Video items storing array for
         this.videoItems = [];
         // The auto-update internal variables

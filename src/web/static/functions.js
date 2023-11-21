@@ -1,3 +1,9 @@
+// ========== Device Information Methods ==========
+
+/**
+ * Retrieves various details about the client's device.
+ * @returns {Object} An object containing device information.
+ */
 export function getClientDeviceInfo() {
     const screenWidth = window.screen.width;
     const screenHeight = window.screen.height;
@@ -36,9 +42,11 @@ export function getClientDeviceInfo() {
     };
 }
 
+/**
+ * Prints device information to the console.
+ * @param {Object} deviceInfo - The device information object.
+ */
 export function printDeviceInfo(deviceInfo) {
-    // const deviceInfo = getClientDeviceInfo();
-
     console.log("Screen Width:", deviceInfo.screenWidth, "Screen Height:", deviceInfo.screenHeight);
     console.log("Window Width:", deviceInfo.windowWidth, "Window Height:", deviceInfo.windowHeight);
     console.log("Is Mobile:", deviceInfo.deviceType.isMobile, "Is Tablet:", deviceInfo.deviceType.isTablet, "Is Desktop:", deviceInfo.deviceType.isDesktop);
@@ -47,15 +55,27 @@ export function printDeviceInfo(deviceInfo) {
     console.log("Browser Name:", deviceInfo.browser.name, "Version:", deviceInfo.browser.version);
 }
 
-// Get/Set Theme methods
-export function getCurrentTheme(){
-    return document.querySelector("html").getAttribute("data-theme");
+// ========== Theme Management Methods ==========
+
+/**
+ * Gets the current theme.
+ * @returns {String} The current theme.
+ */
+export function getUiThemeElement() {
+    return document.querySelector("html");
 }
 
-export function switchTheme(newTheme) {
-    console.log("Set the theme to: [" + newTheme + "]");
+export function getTheme()
+{
+    return getUiThemeElement().getAttribute("data-theme");
+}
 
-    let htmlElement = document.documentElement;
+/**
+ * Switches to a specified theme.
+ * @param {String} newTheme - The theme to switch to.
+ */
+export function setTheme(newTheme) {
+    let htmlElement = getUiThemeElement();
 
     switch(newTheme) {
         case 'dark-theme':
@@ -66,13 +86,34 @@ export function switchTheme(newTheme) {
             break;
         default:
             console.error("Unknown theme:", newTheme);
+            return;
     }
+
+    
 }
 
-export function getCurrentViewMode(){
+// ========== View Mode Methods ==========
+
+/**
+ * Retrieves the current view mode.
+ * @returns {String} The current view mode.
+ */
+export function getCurrentViewModeUiElementState() {
     return document.getElementById('viewMode').value;
 }
 
+/**
+ * Sets the current view mode.
+ * @param {String} newViewMode - The new view mode to set.
+ */
+export function setCurrentViewModeUiElementState(newViewMode) {
+    document.getElementById('viewMode').value = newViewMode;
+}
+
+/**
+ * Adjusts the grid layout based on the device type.
+ * @param {Object} tableManager - The table manager instance.
+ */
 export function adjustGridBasedOnDevice(tableManager) {
     if (tableManager.viewMode === "grid") {
         const deviceInfo = getClientDeviceInfo();
@@ -88,25 +129,64 @@ export function adjustGridBasedOnDevice(tableManager) {
     }
 }
 
+// ========== Client Settings Configuration Methods ==========
 
-export function getClientSettingsConfiguration() {
-    const currentTheme = getCurrentTheme();
+/**
+ * Retrieves the current client settings configuration.
+ * @returns {Object} The current settings configuration.
+ */
+export function getClientUiSettingsConfiguration() {
+    const currentTheme = getTheme();
     const audioBitrate = document.getElementById('audio-limiter').value;
     const videoResolution = document.getElementById('video-limiter').value;
     const fpsValue = document.getElementById('fps-limiter').value;
-
-    // If there's an input field for download location
-    // const downloadLocation = document.getElementById('download-location').value;
+    const viewMode = getCurrentViewModeUiElementState();
 
     return {
         audioBitrate,
         videoResolution,
         fpsValue,
         currentTheme,
-        // downloadLocation
+        viewMode
     };
 }
 
+/**
+ * Sets the client settings based on the provided configuration.
+ * @param {Object} configuration - The configuration object to set.
+ */
+export function setClientUiSettingsConfiguration(configuration, tableManager) {
+    if (configuration.audioBitrate) {
+        document.getElementById('audio-limiter').value = configuration.audioBitrate;
+    }
+    if (configuration.videoResolution) {
+        document.getElementById('video-limiter').value = configuration.videoResolution;
+    }
+    if (configuration.fpsValue) {
+        document.getElementById('fps-limiter').value = configuration.fpsValue;
+    }
+    if (configuration.currentTheme) {
+        // Switch the theme
+        setTheme(configuration.currentTheme);
+        // TODO: maybe we should consolidate the switching and the UI state update
+        // Update the button to reflect the current theme
+        const themeButton = document.getElementById("theme-btn");
+        themeButton.textContent = configuration.currentTheme === 'dark-theme' ? 'Light Mode' : 'Dark Mode';
+    }
+    if (configuration.viewMode) {
+        setCurrentViewModeUiElementState(configuration.viewMode);
+        tableManager.viewMode = configuration.viewMode;
+        adjustGridBasedOnDevice(tableManager);
+        // TODO: maybe we should consolidate the switching and the UI state update
+    }
+}
+
+// ========== Progress Bar Update Method ==========
+
+/**
+ * Updates the progress bar to the specified progress.
+ * @param {Number} progress - The progress percentage to set.
+ */
 export function updateProgressBar(progress) {
     var progressBar = document.getElementById("progress-bar-id");
     progressBar.style.width = progress + '%';

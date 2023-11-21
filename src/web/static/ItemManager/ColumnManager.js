@@ -1,11 +1,12 @@
 class ColumnManager {
     // ============= Initialization methods =============
-    constructor(callbackOnVisibilityChange) {
+    constructor(callbackOnVisibilityChange, postClientStateSettingsRef) {
         this.table = document.getElementById('video-list');
         this.contextMenu = document.getElementById('contextMenu');
         this.columns = [];
         // External callback 
         this.onVisibilityChange = callbackOnVisibilityChange;
+        this.postClientStateSettingsRef = postClientStateSettingsRef;
         // Initialize a default configuration
         this.defaultTableConfiguration();
         // TODO: this could be potentially overwritten here if on startup we load another configuration in the future
@@ -85,6 +86,8 @@ class ColumnManager {
                 checkbox.checked = column.isVisible;
                 checkbox.addEventListener('change', () => {
                     this.setColumnVisibility(index, checkbox.checked);
+                    // Also post the state when there is an update
+                    this.postClientStateSettingsRef()
                 });
             }
         });

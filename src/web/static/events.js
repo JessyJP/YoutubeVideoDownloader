@@ -1,19 +1,17 @@
 import { 
     getVideoItemList,
-    analyzeURLtext,
-    downloadVideoList,
+    getClientStateSettings,
     postClientStateSettings,
     removeItemsSelectedByID,
-    // playVideoPreview, 
-    // selectDownloadLocation
+    analyzeURLtext,
+    downloadVideoList,
 } from './api.js';
 
 import { 
-    getClientDeviceInfo,
-    printDeviceInfo, 
-    getCurrentTheme,
-    switchTheme,
-    adjustGridBasedOnDevice
+    getTheme,
+    setTheme,
+    adjustGridBasedOnDevice,
+    setClientUiSettingsConfiguration
 } from './functions.js';
 
 import ItemManager from './ItemManager/ItemManager.js';
@@ -34,15 +32,20 @@ function onUserInteraction() {
 // Page main event handling
 
 // Start checking on page load
-window.addEventListener("load", () => {
-    const deviceInfo = getClientDeviceInfo();
-    printDeviceInfo(deviceInfo)
-
+window.addEventListener("load", async () => {
+ 
     // Set the default theme
     const defaultTheme = 'dark-theme'
-    switchTheme(defaultTheme);
+    setTheme(defaultTheme);
+
+    // Try to get state from the server
+    const appState = await getClientStateSettings();
+
+    // If available and valid set the client state to the the server snapshot
+    setClientUiSettingsConfiguration(appState.uiSettings, tableManager);
+    // If available also set the column state
+    tableManager.columnManager.updateColumnManagerState(appState.columnVisibility)
     
-    // This is for last
     tableManager.checkAndUpdateState();
 });
 
@@ -131,11 +134,11 @@ document.getElementById("clear-items-btn").addEventListener("click", async () =>
 document.getElementById("theme-btn").addEventListener("click", () => {
     // Determine the new theme based on the current theme
     // TODO: NOTE his could also be done based on the current button state
-    const currentTheme = getCurrentTheme()
+    const currentTheme = getTheme()
     const newTheme = currentTheme === 'dark-theme' ? 'light-theme' : 'dark-theme';
 
     // Switch to the new theme
-    switchTheme(newTheme);
+    setTheme(newTheme);
     // Trigger state check
     onUserInteraction();
 });
