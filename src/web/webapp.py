@@ -335,7 +335,7 @@ def post_update_client_state():
     if not data:
         return jsonify({"error": "No data provided"}), 400
 
-    print(f"Received client state settings: {data}")
+    # print(f"Received client state settings: {data}")
 
     # Extract and store the basic download limit settings
     vlm.lastLimits.bitrate    = data.get('audioBitrate')
