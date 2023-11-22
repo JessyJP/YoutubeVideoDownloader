@@ -20,7 +20,6 @@ class ItemManager {
         // Elements for state control
         this.analyzeBtn = document.getElementById('analyze-btn'); 
         this.downloadBtn = document.getElementById('download-btn'); 
-        this.clearItemsBtn = document.getElementById('clear-items-btn'); 
         // Initialize the column handler/manager
         this.columnManager = new ColumnManager(this.checkAndUpdateState.bind(this), postClientStateSettings.bind(null, this));
         // Video items storing array for
@@ -141,21 +140,18 @@ class ItemManager {
         if (currentState === 'ANALYSIS') {
             this.analyzeBtn.disabled = true;
             this.downloadBtn.disabled = true;
-            this.clearItemsBtn.disabled = true;
             // this.analyzeBtn.classList.add("disabled-button");
             // this.downloadBtn.classList.add("disabled-button");
             // Set other buttons as needed
         } else if (currentState === 'DOWNLOAD') {
             this.analyzeBtn.disabled = true;
             this.downloadBtn.disabled = true;
-            this.clearItemsBtn.disabled = true;
             // this.analyzeBtn.classList.add("disabled-button");
             // this.downloadBtn.classList.add("disabled-button");
             // Set other buttons as needed
         } else {
             this.analyzeBtn.disabled = false;
             this.downloadBtn.disabled = false;
-            this.clearItemsBtn.disabled = false;
             // this.analyzeBtn.classList.remove("disabled-button");
             // this.downloadBtn.classList.remove("disabled-button");
             // Set other buttons as needed

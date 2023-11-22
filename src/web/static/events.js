@@ -86,17 +86,17 @@ document.getElementById("download-btn").addEventListener("click", async () => {
     onUserInteraction();
 });
 
-// Clear Items Button Event Listener
-document.getElementById("clear-items-btn").addEventListener("click", async () => {
-    // Get the ID array of the selected items 
-    const selectionVideoIDs = tableManager.getSelectedItemIds();
-    console.log("Selected item IDs:"+selectionVideoIDs);
-    // Call downloadVideoList and handle the response
-    const response = await removeItemsSelectedByID(selectionVideoIDs);
-    console.log(response.message);
-    // Optionally, update the UI or perform additional actions based on the response
-    onUserInteraction();
-});
+// // Clear Items Button Event Listener
+// document.getElementById("clear-items-btn").addEventListener("click", async () => {
+//     // Get the ID array of the selected items 
+//     const selectionVideoIDs = tableManager.getSelectedItemIds();
+//     console.log("Selected item IDs:"+selectionVideoIDs);
+//     // Call downloadVideoList and handle the response
+//     const response = await removeItemsSelectedByID(selectionVideoIDs);
+//     console.log(response.message);
+//     // Optionally, update the UI or perform additional actions based on the response
+//     onUserInteraction();
+// });
 
 
 // document.getElementById("play-btn").addEventListener("click", async () => {
