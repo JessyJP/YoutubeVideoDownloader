@@ -157,3 +157,31 @@ document.getElementById("video-limiter").addEventListener("change", () => onUser
 document.getElementById("fps-limiter").addEventListener("change", () => onUserInteraction());
 
 // ==========================================================================================
+// Keyboard event handler
+document.addEventListener("keydown", async (event) => {
+    // Handle the Delete key
+    if (event.key === "Delete") {
+        const selectionVideoIDs = tableManager.getSelectedItemIds();
+        console.log("Selected item IDs:", selectionVideoIDs);
+
+        // Call removeItemsSelectedByID and handle the response
+        const response = await removeItemsSelectedByID(selectionVideoIDs);
+        console.log(response.message);
+
+        onUserInteraction();
+    }
+
+    // Handle Ctrl+A key combination
+    if (event.ctrlKey && event.key === "a") {
+        event.preventDefault(); // Prevent default text selection
+        tableManager.setAllItemsAsSelected();
+        // onUserInteraction();//NOTE: Not needed
+    }
+
+    // Handle ESC key for deselecting all items
+    if (event.key === "Escape") {
+        tableManager.setAllItemsAsDeselected();
+        // Optionally, trigger a state check or UI update
+        // onUserInteraction();//NOTE: Not needed
+    }
+});

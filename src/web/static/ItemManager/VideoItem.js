@@ -15,29 +15,11 @@ class VideoItem {
         this.video_size_mb = videoData.video_size_mb != null ? videoData.video_size_mb.toString() : 'N/A';
         // Extra argument
         this.itemIsSelected = false;
+        // Bind the set selection method to the class instance
+        this.setSelectionStateAndUpdateUI = this.setSelectionStateAndUpdateUI.bind(this);
         // Bind the handleRowClick method to the class instance
         this.handleRowClick = this.handleRowClick.bind(this);
     }
-
-    toTableRowDefault(index) {
-        return `
-            <td>${index + 1}</td>
-            <td>${this.download_status}</td>
-            <td><a href="#" data-watch-url="${this.watch_url}">${this.watch_url}</a></td>
-            <td><a href="#" data-title-url="${this.watch_url}">${this.title}</a></td>
-            <td>${this.author}</td>
-            <td>${this.length}</td>
-            <td>${this.publish_date}</td>
-            <td>${this.views}</td>
-            <td><img src="${this.thumbnail_url}" class="thumbnail-image"></td>
-            <td>${this.rating}</td>
-            <td>${this.video_id}</td>
-            <td>${this.quality_str}</td>
-            <td>${this.video_size_mb}</td>
-            <td>${this.description}</td>
-        `;
-    }
-
 
     toTableRow(index, columnState, itemIsSelected = undefined) {
         let rowHTML = '';
@@ -118,6 +100,9 @@ class VideoItem {
         if (titleLink) {
             titleLink.addEventListener('click', this.handleUrlClick);
         }
+
+        // Set and display the selection state
+        this.setSelectionStateAndUpdateUI(this.itemIsSelected)
 
         return row;
     }
@@ -201,8 +186,21 @@ class VideoItem {
         if (watchLink) {
             watchLink.addEventListener('click', this.handleUrlClick);
         }
+        
+        // Set and display the selection state
+        // this.setSelectionStateAndUpdateUI(this.itemIsSelected)//NOTE: it first needs to be added to the DOM
 
         return card;
+    }
+
+    setSelectionStateAndUpdateUI(selected) {
+        this.itemIsSelected = selected;
+
+        // Find the corresponding DOM element and update its class
+        const element = document.querySelector(`[data-video-id="${this.video_id}"]`);
+        if (element) {
+            element.classList.toggle('item-selected', this.itemIsSelected);
+        }
     }
 
     handleUrlClick(event) {
@@ -212,8 +210,6 @@ class VideoItem {
         window.open(url, '_blank');
     }
     
-    
-
     handleRowClick(event) {
         // Ignore clicks on links or other interactive elements
         if (event.target.tagName === 'A' || event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT') {
@@ -221,11 +217,7 @@ class VideoItem {
         }
 
         // Toggle the selection state
-        this.itemIsSelected = !this.itemIsSelected;
-
-        // Update the UI for this row
-        const row = event.currentTarget;
-        row.classList.toggle('item-selected', this.itemIsSelected);
+        this.setSelectionStateAndUpdateUI(!this.itemIsSelected);
     }
 }
 

@@ -112,6 +112,7 @@ class ItemManager {
             videoList.forEach((video, index) => {
                 const rowElement = video.toTableRow(index, columnState);
                 this.videoListTableBody.appendChild(rowElement);
+                // video.setSelectionStateAndUpdateUI(video.itemIsSelected)
             });
         } else if (this.viewMode === 'grid') {
             // Show grid and hide table
@@ -121,6 +122,7 @@ class ItemManager {
             videoList.forEach((video, index) => {
                 const gridElement = video.toGridCard(index, columnState);
                 this.gridContainer.appendChild(gridElement);
+                video.setSelectionStateAndUpdateUI(video.itemIsSelected)
             });
 
             this.adjustGridLayout(this.maxGridCardsPerRow);
@@ -160,6 +162,8 @@ class ItemManager {
         }
     }
 
+    // ================================ Methods for handling the selection ================================
+
     transferSelection(videoListFrom, videoListTo) {
         // Check if videoListFrom is undefined or empty
         if (!videoListFrom || videoListFrom.length === 0) {
@@ -178,6 +182,18 @@ class ItemManager {
         });
     
         return videoListTo;
+    }
+
+    setAllItemsAsSelected(){
+        this.videoItems.forEach(item => {
+            item.setSelectionStateAndUpdateUI(true);
+        })
+    }
+
+    setAllItemsAsDeselected(){
+        this.videoItems.forEach(item => {
+            item.setSelectionStateAndUpdateUI(false);
+        })
     }
 
     // Get functions for the item selections
