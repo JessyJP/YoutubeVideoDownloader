@@ -34,7 +34,7 @@ import shlex
 # Core imports
 from core.pytube_handler import LimitsAndPriority, VideoInfo
 from core.video_list_manager import VideoListManager
-from core.download_options import *
+from core.download_options import * # updateOutputKeepsStr, MediaSymbols # NOTE:imports the symbol list as well
 from core.common import audio_bitrate_list as BitrateList, video_resolution_list as ResolutionList, fps_value_list as FPSList
 # GUI imports
 import tkinter as tk
@@ -783,7 +783,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
     def change_download_status_clearall(self):
         selected_items = self.tree.selection()
-        symbol_list = [COMBINED_SYMBOL, VIDEO_ONLY_SYMBOL, AUDIO_ONLY_SYMBOL, THUMBNAIL_SYMBOL, INFO_SYMBOL, COMMENTS_SYMBOL]
+        symbol_list = MediaSymbols.get_all_symbol_values_as_list()
         state = "off"
 
         for item in selected_items:

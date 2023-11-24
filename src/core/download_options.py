@@ -38,6 +38,14 @@ class MediaSymbols(Enum):
     INFO           = "ⓘ"
     COMMENTS       = "ⓒ"
 
+    @classmethod
+    def get_all_symbol_values_as_list(cls):
+        return [symbol.value for symbol in cls]
+    
+    @staticmethod
+    def get_media_symbols_as_dict():
+        return {f"{symbol.name}_SYMBOL": symbol.value for symbol in MediaSymbols}
+
 
 ## Unpack the options to strings
 COMBINED_SYMBOL         = MediaSymbols.COMBINED.value        

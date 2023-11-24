@@ -28,7 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # Module imports
 from flask import Flask, render_template, request, jsonify, session
 from web.server_mgr import vlm, ProcessRoutine, video_info_to_dict
-from core.download_options import *
+from core.download_options import * # updateOutputKeepsStr, MediaSymbols # NOTE:imports the symbol list as well
 
 #==============================================================================
 ## ---------- Router api calls ----------

@@ -32,7 +32,7 @@ import threading
 from typing import Dict, List, Union, Tuple
 from enum import Enum
 import datetime
-from core.download_options import updateOutputKeepsStr, AUDIO_ONLY_SYMBOL, COMBINED_SYMBOL, COMMENTS_SYMBOL, INFO_SYMBOL, THUMBNAIL_SYMBOL, VIDEO_ONLY_SYMBOL
+from core.download_options import updateOutputKeepsStr, MediaSymbols
 
 
 #==============================================================================
@@ -206,7 +206,7 @@ class WebServerVideoManager(VideoListManager):
 
     def change_download_status_clearall(self, selection_ids):
 
-        symbol_list = [COMBINED_SYMBOL, VIDEO_ONLY_SYMBOL, AUDIO_ONLY_SYMBOL, THUMBNAIL_SYMBOL, INFO_SYMBOL, COMMENTS_SYMBOL]
+        symbol_list = MediaSymbols.get_all_symbol_values_as_list()
         state = "off"
 
         for id in selection_ids:
