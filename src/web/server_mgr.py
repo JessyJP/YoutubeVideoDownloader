@@ -32,6 +32,7 @@ import threading
 from typing import Dict, List, Union, Tuple
 from enum import Enum
 import datetime
+from core.download_options import updateOutputKeepsStr, AUDIO_ONLY_SYMBOL, COMBINED_SYMBOL, COMMENTS_SYMBOL, INFO_SYMBOL, THUMBNAIL_SYMBOL, VIDEO_ONLY_SYMBOL
 
 
 #==============================================================================
@@ -189,6 +190,42 @@ class WebServerVideoManager(VideoListManager):
         # Call the parent to compute the progress value
         self.statusProgressValue = super().update_progressbar(index_in, total_in, task_level)
     #end
+
+    def change_download_status(self, selection_ids, symbol, state="toggle"):
+        for id in selection_ids:
+            item = vlm.getItemByIndexOrVideoID(id)
+            if item:
+                # Update download state of the video info in the handle table entry 
+                item.download_status = updateOutputKeepsStr(item.download_status, symbol, state)
+            else:
+                print(f"Item with ID {id} not found.")
+                # Handle the case where the item is not found
+            #end
+        #end
+    #end
+
+    def change_download_status_clearall(self, selection_ids):
+
+        symbol_list = [COMBINED_SYMBOL, VIDEO_ONLY_SYMBOL, AUDIO_ONLY_SYMBOL, THUMBNAIL_SYMBOL, INFO_SYMBOL, COMMENTS_SYMBOL]
+        state = "off"
+
+        for id in selection_ids:
+            item = vlm.getItemByIndexOrVideoID(id)
+            if item:
+                new_status = item.download_status
+                for symbol in symbol_list:
+                    new_status = updateOutputKeepsStr(new_status, symbol, state)
+                #end
+                
+                # Update download state of the video info in the handle table entry 
+                item.download_status = new_status
+            else:
+                print(f"Item with ID {id} not found.")
+                # Handle the case where the item is not found
+            #end
+        #end
+    #end
+
 #end
 
 #============================== Helper functions ==============================

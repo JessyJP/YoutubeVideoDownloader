@@ -28,6 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # Module imports
 from flask import Flask, render_template, request, jsonify, session
 from web.server_mgr import vlm, ProcessRoutine, video_info_to_dict
+from core.download_options import *
 
 #==============================================================================
 ## ---------- Router api calls ----------
@@ -113,31 +114,31 @@ def changeStatusForItemsSelectedByID():
                     
         elif instruction == "pending":
             # Logic for pending status
-            pass
+            vlm.change_download_status(video_ids, COMBINED_SYMBOL,"on")
         elif instruction == "skip":
             # Logic for skip status
-            pass
+            vlm.change_download_status(video_ids, COMBINED_SYMBOL,"off")
         elif instruction == "audio":
             # Logic for toggling audio
-            pass
+            vlm.change_download_status(video_ids, AUDIO_ONLY_SYMBOL)
         elif instruction == "video":
             # Logic for toggling video
-            pass
+            vlm.change_download_status(video_ids, VIDEO_ONLY_SYMBOL)
         elif instruction == "subtitles":
             # Logic for toggling subtitles
-            pass
+            vlm.change_download_status(video_ids, SUBTITLES_ONLY_SYMBOL)
         elif instruction == "thumbnail":
             # Logic for toggling thumbnail
-            pass
+            vlm.change_download_status(video_ids, THUMBNAIL_SYMBOL)
         elif instruction == "info":
             # Logic for toggling info
-            pass
+            vlm.change_download_status(video_ids, INFO_SYMBOL)
         elif instruction == "comments":
             # Logic for toggling comments
-            pass
+            vlm.change_download_status(video_ids, COMMENTS_SYMBOL)
         elif instruction == "clear":
             # Logic for clearing all keeps
-            pass
+            vlm.change_download_status_clearall(video_ids)
         else:
             # Handle unrecognized instruction
             return jsonify({"error": "Unrecognized instruction"}), 400
