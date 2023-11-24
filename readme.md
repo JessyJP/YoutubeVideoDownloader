@@ -136,6 +136,8 @@ This is relevant when there are a lot of links/text/channels inserted at the sam
 - [ ] Add a playlist column in the main window
 - [ ] There should be a LOG file option in the settings menu
 - [ ] The cancel operation should be revaluated. Any bugs should be fixed for both download and analysis.
+- [ ] Bug: In the web UI the theme button doesn't initializes from the same position for every theme upon reload when state is acquired from the server
+- [ ] TODO: The licence comment in the files has to be completed. Author info & specific file name have to be altered.
 
 ## Potential Features
 - [ ] Webpage/Forum or some kind of marketing strategy for outreach to more users
