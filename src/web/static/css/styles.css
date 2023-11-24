@@ -299,6 +299,49 @@ select {
     background-color: var(--context-menu-hover-bg);
 }
 
+
+/* =============== Toggle Context Popup Menu Styles =============== */
+
+.toggle-context-popup {
+    position: absolute;
+    z-index: 1000;
+    padding: 10px 0;
+    background-color: var(--context-menu-bg);
+    border: 1px solid var(--context-menu-border);
+    box-shadow: var(--context-menu-box-shadow);
+    color: var(--context-menu-text);
+    min-width: 200px;
+}
+
+.toggle-context-popup-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    color: var(--context-menu-text);
+}
+
+.toggle-context-popup-item:hover:not(.disabled) {
+    background-color: var(--context-menu-hover-bg);
+}
+
+.toggle-context-popup-item.disabled {
+    color: var(--context-menu-border);
+    cursor: not-allowed;
+}
+
+.toggle-context-popup-item.disabled:hover {
+    background-color: var(--context-menu-bg); /* Maintaining background color for disabled items on hover */
+}
+
+#toggle-context-popup-item-selection-count{
+    color: red;
+}
+
+.toggle-context-popup-separator {
+    height: 1px;
+    background-color: var(--context-menu-border);
+    margin: 5px 0;
+}
+
 /* =============== Table item selection for context menu =============== */
 .item-selected {
     color: #ef1c1c;

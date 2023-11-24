@@ -3,7 +3,8 @@ import {
     getState,
     getStatusMsg,
     getProgressbarValue,
-    postClientStateSettings
+    postClientStateSettings,
+    changeStatusForItemsSelectedByID
 } from '../api.js';
 import { updateProgressBar } from "../functions.js"
 import VideoItem from './VideoItem.js';
@@ -32,6 +33,9 @@ class ItemManager {
         this.maxIdleChecks = 12;// Default maximum number of refreshes when server in IDLE 
         this.viewMode = 'table'; // Default view mode
         this.maxGridCardsPerRow = 2; // Default Maximum number of grid cards per row
+
+        // Attach the container event listeners only once
+        this.attachContextMenuListener()
     }
 
     async checkAndUpdateState() {
@@ -201,6 +205,107 @@ class ItemManager {
         return this.getSelectedItems().map(item => item.video_id);
     }
 
+     // ========================== Methods for handling the video items context menu ==========================
+    attachContextMenuListener() {
+        // Attach to both the table body and grid container
+        this.videoListTableBody.addEventListener('contextmenu', this.handleContextMenu.bind(this));
+        this.gridContainer.addEventListener('contextmenu', this.handleContextMenu.bind(this));
+
+        // Hide context menu when clicking outside
+        document.addEventListener('click', (event) => {
+            const existingMenu = document.querySelector('.toggle-context-popup');
+            if (existingMenu && !existingMenu.contains(event.target)) {
+                existingMenu.remove();
+            }
+        });
+    }
+
+    async handleContextMenu(event) {
+        event.preventDefault();
+
+        // Remove any existing context menu
+        const existingMenu = document.querySelector('.toggle-context-popup');
+        if (existingMenu) existingMenu.remove();
+
+        const popupMenu = await this.createContextMenu();
+        popupMenu.style.top = `${event.pageY}px`;
+        popupMenu.style.left = `${event.pageX}px`;
+
+        document.body.appendChild(popupMenu);
+    }
+
+    handleMenuItemClick(statusToggle) {
+        console.log(`Change download status to: ${statusToggle}`);
+        // Handle the click event on a menu item
+        const selectedItems = this.getSelectedItemIds();
+
+        changeStatusForItemsSelectedByID(statusToggle,selectedItems)
+
+        // Use API calls to send updates to the server
+        console.log("Menu item toggle [",statusToggle,"] clicked with selected items:", selectedItems);
+
+        // Remove any existing context menu
+        const existingMenu = document.querySelector('.toggle-context-popup');
+        if (existingMenu) existingMenu.remove();
+
+        this.checkAndUpdateState()
+    }
+
+    async createContextMenu() {
+        const selectedItems = this.getSelectedItems();
+        const selectedItemsCount = selectedItems.length;
+        const currentState = await getState();
+        const isProcessActive = currentState !== "IDLE";
+    
+        // The popup menu HTML element
+        const popupMenu = document.createElement('div');
+        popupMenu.className = 'toggle-context-popup';
+    
+        // Show the item count
+        const countItem = document.createElement('div');
+        countItem.textContent = `${selectedItemsCount} item(s) selected`;
+        countItem.id = 'toggle-context-popup-item-selection-count';
+        countItem.className = 'toggle-context-popup-item disabled';
+        popupMenu.appendChild(countItem);
+    
+        // Define the Menu items including separators
+        const menuItems = [
+            { label: 'Download Status: Pending', action: () => this.handleMenuItemClick('pending'), disabled: isProcessActive },
+            { label: 'Download Status: Skip', action: () => this.handleMenuItemClick('skip'), disabled: isProcessActive },
+            { type: 'separator' },
+            { label: 'Keep Audio Only: Toggle Add/Remove', action: () => this.handleMenuItemClick('audio'), disabled: isProcessActive },
+            { label: 'Keep Video Only: Toggle Add/Remove', action: () => this.handleMenuItemClick('video'), disabled: isProcessActive },
+            { label: 'Keep All Subtitles Only: Toggle Add/Remove', action: () => this.handleMenuItemClick('subtitles'), disabled: isProcessActive },
+            { label: 'Keep Thumbnail:   Toggle Add/Remove', action: () => this.handleMenuItemClick('thumbnail'), disabled: isProcessActive },
+            { label: 'Keep Info:       Toggle Add/Remove', action: () => this.handleMenuItemClick('info'), disabled: isProcessActive },
+            { label: 'Keep Comments:   Toggle Add/Remove', action: () => this.handleMenuItemClick('comments'), disabled: isProcessActive },
+            { label: 'Clear All Keeps', action: () => this.handleMenuItemClick('clear'), disabled: isProcessActive },
+            { type: 'separator' },
+            { label: 'Remove Selected Entries', action: () => this.handleMenuItemClick('remove'), disabled: isProcessActive },
+
+        ];
+        
+        // Add the menu items
+        menuItems.forEach(item => {
+            if (item.type === 'separator') {
+                const separator = document.createElement('div');
+                separator.className = 'toggle-context-popup-separator';
+                popupMenu.appendChild(separator);
+            } else {
+                const menuItem = document.createElement('div');
+                menuItem.textContent = item.label;
+                menuItem.className = 'toggle-context-popup-item';
+                if (!item.disabled) {
+                    menuItem.addEventListener("click", () => item.action(selectedItems));
+                } else {
+                    menuItem.classList.add("disabled");
+                }
+                popupMenu.appendChild(menuItem);
+            }
+        });
+    
+        return popupMenu;
+    }
 }
 
 export default ItemManager;
