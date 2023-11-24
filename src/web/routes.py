@@ -190,12 +190,13 @@ def post_update_client_state():
     # print(f"Received client state settings: {data}")
 
     # Extract and store the basic download limit settings
-    vlm.lastLimits.bitrate    = data.get('audioBitrate')
-    vlm.lastLimits.resolution = data.get('videoResolution')
-    vlm.lastLimits.fps        = data.get('fpsValue')
+    uiSettings = data.get('uiSettings', {})
+    
+    vlm.lastLimits.bitrate    = uiSettings.get('audioBitrate')
+    vlm.lastLimits.resolution = uiSettings.get('videoResolution')
+    vlm.lastLimits.fps        = uiSettings.get('fpsValue')
 
     # Extract and store the UI settings and column visibility in clientState
-    uiSettings = data.get('uiSettings', {})
     columnVisibility = data.get('columnVisibility', {})
 
     vlm.clientState['theme'] = uiSettings.get('currentTheme')
