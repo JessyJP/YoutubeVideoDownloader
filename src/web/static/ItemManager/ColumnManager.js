@@ -2,7 +2,7 @@ class ColumnManager {
     // ============= Initialization methods =============
     constructor(callbackOnVisibilityChange, postClientStateSettingsRef) {
         this.table = document.getElementById('video-list');
-        this.contextMenu = document.getElementById('contextMenu');
+        this.contextMenu = document.getElementById('column-context-menu-id');
         this.columns = [];
         // External callback 
         this.onVisibilityChange = callbackOnVisibilityChange;
