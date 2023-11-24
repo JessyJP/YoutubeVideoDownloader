@@ -129,6 +129,33 @@ export function adjustGridBasedOnDevice(tableManager) {
     }
 }
 
+// ========== Get/Set function pairs for the dropdown quality limiters  ==========
+
+function setAudioLimit(value) {
+    document.getElementById("audio-limiter").value = value;
+}
+
+function getAudioLimit() {
+    return document.getElementById("audio-limiter").value;
+}
+
+function setVideoLimit(value) {
+    document.getElementById("video-limiter").value = value;
+}
+
+function getVideoLimit() {
+    return document.getElementById("video-limiter").value;
+}
+
+function setFpsLimit(value) {
+    document.getElementById("fps-limiter").value = value;
+}
+
+function getFpsLimit() {
+    return document.getElementById("fps-limiter").value;
+}
+
+
 // ========== Client Settings Configuration Methods ==========
 
 /**
@@ -137,9 +164,9 @@ export function adjustGridBasedOnDevice(tableManager) {
  */
 export function getClientUiSettingsConfiguration() {
     const currentTheme = getTheme();
-    const audioBitrate = document.getElementById('audio-limiter').value;
-    const videoResolution = document.getElementById('video-limiter').value;
-    const fpsValue = document.getElementById('fps-limiter').value;
+    const audioBitrate = getAudioLimit();
+    const videoResolution = getVideoLimit();
+    const fpsValue = getFpsLimit();
     const viewMode = getCurrentViewModeUiElementState();
 
     return {
@@ -157,13 +184,13 @@ export function getClientUiSettingsConfiguration() {
  */
 export function setClientUiSettingsConfiguration(configuration, tableManager) {
     if (configuration.audioBitrate) {
-        document.getElementById('audio-limiter').value = configuration.audioBitrate;
+        setAudioLimit( configuration.audioBitrate );
     }
     if (configuration.videoResolution) {
-        document.getElementById('video-limiter').value = configuration.videoResolution;
+        setVideoLimit( configuration.videoResolution );
     }
     if (configuration.fpsValue) {
-        document.getElementById('fps-limiter').value = configuration.fpsValue;
+        setFpsLimit( configuration.fpsValue );
     }
     if (configuration.currentTheme) {
         // Switch the theme
