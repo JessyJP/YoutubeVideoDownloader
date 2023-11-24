@@ -2,7 +2,7 @@ import {
     getVideoItemList,
     getClientStateSettings,
     postClientStateSettings,
-    removeItemsSelectedByID,
+    changeStatusForItemsSelectedByID,
     analyzeURLtext,
     downloadVideoList,
 } from './api.js';
@@ -86,19 +86,6 @@ document.getElementById("download-btn").addEventListener("click", async () => {
     onUserInteraction();
 });
 
-// // Clear Items Button Event Listener
-// document.getElementById("clear-items-btn").addEventListener("click", async () => {
-//     // Get the ID array of the selected items 
-//     const selectionVideoIDs = tableManager.getSelectedItemIds();
-//     console.log("Selected item IDs:"+selectionVideoIDs);
-//     // Call downloadVideoList and handle the response
-//     const response = await removeItemsSelectedByID(selectionVideoIDs);
-//     console.log(response.message);
-//     // Optionally, update the UI or perform additional actions based on the response
-//     onUserInteraction();
-// });
-
-
 // document.getElementById("play-btn").addEventListener("click", async () => {
 //     // TODO: still unfinished
 //     const videoPath = 'path/to/selected/video'; // Implement the mechanism to get the selected video path
@@ -164,8 +151,8 @@ document.addEventListener("keydown", async (event) => {
         const selectionVideoIDs = tableManager.getSelectedItemIds();
         console.log("Selected item IDs:", selectionVideoIDs);
 
-        // Call removeItemsSelectedByID and handle the response
-        const response = await removeItemsSelectedByID(selectionVideoIDs);
+        // Call changeStatusForItemsSelectedByID and handle the response
+        const response = await changeStatusForItemsSelectedByID("remove",selectionVideoIDs);
         console.log(response.message);
 
         onUserInteraction();

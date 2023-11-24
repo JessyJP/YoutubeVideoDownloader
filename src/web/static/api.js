@@ -157,27 +157,29 @@ async function postClientStateSettings(itemManager) {
     }
 }
 
-async function removeItemsSelectedByID(videoIds) {
-    console.log("Clearing items with IDs: ", videoIds);
+async function changeStatusForItemsSelectedByID(instruction, videoIds) {
+    console.log(`Applying instruction '${instruction}' to items with IDs: `, videoIds);
 
-    // Send this list of IDs to the backend
-    const response = await fetch(`${API_PROXY}/api/removeItemsSelectedByID`, {
+    // Send the instruction and list of IDs to the backend
+    const response = await fetch(`${API_PROXY}/api/changeStatusForItemsSelectedByID`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ videoIds: videoIds })
+        body: JSON.stringify({ instruction, videoIds })
     });
 
     // Check the response from the server
     if (response.ok) {
-        console.log("Items cleared successfully.");
-        return await response.json(); // Assuming the backend sends a response
+        const responseData = await response.json(); // Assuming the backend sends a response
+        console.log(`Instruction '${instruction}' applied successfully to items: `, videoIds, "Response:", responseData);
+        return responseData;
     } else {
-        console.error("Failed to clear items.");
-        throw new Error("Failed to clear items.");
+        console.error(`Failed to apply instruction '${instruction}' to items: `, videoIds);
+        throw new Error(`Failed to apply instruction '${instruction}'.`);
     }
 }
+
 
 // ============= POST methods for processing =============
 
@@ -234,7 +236,7 @@ export {
     getVideoItemList,
     getClientStateSettings,
     postClientStateSettings,
-    removeItemsSelectedByID,
+    changeStatusForItemsSelectedByID,
     analyzeURLtext,
     downloadVideoList,
     // playVideoPreview,

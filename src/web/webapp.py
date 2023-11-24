@@ -276,22 +276,57 @@ def downloadVideoList():
     vlm.processState = ProcessRoutine.IDLE
     return jsonify({"download": "download_path"}) , 202
 
-@app.route('/api/removeItemsSelectedByID', methods=['POST'])
-def removeItemsSelectedByID():
+@app.route('/api/changeStatusForItemsSelectedByID', methods=['POST'])
+def changeStatusForItemsSelectedByID():
     if vlm.processState == ProcessRoutine.IDLE:
         data = request.json
+        instruction = data.get('instruction')
         video_ids = data.get('videoIds', [])
-            
-        # Logic to clear items using the video IDs
-        for id in video_ids:
-            item = vlm.getItemByIndexOrVideoID(id)
-            if item:
-                vlm.removeItem(item)
-            else:
-                print(f"Item with ID {id} not found.")
-                # Handle the case where the item is not found
 
-        return jsonify({"message": "Items cleared successfully"}), 200
+        # Define the logic for each instruction
+        if instruction == "remove":
+            # Logic to remove items from the list           
+             for id in video_ids:
+                item = vlm.getItemByIndexOrVideoID(id)
+                if item:
+                    vlm.removeItem(item)
+                else:
+                    print(f"Item with ID {id} not found.")
+                    # Handle the case where the item is not found
+                    
+        elif instruction == "pending":
+            # Logic for pending status
+            pass
+        elif instruction == "skip":
+            # Logic for skip status
+            pass
+        elif instruction == "audio":
+            # Logic for toggling audio
+            pass
+        elif instruction == "video":
+            # Logic for toggling video
+            pass
+        elif instruction == "subtitles":
+            # Logic for toggling subtitles
+            pass
+        elif instruction == "thumbnail":
+            # Logic for toggling thumbnail
+            pass
+        elif instruction == "info":
+            # Logic for toggling info
+            pass
+        elif instruction == "comments":
+            # Logic for toggling comments
+            pass
+        elif instruction == "clear":
+            # Logic for clearing all keeps
+            pass
+        else:
+            # Handle unrecognized instruction
+            return jsonify({"error": "Unrecognized instruction"}), 400
+        #end
+
+        return jsonify({"message": f"Instruction '{instruction}' applied successfully", "affectedItems": video_ids}), 200
     else:
         return jsonify({"message": f"Processing [{vlm.processState}] is currently running!"}), 200
     #end
