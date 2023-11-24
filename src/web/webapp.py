@@ -1,39 +1,34 @@
 # Module imports
 from flask import Flask, render_template, request, jsonify, session
-from web.server_mgr import WebServerVideoManager, ProcessRoutine, video_info_to_dict
-
-
-#==============================================================================
-
-# Flask application setup
-vlm = WebServerVideoManager("R:/")
-app = Flask(__name__)
-app.secret_key = 'my_session_secret_key'  # Set a secret key for session management
+from web.server_mgr import vlm, ProcessRoutine, video_info_to_dict
 
 #==============================================================================
 ## ---------- Router api calls ----------
+from flask import Blueprint # , render_template
+# Create a Blueprint for your routes
+router = Blueprint('router', __name__)
 
-@app.route('/')
+@router.route('/')
 def index():
     return render_template('index.html', title="YouTubeDownloader",
                             **vlm.getLimitsDropdownValuesAndLastSelection())
 #end
 
-@app.route('/api/getState', methods=['GET'])
+@router.route('/api/getState', methods=['GET'])
 def getState():
     return vlm.processState.value  # Assuming this is a string
 
-@app.route('/api/getStatusMsg', methods=['GET'])
+@router.route('/api/getStatusMsg', methods=['GET'])
 def getStatusMsg():
     return vlm.statusMsg  # Assuming this is a string
 
-@app.route('/api/getProgressbarValue', methods=['GET'])
+@router.route('/api/getProgressbarValue', methods=['GET'])
 def getProgressbarValue():
     # Assuming you want to keep two decimal places
     return format(vlm.statusProgressValue, '.2f')
 
 
-@app.route('/api/getVideoItemList', methods=['GET'])
+@router.route('/api/getVideoItemList', methods=['GET'])
 def getVideoItemList():
     jsonList = []
     for item in vlm.getVideoList():
@@ -42,7 +37,7 @@ def getVideoItemList():
     return jsonify(jsonList)
 #end
 
-@app.route('/api/analyzeURLtext', methods=['POST'])
+@router.route('/api/analyzeURLtext', methods=['POST'])
 def analyzeURLtext():
     # vlm = WebServerVideoManager()
     data = request.json
@@ -53,7 +48,7 @@ def analyzeURLtext():
     return jsonify({"message": "Analysis process started"}), 202
 #end
 
-@app.route('/api/downloadVideoList', methods=['POST'])
+@router.route('/api/downloadVideoList', methods=['POST'])
 def downloadVideoList():
     # Set state to ANALYSIS at the start
     vlm.processState = ProcessRoutine.DOWNLOAD
@@ -71,7 +66,7 @@ def downloadVideoList():
     vlm.processState = ProcessRoutine.IDLE
     return jsonify({"download": "download_path"}) , 202
 
-@app.route('/api/changeStatusForItemsSelectedByID', methods=['POST'])
+@router.route('/api/changeStatusForItemsSelectedByID', methods=['POST'])
 def changeStatusForItemsSelectedByID():
     if vlm.processState == ProcessRoutine.IDLE:
         data = request.json
@@ -128,7 +123,7 @@ def changeStatusForItemsSelectedByID():
 #end
 
 
-# @app.route('/api/play_video_preview', methods=['POST'])
+# @router.route('/api/play_video_preview', methods=['POST'])
 # def play_video_preview():
 #     data = request.json
 #     video_path = data['video_path']
@@ -139,7 +134,7 @@ def changeStatusForItemsSelectedByID():
 #     return jsonify({"message": "Video is playing"})
 
 
-@app.route('/api/update_client_state', methods=['GET'])
+@router.route('/api/update_client_state', methods=['GET'])
 def get_update_client_state():
     # Construct the state to be sent
     state = {
@@ -159,7 +154,7 @@ def get_update_client_state():
     return jsonify(state)
 
 
-@app.route('/api/update_client_state', methods=['POST'])
+@router.route('/api/update_client_state', methods=['POST'])
 def post_update_client_state():
     data = request.get_json()
     if not data:
@@ -183,6 +178,14 @@ def post_update_client_state():
     # Return a success response
     return jsonify({"message": "Server: Client state settings updated successfully"}), 200
 
+#==============================================================================
+
+# Flask application setup
+app = Flask(__name__)
+app.secret_key = 'my_session_secret_key'  # Set a secret key for session management
+app.register_blueprint(router)
+
+#==============================================================================
 
 def main(port:int=80, output_dir:str='',
          use_multithreading_analysis:bool = False,

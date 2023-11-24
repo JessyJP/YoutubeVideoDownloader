@@ -43,7 +43,7 @@ def singleton(cls):
 # Wrapper for the manager
 @singleton
 class WebServerVideoManager(VideoListManager):
-    def __init__(self, default_tmp_dir):        
+    def __init__(self):        
         super().__init__()
         # This status string is for updating the current process status
         self.statusMsg = "Ready!"
@@ -54,7 +54,7 @@ class WebServerVideoManager(VideoListManager):
         self.use_multithreading_analysis = False
         # Parameters for Download
         self.process_via_multithreading = True  
-        self.tmpOutputDir = default_tmp_dir # TODO: maybe it shouldn't be assigned but the construction should happen in main
+        self.tmpOutputDir = '.' # TODO: maybe it shouldn't be assigned but the construction should happen in main
         self.outputExt = ".mkv"
 
         # Frontend client settings state
@@ -204,3 +204,6 @@ def video_info_to_dict(vItem: VideoInfo) -> dict:
 
     return video_info_dict#json.dumps(video_info_dict, indent=4)
 #end
+
+#================ Initialize the web server video item manager ================
+vlm = WebServerVideoManager()
