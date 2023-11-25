@@ -5,6 +5,7 @@ import {
     changeStatusForItemsSelectedByID,
     analyzeURLtext,
     downloadVideoList,
+    getSaveOutputToDevice,
 } from './api.js';
 
 import { 
@@ -143,6 +144,14 @@ document.getElementById("video-limiter").addEventListener("change", () => onUser
 
 document.getElementById("fps-limiter").addEventListener("change", () => onUserInteraction());
 
+// Save to my device Button Event Listener
+document.getElementById("save-to-device").addEventListener("click", async () => {
+    // Call downloadVideoList and handle the response
+    const response = await getSaveOutputToDevice();
+    console.log(response.message);
+    // Optionally, update the UI or perform additional actions based on the response
+    onUserInteraction();
+});
 // ==========================================================================================
 // Keyboard event handler
 document.addEventListener("keydown", async (event) => {

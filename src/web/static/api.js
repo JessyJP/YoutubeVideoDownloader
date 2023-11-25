@@ -1,5 +1,5 @@
 import VideoItem from "./ItemManager/VideoItem.js";
-import {getClientUiSettingsConfiguration}from "./functions.js"
+import {getClientUiSettingsConfiguration, updateProgressBarUi}from "./functions.js"
 
 const API_PROXY = "http://localhost:80";  // Replace with your actual IP and port.
 
@@ -211,8 +211,60 @@ async function downloadVideoList() {
     return await response.json();
 }
 
-// ============= UNUSED methods =============
+// ============= Transfer file methods =============
+// TODO: NOTE: Test api call 
+async function getSaveOutputToDevice() {
+    const urlGetList = `${API_PROXY}/api/getFileList`;
+    let fileList;
+    updateProgressBarUi(0); // Initialize the progress bar to 0%
 
+    try {
+        const response = await fetch(urlGetList);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        fileList = await response.json();
+    } catch (error) {
+        console.error("Error in fetching file list: ", error);
+        return null;
+    }
+
+    let urlTransferFile = `${API_PROXY}/api/transferFile`;
+    // Download each file
+    for (let i = 0; i < fileList.length; i++) {
+        let file = fileList[i];
+        try {
+            let downloadResponse = await fetch(`${urlTransferFile}?video_id=${encodeURIComponent(file.video_id)}&symbol_key=${encodeURIComponent(file.symbol_key)}`);
+            
+            if (!downloadResponse.ok) {
+                throw new Error(`HTTP error! status: ${downloadResponse.status}`);
+            }
+
+            let blob = await downloadResponse.blob();
+            saveFile(blob, `${file.save_output_filename}`); // Adjust file name format as needed
+            
+            // Update the progress bar UI with the current progress
+            updateProgressBarUi((i / fileList.length) * 100);
+        } catch (downloadError) {
+            console.error(`Error downloading file ${file.video_title}: `, downloadError);
+        }
+    }
+    // Ensure the progress bar shows 100% when all files are processed
+    updateProgressBarUi(100);
+}
+
+function saveFile(blob, fileName) {
+    // Create a link and set the URL using createObjectURL
+    let link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(link.href); // Clean up
+}
+
+// ============= UNUSED methods =============
 // async function playVideoPreview(videoPath) {
 //     const response = await fetch(`${API_PROXY}/api/play_video_preview`, {
 //         method: 'POST',
@@ -241,4 +293,5 @@ export {
     downloadVideoList,
     // playVideoPreview,
     // selectDownloadLocation,
+    getSaveOutputToDevice
 };

@@ -26,7 +26,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 # Module imports
-from flask import Flask, render_template, request, jsonify, session
+import os
+from types import SimpleNamespace
+from flask import Flask, render_template, request, jsonify, send_file, session
 from web.server_mgr import vlm, ProcessRoutine, video_info_to_dict
 from core.download_options import * # updateOutputKeepsStr, MediaSymbols # NOTE:imports the symbol list as well
 
@@ -208,3 +210,54 @@ def post_update_client_state():
     return jsonify({"message": "Server: Client state settings updated successfully"}), 200
 
 #==============================================================================
+
+@router.route('/api/getFileList', methods=['GET'])
+def getFileList():
+    if vlm.processState == ProcessRoutine.IDLE:
+        # data = request.json
+        # video_ids = data.get('videoIds', [])
+        # TODO: we could do a selection save but that is not needed now
+
+        symbol_dic = MediaSymbols.get_media_symbols_as_dict()
+        videoItemList = vlm.getVideoList()
+        listOfOutputs = []
+        # Loop over the items
+        for item in videoItemList:
+            # Iterate over the output types
+            for label in symbol_dic:
+                symbol = symbol_dic[label]
+                # Check if the value is not None
+                if item.outputFilepaths[symbol] is not None:
+                    # Add the string to the list
+                    listOfOutputs.append({
+                        "index": len(listOfOutputs),
+                        "video_title" : item.title,
+                        "video_id" : item.video_id,
+                        "label": label,
+                        "symbol_key": symbol,
+                        "save_output_filename": os.path.basename(item.outputFilepaths[symbol])
+                    })
+                #end
+            #end
+        #end
+        return jsonify(listOfOutputs), 200
+    else:
+        return jsonify({"message": f"Processing [{vlm.processState}] is currently running!"}), 200
+    #end
+#end
+
+
+@router.route('/api/transferFile', methods=['GET'])
+def transferFile():
+    if vlm.processState == ProcessRoutine.IDLE:
+        video_id = request.args.get('video_id')
+        symbol_key = request.args.get('symbol_key')
+
+        item = vlm.getItemByIndexOrVideoID(video_id)
+        file_path = item.outputFilepaths[symbol_key]
+
+        return send_file(file_path, as_attachment=True)
+    else:
+        return jsonify({"message": f"Processing [{vlm.processState}] is currently running!"}), 200
+    #end
+#end
