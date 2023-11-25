@@ -27,9 +27,7 @@ from typing import Tuple
 
 import requests
 import shutil
-import json
-import csv
-import pytchat
+from datetime import datetime
 
 from core.validation_methods import check_for_disallowed_filename_chars
 from core.download_options import setOutputKeepsStr
@@ -66,6 +64,18 @@ class VideoInfo(YouTube):
         # Filesize
         self.video_size_bytes = video_stream.filesize + audio_stream.filesize# TODO:
         self.video_size_mb = round(self.video_size_bytes / (1024 * 1024))# TODO:Better and updatable calculation is needed
+
+        # Get the default file name for the various files
+        self.base_output_name = os.path.splitext(video_stream.default_filename)[0]
+        # NOTE: alternatively we can use the title
+
+        # Internal limiter which can allow limits per video
+        self.internalLimiter = LimitsAndPriority()# TODO: will be currently unused
+        # Output filepaths dictionary which stores the paths for each download symbol 
+        self.outputFilepaths = {symbol: None for symbol in MediaSymbols.get_all_symbol_values_as_list()}
+        # self.outputFilepaths = SimpleNamespace(**self.outputFilepaths)
+        # Creation timestamp, which can be used for sorting
+        self.creationTimestamp = datetime.now()
     #end
 
     def as_tuple(self) -> Tuple:
@@ -93,18 +103,21 @@ class VideoInfo(YouTube):
             audio_streams_to_check = [s for s in audio_streams_to_check if propToInt(s.abr,"kbps") <= max_audio_bitrate]
         #end
 
-        if formatPriority == []:
-            return audio_streams_to_check[0]
-        else:
-            for format in formatPriority:
-                for stream in audio_streams_to_check:
-                    if stream.mime_type.startswith(f'audio/{format}'):
-                        return stream
-                    #end
-                #end
-            #end
-            return audio_streams_to_check[0]
-        #end
+        # TODO:NOTE for now disable format priority. It may not be useful. 
+        # Also there is a bug that here. 
+        # Format priority only works if we additionally filter by ony the above criteria and then check
+        # if formatPriority != []:
+        #     for format in formatPriority:
+        #         for stream in audio_streams_to_check:
+        #             if stream.mime_type.startswith(f'audio/{format}'):
+        #                 return stream
+        #             #end
+        #         #end
+        #     #end
+        # #end
+
+        # Fallback to the first available stream if none match the format priority
+        return audio_streams_to_check[0]
     #end
 
     def select_video_stream(self, max_resolution, max_fps, formatPriority=[]):
@@ -120,27 +133,31 @@ class VideoInfo(YouTube):
             video_streams_to_check = [s for s in video_streams_to_check if s.fps <= max_fps]
         #end
 
-        # Select stream based on format priority
-        if formatPriority == []:
-            return video_streams_to_check[0]
-        else:
-            for format in formatPriority:
-                for stream in video_streams_to_check:
-                    if stream.mime_type.startswith(f'video/{format}'):
-                        return stream
-                    #end
-                #end
-            #end
+        # TODO:NOTE for now disable format priority. It may not be useful. 
+        # Also there is a bug that here. 
+        # Format priority only works if we additionally filter by ony the above criteria and then check
+        # # Select stream based on format priority
+        # if formatPriority != []:
+        #     for format in formatPriority:
+        #         for stream in video_streams_to_check:
+        #             if stream.mime_type.startswith(f'video/{format}'):
+        #                 return stream
+        #             #end
+        #         #end
+        #     #end
+        # #end
+
         # Fallback to the first available stream if none match the format priority
         return video_streams_to_check[0]
-        #end
     #end
 
     def download_audio(self,audio_stream, output):
         # Download the highest quality audio
-        audio_filename = f"{self.title}.mp3"
+        # TODO: we need to think a bit more about the naming and potential file format conflicts
+        audio_filename = f"{self.base_output_name}.mp3"
+        audio_filename = self.base_output_name+".aac"
         audio_filename = check_for_disallowed_filename_chars(audio_filename)
-        print(f"Downloading audio for {self.title}...")
+        print(f"Downloading audio for [{self.title}] ...")
 
         audio_stream.download(output, filename=audio_filename)
 
@@ -153,9 +170,9 @@ class VideoInfo(YouTube):
 
     def download_video(self,video_stream, output):
         # Download the video file
-        video_filename = f"{self.title}.mp4"
+        video_filename = f"{self.base_output_name}.mp4"
         video_filename = check_for_disallowed_filename_chars(video_filename)
-        print(f"Downloading video ({video_stream.resolution}) for {self.title}...")
+        print(f"Downloading video ({video_stream.resolution}) for [{self.title}] ...")
 
         video_stream.download(output, filename=video_filename)
         video_file = os.path.join(output, video_filename);
@@ -187,7 +204,8 @@ class VideoInfo(YouTube):
 
         if COMBINED_SYMBOL in self.download_status:
             # Call the combine function
-            outputFilename = os.path.join(output_dir,check_for_disallowed_filename_chars(self.title)+outputExt)
+            outputFilename = self.base_output_name+outputExt
+            outputFilename = os.path.join(output_dir,check_for_disallowed_filename_chars(outputFilename))
             audio_filenames = [audio_filename]
             subtitle_filenames = []  # Assuming no subtitles for now
             self.log(strOut+"Combining Audio and Video: "+outputFilename)
@@ -197,27 +215,29 @@ class VideoInfo(YouTube):
             # NOTE: FFMPEG    (implemented)
             # NOTE: mkvmerge  (implemented)
             # TODO: VLC
+
+            self.outputFilepaths[COMBINED_SYMBOL] = outputFilename
         #end
 
         if AUDIO_ONLY_SYMBOL in self.download_status:
-            shutil.move(audio_filename,output_dir)
+            self.outputFilepaths[AUDIO_ONLY_SYMBOL] = shutil.move(audio_filename,output_dir)
         #end        
         if VIDEO_ONLY_SYMBOL in self.download_status:
-            shutil.move(video_filename,output_dir)
+            self.outputFilepaths[VIDEO_ONLY_SYMBOL] = shutil.move(video_filename,output_dir)
         #end
         if SUBTITLES_ONLY_SYMBOL in self.download_status:
             self.download_subtitles(output_dir,any)# TODO: will have to download them in advance and move them later
         #end
         if THUMBNAIL_SYMBOL in self.download_status:
-            self.download_thumbnail(output_dir)
+            self.outputFilepaths[THUMBNAIL_SYMBOL]  = self.download_thumbnail(output_dir)
         #end
 
         if INFO_SYMBOL in self.download_status:
-            self.download_video_info(output_dir)
+            self.outputFilepaths[INFO_SYMBOL]       = self.download_video_info(output_dir)
         #end
 
         if COMMENTS_SYMBOL in self.download_status:
-            self.download_comments(output_dir)
+            self.outputFilepaths[COMMENTS_SYMBOL]   = self.download_comments(output_dir)
         #end
 
         # Clean up the temporary directory and delete it
@@ -233,7 +253,7 @@ class VideoInfo(YouTube):
     # Function to download thumbnail
     def download_thumbnail(self, output_dir: str, format="jpg") -> str:
         thumbnail_url = self.thumbnail_url
-        thumbnail_filename = os.path.join(output_dir, f"{self.title}_thumbnail.{format}")
+        thumbnail_filename = os.path.join(output_dir, f"{self.base_output_name}.{format}")
         thumbnail_data = requests.get(thumbnail_url).content
         with open(thumbnail_filename, 'wb') as f:
             f.write(thumbnail_data)
@@ -242,7 +262,7 @@ class VideoInfo(YouTube):
 
     # Function to download video info in a text file
     def download_video_info(self, output_dir: str) -> str:
-        video_info_filename = os.path.join(output_dir, f"{self.title}_info.txt")
+        video_info_filename = os.path.join(output_dir, f"{self.base_output_name}_info.txt")
         with open(video_info_filename, 'w') as f:
             f.write(f"Title: {self.title}\n")
             f.write(f"Author: {self.author}\n")
@@ -274,7 +294,7 @@ class VideoInfo(YouTube):
         :return: The full path of the output file.
         """
         # Create the output file path
-        output_filename = check_for_disallowed_filename_chars(f"{self.title}_comments.{output_format}")
+        output_filename = check_for_disallowed_filename_chars(f"{self.base_output_name}.comments.{output_format}")
         output_file_path = os.path.join(output_dir, output_filename)
 
         # Download the comments and write them to the output file
@@ -328,7 +348,7 @@ class VideoInfo(YouTube):
     def make_tmp_dir(self,output_dir):
         # Create a hidden subdirectory in the user-selected download location
         dir_prefix = "." # For hidden directory
-        temp_dir = check_for_disallowed_filename_chars(self.title)
+        temp_dir = check_for_disallowed_filename_chars(self.video_id)
         temp_path = os.path.join(output_dir, f"{dir_prefix}{temp_dir}")
         os.makedirs(temp_path, exist_ok=True)
         return temp_path
