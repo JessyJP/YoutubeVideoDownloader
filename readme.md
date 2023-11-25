@@ -135,9 +135,16 @@ This is relevant when there are a lot of links/text/channels inserted at the sam
 - [ ] Bugfix: Sometimes not all videos are properly extracted from a playlist
 - [ ] Add a playlist column in the main window
 - [ ] There should be a LOG file option in the settings menu
-- [ ] The cancel operation should be revaluated. Any bugs should be fixed for both download and analysis.
-- [ ] Bug: In the web UI the theme button doesn't initializes from the same position for every theme upon reload when state is acquired from the server
+- [ ] The cancel operation should be revaluated. Any bugs should be fixed for both download and analysis. Note: it works for single threaded downloads but ones the threads are initialized in the multithreaded mode there is no convenient way to stop them until they are finished. (aside from hard stop. In that case a post cleanup will have to be done somehow.)
+- [ ] Web: Currently there is no cancel option for the web version.
+- [ ] Web: Bug: In the web UI the theme button doesn't initializes from the same position for every theme upon reload when state is acquired from the server
 - [ ] TODO: The licence comment in the files has to be completed. Author info & specific file name have to be altered.
+- [ ] Web: Maybe add individual buttons for local download. Those could be added in the context menu potentially. Along with that perhaps include a field for specifying the local download location.
+- [ ] Web: After the analysis is done maybe clear the analysis bar from the text.
+- [ ] Web: for convenience the context menus can be made be duplicated as a side panel for mobile devices for example.
+- [ ] Web: Maybe do a multi-user mode with with a simple database. Even a serverless SQL database would work. We can use ORM to get/set simple user configuration info.  That would also include IP recognition as well or alternatively we can have user/password or simply user/device name option. 
+- [ ] Make a docker file deployment
+- [ ] Try android version with Kiwi
 
 ## Potential Features
 - [ ] Webpage/Forum or some kind of marketing strategy for outreach to more users
