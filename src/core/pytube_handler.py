@@ -22,6 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ## Imports
 import os
+import subprocess
 from pytube import YouTube # py/Youtube Classes
 from typing import Tuple
 
@@ -248,6 +249,7 @@ class VideoInfo(YouTube):
     # ----- More download methods -----
     def download_subtitles(self,output_dir, languages):
         pass
+        #TODO:NOTE note implemented
     #end
 
     # Function to download thumbnail
@@ -296,41 +298,17 @@ class VideoInfo(YouTube):
         # Create the output file path
         output_filename = check_for_disallowed_filename_chars(f"{self.base_output_name}.comments.{output_format}")
         output_file_path = os.path.join(output_dir, output_filename)
-
-        # Download the comments and write them to the output file
-        if output_format == "json":
-            comments = pytchat.create(video_id=self.video_id)
-            comments_list = []
-            for c in comments.sync_items():
-                comment = {
-                    "text": c.message,
-                    "author": c.author.name,
-                    "author_channel_url": c.author.channel_url,
-                    "published_at": c.datetime.isoformat(),
-                    "likes": c.likecount,
-                    "replies": c.replycount
-                }
-                comments_list.append(comment)
-
-            with open(output_file_path, "w", encoding="utf-8") as f:
-                json.dump(comments_list, f, ensure_ascii=False, indent=4)
-        elif output_format == "csv":
-            comments = pytchat.create(video_id=self.video_id)
-            fieldnames = ["text", "author", "author_channel_url", "published_at", "likes", "replies"]
-            with open(output_file_path, "w", encoding="utf-8", newline="") as f:
-                writer = csv.DictWriter(f, fieldnames=fieldnames)
-                writer.writeheader()
-                for c in comments.sync_items():
-                    writer.writerow({
-                        "text": c.message,
-                        "author": c.author.name,
-                        "author_channel_url": c.author.channel_url,
-                        "published_at": c.datetime.isoformat(),
-                        "likes": c.likecount,
-                        "replies": c.replycount
-                    })
-        else:
-            raise ValueError(f"Unsupported output format: {output_format}")
+        # NOTE: TODO the functionality for downloading the comments has to be revised in detail
+        # NOTE: TODO currently this is unavailable
+        
+        try:
+            subprocess.run(['python', './src/core/download_video_comments2.py', 
+                            self.video_id, self.base_output_name, output_dir, output_format], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred in subprocess: {e}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+        #end
 
         return output_file_path
     #end
