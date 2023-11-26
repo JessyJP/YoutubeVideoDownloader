@@ -214,7 +214,7 @@ export function setClientUiSettingsConfiguration(configuration, tableManager) {
  * Updates the progress bar to the specified progress.
  * @param {Number} progress - The progress percentage to set.
  */
-export function updateProgressBar(progress) {
+export function updateProgressBarUi(progress) {
     var progressBar = document.getElementById("progress-bar-id");
     progressBar.style.width = progress + '%';
     progressBar.innerText = progress + '%';

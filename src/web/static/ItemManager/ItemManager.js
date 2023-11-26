@@ -6,7 +6,7 @@ import {
     postClientStateSettings,
     changeStatusForItemsSelectedByID
 } from '../api.js';
-import { updateProgressBar } from "../functions.js"
+import { updateProgressBarUi } from "../functions.js"
 import VideoItem from './VideoItem.js';
 
 import ColumnManager from './ColumnManager.js';
@@ -78,7 +78,7 @@ class ItemManager {
         // Update status text and UI elements based on the current state
         this.setUIElementsByState(currentState);
         this.statusOutput.textContent = currentStatusMsg;
-        updateProgressBar(currentProgressValue)
+        updateProgressBarUi(currentProgressValue)
 
         // Update the video list table 
         try {
