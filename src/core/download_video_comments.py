@@ -5,7 +5,7 @@ import csv
 import pytchat
 # NOTE:TODO: this library is suitable for live streaming but not suitable for downloading comments
 from validation_methods import check_for_disallowed_filename_chars
-# from src.core.validation_methods import check_for_disallowed_filename_chars
+# from core.validation_methods import check_for_disallowed_filename_chars
 def download_comments(video_id, base_output_name , output_dir: str, output_format: str = "json") -> str:
     """
     Download the comments for the video.

@@ -155,7 +155,7 @@ class ColumnManager {
         } else if (typeof data === 'object' && Array.isArray(data)) {
             newState = data;
         } else {
-            console.error("Invalid data type");
+            console.log("Error: Invalid data type, meaning the UI has not been given to the backend.");
             return;
         }
     

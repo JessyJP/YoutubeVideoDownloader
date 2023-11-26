@@ -11,7 +11,7 @@ args.append('--web')
 
 # Threading modes
 args.append('--enable-analysis-threading')
-# args.append('--enable-download-threading')
+args.append('--enable-download-threading')
 
 # Output dir
 # args.append("--output R:/") #"./output/"

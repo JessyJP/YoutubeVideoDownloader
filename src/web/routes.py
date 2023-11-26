@@ -152,18 +152,6 @@ def changeStatusForItemsSelectedByID():
     #end
 #end
 
-
-# @router.route('/api/play_video_preview', methods=['POST'])
-# def play_video_preview():
-#     data = request.json
-#     video_path = data['video_path']
-    
-#     # Assuming a play_video method exists in the vlm object
-#     vlm.play_video(video_path)
-
-#     return jsonify({"message": "Video is playing"})
-
-
 @router.route('/api/update_client_state', methods=['GET'])
 def get_update_client_state():
     # Construct the state to be sent
@@ -209,8 +197,6 @@ def post_update_client_state():
     # Return a success response
     return jsonify({"message": "Server: Client state settings updated successfully"}), 200
 
-#==============================================================================
-
 @router.route('/api/getFileList', methods=['GET'])
 def getFileList():
     if vlm.processState == ProcessRoutine.IDLE:
@@ -246,7 +232,6 @@ def getFileList():
     #end
 #end
 
-
 @router.route('/api/transferFile', methods=['GET'])
 def transferFile():
     if vlm.processState == ProcessRoutine.IDLE:
@@ -261,3 +246,15 @@ def transferFile():
         return jsonify({"message": f"Processing [{vlm.processState}] is currently running!"}), 200
     #end
 #end
+
+#==============================================================================
+
+# @router.route('/api/play_video_preview', methods=['POST'])
+# def play_video_preview():
+#     data = request.json
+#     video_path = data['video_path']
+    
+#     # Assuming a play_video method exists in the vlm object
+#     vlm.play_video(video_path)
+
+#     return jsonify({"message": "Video is playing"})
