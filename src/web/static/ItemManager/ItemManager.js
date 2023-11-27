@@ -6,7 +6,7 @@ import {
     postClientStateSettings,
     changeStatusForItemsSelectedByID
 } from '../api.js';
-import { updateProgressBarUi } from "../functions.js"
+import { updateProgressBarUi , setWebUIcontrolsEnabled } from "../functions.js"
 import VideoItem from './VideoItem.js';
 
 import ColumnManager from './ColumnManager.js';
@@ -141,24 +141,10 @@ class ItemManager {
 
     // When the server is performing processing, certain elements will be disabled in the UI
     setUIElementsByState(currentState) {        
-        if (currentState === 'ANALYSIS') {
-            this.analyzeBtn.disabled = true;
-            this.downloadBtn.disabled = true;
-            // this.analyzeBtn.classList.add("disabled-button");
-            // this.downloadBtn.classList.add("disabled-button");
-            // Set other buttons as needed
-        } else if (currentState === 'DOWNLOAD') {
-            this.analyzeBtn.disabled = true;
-            this.downloadBtn.disabled = true;
-            // this.analyzeBtn.classList.add("disabled-button");
-            // this.downloadBtn.classList.add("disabled-button");
-            // Set other buttons as needed
+        if (currentState === 'IDLE') {
+            setWebUIcontrolsEnabled(true)
         } else {
-            this.analyzeBtn.disabled = false;
-            this.downloadBtn.disabled = false;
-            // this.analyzeBtn.classList.remove("disabled-button");
-            // this.downloadBtn.classList.remove("disabled-button");
-            // Set other buttons as needed
+            setWebUIcontrolsEnabled(false)
         }
     }
 

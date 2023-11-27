@@ -12,7 +12,8 @@ import {
     getTheme,
     setTheme,
     adjustGridBasedOnDevice,
-    setClientUiSettingsConfiguration
+    setClientUiSettingsConfiguration,
+    setWebUIcontrolsEnabled
 } from './functions.js';
 
 import ItemManager from './ItemManager/ItemManager.js';
@@ -146,10 +147,12 @@ document.getElementById("fps-limiter").addEventListener("change", () => onUserIn
 
 // Save to my device Button Event Listener
 document.getElementById("save-to-device").addEventListener("click", async () => {
+    setWebUIcontrolsEnabled(false)
     // Call downloadVideoList and handle the response
     const response = await getSaveOutputToDevice();
     console.log(response.message);
     // Optionally, update the UI or perform additional actions based on the response
+    setWebUIcontrolsEnabled(true)
     onUserInteraction();
 });
 // ==========================================================================================

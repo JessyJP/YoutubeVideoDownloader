@@ -216,6 +216,40 @@ export function setClientUiSettingsConfiguration(configuration, tableManager) {
  */
 export function updateProgressBarUi(progress) {
     var progressBar = document.getElementById("progress-bar-id");
-    progressBar.style.width = progress + '%';
-    progressBar.innerText = progress + '%';
+
+    // Round the progress to two decimal places
+    var roundedProgress = parseFloat(progress).toFixed(2);
+
+    progressBar.style.width = roundedProgress + '%';
+    progressBar.innerText = roundedProgress + '%';
+}
+
+// ========== Enable/Disable controls Method ==========
+
+export function setWebUIcontrolsEnabled(enable) {
+    // Select the elements by their IDs or classes
+    const controls = [
+        document.getElementById("url-entry"),
+        document.getElementById("analyze-btn"),
+        document.getElementById("download-btn"),
+        document.getElementById("theme-btn"),
+        document.getElementById("viewMode"),
+        document.getElementById("audio-limiter"),
+        document.getElementById("video-limiter"),
+        document.getElementById("fps-limiter"),
+        document.getElementById("save-to-device")
+    ];
+
+    // this.analyzeBtn.disabled = true;
+    // this.downloadBtn.disabled = true;
+    // this.analyzeBtn.classList.add("disabled-button");
+    // this.downloadBtn.classList.add("disabled-button");
+    // Set other buttons as needed
+    
+    // Loop through each control and set its disabled property
+    controls.forEach(control => {
+        if (control) {
+            control.disabled = !enable;
+        }
+    });
 }
