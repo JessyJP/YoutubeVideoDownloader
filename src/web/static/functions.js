@@ -99,7 +99,7 @@ export function setTheme(newTheme) {
  * @returns {String} The current view mode.
  */
 export function getCurrentViewModeUiElementState() {
-    return document.getElementById('viewMode').value;
+    return document.getElementById('view-mode-dropdown').value;
 }
 
 /**
@@ -107,7 +107,7 @@ export function getCurrentViewModeUiElementState() {
  * @param {String} newViewMode - The new view mode to set.
  */
 export function setCurrentViewModeUiElementState(newViewMode) {
-    document.getElementById('viewMode').value = newViewMode;
+    document.getElementById('view-mode-dropdown').value = newViewMode;
 }
 
 /**
@@ -233,7 +233,7 @@ export function setWebUIcontrolsEnabled(enable) {
         document.getElementById("analyze-btn"),
         document.getElementById("download-btn"),
         document.getElementById("theme-btn"),
-        document.getElementById("viewMode"),
+        document.getElementById("view-mode-dropdown"),
         document.getElementById("audio-limiter"),
         document.getElementById("video-limiter"),
         document.getElementById("fps-limiter"),

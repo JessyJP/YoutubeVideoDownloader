@@ -120,7 +120,7 @@ document.getElementById("theme-btn").addEventListener("click", () => {
     onUserInteraction();
 });
 
-document.getElementById('viewMode').addEventListener('change', (event) => {
+document.getElementById("view-mode-dropdown").addEventListener('change', (event) => {
     tableManager.viewMode = event.target.value;
     adjustGridBasedOnDevice(tableManager);
     onUserInteraction();
