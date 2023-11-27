@@ -100,6 +100,8 @@ def main():
     
     # Create the executable
     cmd = f'python -m PyInstaller "{MAIN_SCRIPT_PATH}" --onefile --icon "{ICON_PATH}"'
+    _separator_ = ";" if IS_WINDOWS else ":"
+    cmd += f" --add-data src/web/templates{_separator_}templates --add-data src/web/static{_separator_}static"
     # cmd += ' --noconsole'
     # cmd += ' --splash "./images/IconProjects/pngaaa.com-4933843.png"'
     run_command(cmd)

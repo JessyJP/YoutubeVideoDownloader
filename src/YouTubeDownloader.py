@@ -28,6 +28,7 @@ import ctypes
 from cli.CLI_VideoListManager import VideoListManagerCLI
 from core.common import audio_bitrate_list, video_resolution_list, fps_value_list
 from core.download_options import setOutputKeepsStr
+from web.webapp import default as DefaultCFG
 
 def hide_console():
     try:
@@ -89,8 +90,8 @@ def run_cli(args):
 #end
 
 def run_web_service(args):
-    from web.webapp import main as webapp_main
-    webapp_main(port=args.port,output_dir=args.output,
+    from web.webapp import run_from_dispatcher as run_webapp
+    run_webapp(port=args.port,output_dir=args.output,
                 use_multithreading_analysis=args.enable_analysis_threading,
                 process_via_multithreading=args.enable_download_threading)
 #end
@@ -136,13 +137,13 @@ def main():
     # Second stage parser for CLI arguments
     web_parser = argparse.ArgumentParser(description="YouTube video downloader - Web Service mode")
     # Output directory as an optional argument
-    web_parser.add_argument("-o", "--output", default=".", help="Output directory (default: current directory)")
+    web_parser.add_argument("-o", "--output", default=DefaultCFG.OUTDIR, help=f"Output directory (default: {DefaultCFG.OUTDIR})")
     # web_parser.add_argument("-o", "--output", required=True, help="Output directory (default: current directory)")
     # TODO: one of the 2 options has to be selected. Either compulsory or having a default
     # Add argument for remote storage
-    web_parser.add_argument("-rs", "--remote-storage", type=str, help="Remote storage URL or path")
+    # web_parser.add_argument("-rs", "--remote-storage", type=str, help="Remote storage URL or path") # TODO: disable for now, maybe remove if it remains unused
     # Add Web Service-specific arguments
-    web_parser.add_argument("-p", "--port", type=int, default=80, help="Port for the web service")
+    web_parser.add_argument("-p", "--port", type=int, default=DefaultCFG.PORT, help=f"Port for the web service (default: {DefaultCFG.PORT})")
 
     ## ======== Select a mode ========
     if mode_args.cli:

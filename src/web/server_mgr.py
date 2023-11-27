@@ -193,7 +193,7 @@ class WebServerVideoManager(VideoListManager):
 
     def change_download_status(self, selection_ids, symbol, state="toggle"):
         for id in selection_ids:
-            item = vlm.getItemByIndexOrVideoID(id)
+            item = self.getItemByIndexOrVideoID(id)
             if item:
                 # Update download state of the video info in the handle table entry 
                 item.download_status = updateOutputKeepsStr(item.download_status, symbol, state)
@@ -210,7 +210,7 @@ class WebServerVideoManager(VideoListManager):
         state = "off"
 
         for id in selection_ids:
-            item = vlm.getItemByIndexOrVideoID(id)
+            item = self.getItemByIndexOrVideoID(id)
             if item:
                 new_status = item.download_status
                 for symbol in symbol_list:
@@ -270,4 +270,5 @@ def video_info_to_dict(vItem: VideoInfo) -> dict:
 #end
 
 #================ Initialize the web server video item manager ================
-vlm = WebServerVideoManager()
+vlm = WebServerVideoManager() # TODO:NOTE there should be a better way to initialize and the get VLM.
+# The VLM - the Video List Manager is essentially the session 
