@@ -57,7 +57,7 @@ class ItemManager {
                 this.resetIdleCheckCounter();
             }
 
-            this.updateUI();
+            this.updateUI(currentState);
             await this.delay(this.refreshTimeoutFactor*this.idleCheckCounter); // Update a few times with increasing delay
         }
     }
@@ -70,8 +70,7 @@ class ItemManager {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async updateUI() {
-        const currentState = await getState();
+    async updateUI(currentState) {
         const currentStatusMsg = await getStatusMsg();
         const currentProgressValue = await getProgressbarValue()
 

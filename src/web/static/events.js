@@ -106,36 +106,6 @@ document.getElementById("save-to-device").addEventListener("click", async () => 
     onUserInteraction();
 });
 
-// document.getElementById("play-btn").addEventListener("click", async () => {
-//     // TODO: still unfinished
-//     const videoPath = 'path/to/selected/video'; // Implement the mechanism to get the selected video path
-//     try {
-//         const data = await playVideoPreview(videoPath);
-//         if (data.message) {
-//             alert(data.message);
-//         }
-//     } catch (error) {
-//         console.error("Error playing video preview: ", error);
-//         alert("Failed to play video preview.");
-//     }
-//     onUserInteraction();
-// });
-
-// document.getElementById("location-btn").addEventListener("click", async () => {
-//     // TODO: still unfinished
-//     try {
-//         const locationData = await selectDownloadLocation();
-//         const inputLocation = document.getElementById("download-location");
-//         inputLocation.value = locationData.download_location;
-//     } catch (error) {
-//         console.error("Error selecting download location: ", error);
-//         alert("Failed to select download location.");
-//     }
-//     onUserInteraction();
-// });
-// 
-// document.getElementById("download-location").addEventListener("change", () => onUserInteraction());
-
 // ==========================================================================================
 // Update client state settings
 document.getElementById("theme-btn").addEventListener("click", () => {

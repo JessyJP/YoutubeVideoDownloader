@@ -94,7 +94,6 @@ async function getVideoItemList() {
     }
 }
 
-
 async function getClientStateSettings() {
     try {
         const response = await fetch(`${API_PROXY}/api/update_client_state`, {
@@ -108,24 +107,12 @@ async function getClientStateSettings() {
         const data = await response.json();
         console.log("Received client state settings from server:", data);
 
-        // Here you would use the data to update your client state
-        // For example:
-        // if (data.uiSettings) {
-        //     if (data.uiSettings.currentTheme) {
-        //         switchTheme(data.uiSettings.currentTheme);
-        //     }
-        //     if (data.uiSettings.viewMode) {
-        //         setCurrentViewMode(data.uiSettings.viewMode);
-        //     }
-        // }
-
         return data;
     } catch (error) {
         console.error("Failed to fetch client state settings:", error);
         // Handle the error appropriately
     }
 }
-
 
 // ============= SET state POST methods ============= 
 
@@ -264,23 +251,6 @@ function saveFile(blob, fileName) {
     URL.revokeObjectURL(link.href); // Clean up
 }
 
-// ============= UNUSED methods =============
-// async function playVideoPreview(videoPath) {
-//     const response = await fetch(`${API_PROXY}/api/play_video_preview`, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({ video_path: videoPath }),
-//     });
-//     return await response.json();
-// }
-
-// async function selectDownloadLocation() {
-//     const response = await fetch(`${API_PROXY}/api/select_download_location`);
-//     return await response.json();
-// }
-
 export {
     getState,
     getStatusMsg,
@@ -291,7 +261,6 @@ export {
     changeStatusForItemsSelectedByID,
     analyzeURLtext,
     downloadVideoList,
-    // playVideoPreview,
     // selectDownloadLocation,
     getSaveOutputToDevice
 };
