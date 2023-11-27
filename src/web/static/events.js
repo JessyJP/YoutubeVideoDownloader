@@ -17,7 +17,8 @@ import {
 } from './functions.js';
 
 import ItemManager from './ItemManager/ItemManager.js';
-
+// === Define ===
+const environment = "development" 
 //  ==========================================================================================
 // Instantiate ItemManager only once
 const tableManager = new ItemManager();
@@ -35,6 +36,12 @@ function onUserInteraction() {
 
 // Start checking on page load
 window.addEventListener("load", async () => {
+
+    if (environment === 'production') {
+        // Disable console.log
+        console.log = function() {};
+    }
+    
  
     // Set the default theme
     const defaultTheme = 'dark-theme'
