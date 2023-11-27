@@ -95,6 +95,17 @@ document.getElementById("download-btn").addEventListener("click", async () => {
     onUserInteraction();
 });
 
+// Save to my device Button Event Listener
+document.getElementById("save-to-device").addEventListener("click", async () => {
+    setWebUIcontrolsEnabled(false)
+    // Call downloadVideoList and handle the response
+    await getSaveOutputToDevice();
+    console.log("Finished transferring the downloaded files!");
+    // Optionally, update the UI or perform additional actions based on the response
+    setWebUIcontrolsEnabled(true)
+    onUserInteraction();
+});
+
 // document.getElementById("play-btn").addEventListener("click", async () => {
 //     // TODO: still unfinished
 //     const videoPath = 'path/to/selected/video'; // Implement the mechanism to get the selected video path
@@ -152,16 +163,6 @@ document.getElementById("video-limiter").addEventListener("change", () => onUser
 
 document.getElementById("fps-limiter").addEventListener("change", () => onUserInteraction());
 
-// Save to my device Button Event Listener
-document.getElementById("save-to-device").addEventListener("click", async () => {
-    setWebUIcontrolsEnabled(false)
-    // Call downloadVideoList and handle the response
-    const response = await getSaveOutputToDevice();
-    console.log(response.message);
-    // Optionally, update the UI or perform additional actions based on the response
-    setWebUIcontrolsEnabled(true)
-    onUserInteraction();
-});
 // ==========================================================================================
 // Keyboard event handler
 document.addEventListener("keydown", async (event) => {
