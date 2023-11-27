@@ -42,12 +42,12 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(current_dir, '../../'))
 source_dir = os.path.join(project_root, "src")
 sys.path.append(project_root)
-from src.core.common import add_module_paths
+from core.common import add_module_paths
 add_module_paths(source_dir)
 
-from src.core.common import audio_bitrate_list, video_resolution_list, fps_value_list
-from src.core.video_list_manager import VideoListManager
-from src.core.pytube_handler import LimitsAndPriority, VideoInfo
+from core.common import audio_bitrate_list, video_resolution_list, fps_value_list
+from core.video_list_manager import VideoListManager
+from core.pytube_handler import LimitsAndPriority, VideoInfo
 
 #==============================================================================
 # Enum definition for backend current state
