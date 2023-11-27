@@ -126,6 +126,16 @@ document.getElementById("view-mode-dropdown").addEventListener('change', (event)
     onUserInteraction();
 });
 
+document.querySelectorAll('input[type="radio"][name="radio"]').forEach(radio => {
+    radio.addEventListener('change', (event) => {
+        if (event.target.checked) {
+            tableManager.viewMode = event.target.value;
+            adjustGridBasedOnDevice(tableManager);
+            onUserInteraction();
+        }
+    });
+});
+
 
 document.getElementById("audio-limiter").addEventListener("change", () => onUserInteraction());
 

@@ -93,22 +93,38 @@ export function setTheme(newTheme) {
 }
 
 // ========== View Mode Methods ==========
+export function getCurrentViewModeUiElementState() {
+    const radioButtons = document.querySelectorAll('input[type="radio"][name="radio"]');
+    for (let radioButton of radioButtons) {
+        if (radioButton.checked) {
+            return radioButton.value;
+        }
+    }
+}
+
+export function setCurrentViewModeUiElementState(newViewMode) {
+    const radioButtons = document.querySelectorAll('input[type="radio"][name="radio"]');
+    for (let radioButton of radioButtons) {
+        radioButton.checked = (radioButton.value === newViewMode);
+    }
+}
+
 
 /**
  * Retrieves the current view mode.
  * @returns {String} The current view mode.
  */
-export function getCurrentViewModeUiElementState() {
-    return document.getElementById('view-mode-dropdown').value;
-}
+// export function getCurrentViewModeUiElementState() {
+//     return document.getElementById('view-mode-dropdown').value;
+// }
 
 /**
  * Sets the current view mode.
  * @param {String} newViewMode - The new view mode to set.
  */
-export function setCurrentViewModeUiElementState(newViewMode) {
-    document.getElementById('view-mode-dropdown').value = newViewMode;
-}
+// export function setCurrentViewModeUiElementState(newViewMode) {
+//     document.getElementById('view-mode-dropdown').value = newViewMode;
+// }
 
 /**
  * Adjusts the grid layout based on the device type.
