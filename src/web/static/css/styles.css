@@ -450,3 +450,13 @@ select {
     display: grid;
     /* Other styles... */
 }
+
+/* =============== Disable some control element =============== */
+.view-mode-dropdown-selector {
+    display: none;
+}
+
+/* or if you need to hide it conditionally based on an additional class */
+.hidden .view-mode-dropdown-selector {
+    display: none;
+}
