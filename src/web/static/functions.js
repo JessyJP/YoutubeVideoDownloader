@@ -250,6 +250,8 @@ export function setWebUIcontrolsEnabled(enable) {
         document.getElementById("download-btn"),
         document.getElementById("theme-btn"),
         document.getElementById("view-mode-dropdown"),
+        document.getElementById("view-mode-selector-radio"),
+        document.getElementById("view-mode-radio"),
         document.getElementById("audio-limiter"),
         document.getElementById("video-limiter"),
         document.getElementById("fps-limiter"),
