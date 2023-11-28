@@ -269,3 +269,11 @@ export function setWebUIcontrolsEnabled(enable) {
         }
     });
 }
+
+// ========== Check the download button state ==========
+export function isDownloadButtonDisabled() {
+    // UI inputs are disabled while server is running along process. 
+    // This is useful for getting the state of the
+    const downloadButton = document.getElementById("download-btn");
+    return downloadButton ? downloadButton.disabled : false;
+}
