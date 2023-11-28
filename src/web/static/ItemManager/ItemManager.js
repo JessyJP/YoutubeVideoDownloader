@@ -6,7 +6,7 @@ import {
     postClientStateSettings,
     changeStatusForItemsSelectedByID
 } from '../api.js';
-import { updateProgressBarUi , setWebUIcontrolsEnabled } from "../functions.js"
+import { updateProgressBarUi , setWebUIcontrolsEnabled, isDownloadButtonDisabled } from "../functions.js"
 import VideoItem from './VideoItem.js';
 
 import ColumnManager from './ColumnManager.js';
@@ -206,6 +206,10 @@ class ItemManager {
     }
 
     async handleContextMenu(event) {
+        // The state is only available while the server is not processing
+        // If disabled then a process is running
+        if (isDownloadButtonDisabled()){return;}
+
         event.preventDefault();
 
         // Remove any existing context menu
@@ -237,10 +241,13 @@ class ItemManager {
     }
 
     async createContextMenu() {
+        const isProcessActive = isDownloadButtonDisabled();
+        // The state is only available while the server is not processing
+        if (isProcessActive){return;}
+
         const selectedItems = this.getSelectedItems();
         const selectedItemsCount = selectedItems.length;
-        const currentState = await getState();
-        const isProcessActive = currentState !== "IDLE";
+
     
         // The popup menu HTML element
         const popupMenu = document.createElement('div');
