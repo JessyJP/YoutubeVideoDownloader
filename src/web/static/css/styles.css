@@ -173,6 +173,7 @@ select {
   
   #view-mode-radio div {
     display: flex;
+    flex-direction: row; /* Align children in a row */
     flex-wrap: wrap;
     margin-top: 0.5rem;
     justify-content: center;
@@ -207,6 +208,7 @@ select {
     color: #3e4963;
     text-align: center;
     transition: background-color .5s ease;
+    border-radius: 0.375em; /* Adjust as needed */
   }
   
   #view-mode-radio label:first-child span {
@@ -216,6 +218,11 @@ select {
   #view-mode-radio label:last-child span {
     border-radius: 0 .375em .375em 0;
   }
+
+  #view-mode-radio label {
+    flex: 1; /* Each label will take up equal space */
+}
+
   
 
 /* =============== Diagnostic output  Styles =============== */
