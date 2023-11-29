@@ -1,3 +1,5 @@
+import { defaultTableColumnConfiguration } from "../definitions.js";
+
 class ColumnManager {
     // ============= Initialization methods =============
     constructor(callbackOnVisibilityChange, postClientStateSettingsRef) {
@@ -8,7 +10,7 @@ class ColumnManager {
         this.onVisibilityChange = callbackOnVisibilityChange;
         this.postClientStateSettingsRef = postClientStateSettingsRef;
         // Initialize a default configuration
-        this.defaultTableConfiguration();
+        this.makeDefaultTableConfiguration();
         // TODO: this could be potentially overwritten here if on startup we load another configuration in the future
         this.initialize()
     }
@@ -20,11 +22,10 @@ class ColumnManager {
     }
 
     // Make a default configuration
-    defaultTableConfiguration() {
-        const labels = ['Index', 'Download Status', 'Watch URL', 'Title', 'Author', 'Length', 'Publish Date', 'Views', 'Thumbnail URL', 'Rating', 'Video ID', 'Quality', 'File Size (MB)'];
-        labels.forEach(label => this.addColumn(label));
-        // add 'Description' but set it to invisible by default
-        this.addColumn('Description',false)
+    makeDefaultTableConfiguration() {
+        defaultTableColumnConfiguration.forEach(columnConfig => {
+            this.addColumn(columnConfig.label, columnConfig.visible);
+        });
     }
 
     //This initializes the current configuration

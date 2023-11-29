@@ -1,3 +1,4 @@
+import * as Defaults from '../definitions.js';
 import {
     getVideoItemList,
     getState,
@@ -7,7 +8,7 @@ import {
     changeStatusForItemsSelectedByID
 } from '../api.js';
 import { updateProgressBarUi , setWebUIcontrolsEnabled, isDownloadButtonDisabled } from "../functions.js"
-import VideoItem from './VideoItem.js';
+// import VideoItem from './VideoItem.js';
 
 import ColumnManager from './ColumnManager.js';
 
@@ -29,10 +30,10 @@ class ItemManager {
         this.checkModeFlag = false;
         this.idleCheckCounter = 0;
         // The auto-update parameters
-        this.refreshTimeoutFactor = 50;// Default interval between refreshes ms in IDLE
-        this.maxIdleChecks = 12;// Default maximum number of refreshes when server in IDLE 
-        this.viewMode = 'table'; // Default view mode
-        this.maxGridCardsPerRow = 2; // Default Maximum number of grid cards per row
+        this.refreshTimeoutFactor = Defaults.refreshTimeoutFactor;// Default interval between refreshes ms in IDLE
+        this.maxIdleChecks = Defaults.maxIdleChecks;// Default maximum number of refreshes when server in IDLE 
+        this.viewMode = Defaults.viewMode; // Default view mode
+        this.maxGridCardsPerRow = Defaults.maxGridCardsPerRow; // Default Maximum number of grid cards per row
 
         // Attach the container event listeners only once
         this.attachContextMenuListener()

@@ -17,8 +17,9 @@ import {
 } from './functions.js';
 
 import ItemManager from './ItemManager/ItemManager.js';
-// === Define ===
-const environment = "development" 
+
+import { resetTheAnalysisInputBar, is_production_environment } from './definitions.js';
+
 //  ==========================================================================================
 // Instantiate ItemManager only once
 const tableManager = new ItemManager();
@@ -37,7 +38,7 @@ function onUserInteraction() {
 // Start checking on page load
 window.addEventListener("load", async () => {
 
-    if (environment === 'production') {
+    if (is_production_environment) {
         // Disable console.log
         console.log = function() {};
     }
@@ -82,6 +83,9 @@ document.getElementById("analyze-btn").addEventListener("click", async () => {
     // Call analyzeURLtext and handle the response
     const data = await analyzeURLtext(url);
     console.log(data.message);
+    if (resetTheAnalysisInputBar){
+        document.getElementById("url-entry").value = ""
+    }
     // Optionally, update the UI or perform additional actions based on the response
     onUserInteraction()
 });

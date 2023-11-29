@@ -1,7 +1,6 @@
+import { API_PROXY } from "./definitions.js";
 import VideoItem from "./ItemManager/VideoItem.js";
 import {getClientUiSettingsConfiguration, updateProgressBarUi}from "./functions.js"
-
-const API_PROXY = "http://localhost:80";  // Replace with your actual IP and port.
 
 // ============= GET state GET methods ============= 
 
