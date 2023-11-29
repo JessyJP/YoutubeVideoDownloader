@@ -79,7 +79,7 @@ def create_web_app(port: int = default.PORT, output_dir: str = default.OUTDIR,
 
 def run_from_dispatcher(port,output_dir,use_multithreading_analysis,process_via_multithreading):
     app = create_web_app(port,output_dir,use_multithreading_analysis,process_via_multithreading)
-    debugON = getattr(sys, 'frozen', False)# If not frozen then the debug mode is on
+    debugON = not getattr(sys, 'frozen', False)# If not frozen then the debug mode is on
     app.run(debug=debugON, port=port)
 
 def getEnvironmentalParameters():
