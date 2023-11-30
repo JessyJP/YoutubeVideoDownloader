@@ -101,39 +101,46 @@ This will execute the script and perform the make and packaging tasks defined in
 - **Deactivating the Virtual Environment**: To exit the virtual environment, simply run `deactivate` in your terminal. This will revert to your global Python environment.
 - **Reactivating**: To work on your project again after deactivating, navigate to your project directory and activate the virtual environment as shown in Step 1.
 
+### Step 5: Docker deployment
+The application can also be run as a docker container.
+To build the docker container, from the project directory you can run: 
+```bash
+docker build -t youtube-downloader .
+```
+When built to execute the docker container, you can run:
+```bash
+docker run -p 8080:8080 --name youtube-downloader-container youtube-downloader
+```
+
 
 ## Current State of Development TODO(s)
 
 [//]: # (Add the current state of things section here when content is provided)
 - [ ] There are various TODO notes in the coded related to implementation of features and bugfixes.
 
-The program can work just fine portable but it's good to have a type of installer.
-- [x] URL scraping from YouTube Channel URLs
-  - [ ] Testing is needed, meaning automated testing procedures during build time.
-- [ ] Per video quality stream selection no yet implemented. (only global limiters available at the moment)
+- [ ] Optional: URL scraping from YouTube Channel URLs
+- [ ] Optional: It would be good to have some testing, meaning automated testing procedures during build time.
+- [ ] Optional: Per video quality stream selection no yet implemented. (only global limiters available at the moment)
 This could be with a selection and a button to transfer the limits.
-- [x] Finish the "keep file" functionality for separate audio,video, subtitle,etc. data.
-  - [ ] Subtitles download and integration still to be implemented.
-  - [ ] Comments download still to be implemented 
-- [ ] Better progress reporting and percentage for download progress implementation.
+- [ ] Finish the "keep file" functionality for subtitle and comments. This appears to be a bit more tricky as it requires different sort of APIs. 
+- [ ] Optional: Better progress reporting and percentage for download progress implementation.
 This is relevant when there are a lot of links/text/channels inserted at the same time.
 	- Download reporting is ok but not too detailed.
 	- Analysis reporting could do much better. 
 
-- [x] Improve multithreading and parallel downloads
-    - It gets really slow when there is over hundred URLs to analyse, so for now the analyses is set to single thread by default.
+- [x] Improve multithreading and parallel downloads. In this case some limiters on the number of threads would be good.
 - [ ] The settings sub-window needs to be implemented. Currently it is in embryonic state. 
   - In the settings window the user will be able to select, themes languages, paths, shortcut combinations etc.
   - Column order can also be implemented in the Settings and as drag and drop option.
-- [x] Redesign file and functionality separation.
-  - It would be necessary to better spread the functionality in the GUI and the core across files. 
-  - This will make it easier for proper terminal use implementation. 
-  - There should be an option for straight through command user and interactive terminal use.
+- [x] Redesign of the web based UI.
+  * In particular the client-server interaction.
+  * Currently there is no form of socketing or synchronized update in web-mode.
+- [ ] User sessions or some form of per user separation could be considered for multiuser mode. 
 - [ ] Final file size reporting should be corrected and make more accurate and reflect the latest changes.
 - [ ] Better error handling, proper cancellation (and clean-up) and abrupt exit thread handling and clean-up should be implemented (especially for the windowed GUI mode).
-- [ ] Speed and GUI responsiveness should also be improved.
-- [ ] Bugfix: Sometimes not all videos are properly extracted from a playlist
-- [ ] Add a playlist column in the main window
+
+- [ ] Bugfix: Sometimes not all videos are properly extracted from a playlist. 
+  * This is due to video restrictions which require login. Maybe we could consider some form of sign. 
 - [ ] There should be a LOG file option in the settings menu
 - [ ] The cancel operation should be revaluated. Any bugs should be fixed for both download and analysis. Note: it works for single threaded downloads but ones the threads are initialized in the multithreaded mode there is no convenient way to stop them until they are finished. (aside from hard stop. In that case a post cleanup will have to be done somehow.)
 - [ ] Web: Currently there is no cancel option for the web version.
@@ -143,8 +150,9 @@ This is relevant when there are a lot of links/text/channels inserted at the sam
 - [ ] Web: After the analysis is done maybe clear the analysis bar from the text.
 - [ ] Web: for convenience the context menus can be made be duplicated as a side panel for mobile devices for example.
 - [ ] Web: Maybe do a multi-user mode with with a simple database. Even a serverless SQL database would work. We can use ORM to get/set simple user configuration info.  That would also include IP recognition as well or alternatively we can have user/password or simply user/device name option. 
-- [ ] Make a docker file deployment
+
 - [ ] Try android version with Kiwi
+- [ ] TODO: the readme should be updated and cleaned up.
 
 ## Potential Features
 - [ ] Webpage/Forum or some kind of marketing strategy for outreach to more users
