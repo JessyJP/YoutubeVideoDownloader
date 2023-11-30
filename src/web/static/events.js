@@ -13,7 +13,8 @@ import {
     setTheme,
     adjustGridBasedOnDevice,
     setClientUiSettingsConfiguration,
-    setWebUIcontrolsEnabled
+    setWebUIcontrolsEnabled,
+    updateProgressBarUi
 } from './functions.js';
 
 import ItemManager from './ItemManager/ItemManager.js';
@@ -79,6 +80,8 @@ document.getElementById("analyze-btn").addEventListener("click", async () => {
         alert("Please enter a video URL.");
         return;
     }
+    setWebUIcontrolsEnabled(false)
+    updateProgressBarUi(0)
 
     // Call analyzeURLtext and handle the response
     const data = await analyzeURLtext(url);
@@ -88,26 +91,31 @@ document.getElementById("analyze-btn").addEventListener("click", async () => {
     }
     // Optionally, update the UI or perform additional actions based on the response
     onUserInteraction()
+    // setWebUIcontrolsEnabled(true)
 });
 
 // Download Button Event Listener
 document.getElementById("download-btn").addEventListener("click", async () => {
+    setWebUIcontrolsEnabled(false)
+    updateProgressBarUi(0)
     // Call downloadVideoList and handle the response
     const response = await downloadVideoList();
     console.log(response.message);
     // Optionally, update the UI or perform additional actions based on the response
     onUserInteraction();
+    // setWebUIcontrolsEnabled(true)
 });
 
 // Save to my device Button Event Listener
 document.getElementById("save-to-device").addEventListener("click", async () => {
     setWebUIcontrolsEnabled(false)
+    updateProgressBarUi(0)
     // Call downloadVideoList and handle the response
     await getSaveOutputToDevice();
     console.log("Finished transferring the downloaded files!");
     // Optionally, update the UI or perform additional actions based on the response
-    setWebUIcontrolsEnabled(true)
     onUserInteraction();
+    // setWebUIcontrolsEnabled(true)
 });
 
 // ==========================================================================================
