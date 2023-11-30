@@ -38,8 +38,8 @@ from types import SimpleNamespace
 default = SimpleNamespace(
     PORT=8080,
     OUTDIR='./tmp',
-    MT_ANALYSIS=False,
-    MT_DOWNLOAD=False
+    MT_ANALYSIS=True,
+    MT_DOWNLOAD=True
 )
 
 def create_web_app(port: int = default.PORT, output_dir: str = default.OUTDIR,
@@ -81,6 +81,7 @@ def create_web_app(port: int = default.PORT, output_dir: str = default.OUTDIR,
 def run_from_dispatcher(port,output_dir,use_multithreading_analysis,process_via_multithreading):
     app = create_web_app(port,output_dir,use_multithreading_analysis,process_via_multithreading)
     debugON = not getattr(sys, 'frozen', False)# If not frozen then the debug mode is on
+    debugON = False
     CORS(app)
     app.run(debug=debugON, host='0.0.0.0', port=port)
 

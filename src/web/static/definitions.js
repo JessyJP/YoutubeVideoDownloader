@@ -2,7 +2,7 @@
 export const API_PROXY = "http://localhost:8080"; // Replace with your actual IP and port.
 
 // Define the environment state for production or development
-export const is_production_environment = false 
+export const is_production_environment = true; 
 
 // For import in the Item Manager
 export const refreshTimeoutFactor = 100; // Default interval between refreshes in ms when IDLE
