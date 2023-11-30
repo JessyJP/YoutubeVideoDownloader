@@ -34,9 +34,12 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app/src
 
-# Production server 
+# Production server
 # Define command to start the application using Gunicorn
-CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:8080", "YouTubeDownloaderWEB:app"]
+# CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:8080", "YouTubeDownloaderWEB:app"]
 
 #  Development server
-# CMD ["python","./YouTubeDownloader.py", "--web", "--enable-analysis-threading","--enable-download-threading","--output","/app/tmp"]
+# RUN python ./make.py
+
+# WORKDIR /app/src
+CMD ["python","./YouTubeDownloader.py", "--web", "--enable-analysis-threading","--enable-download-threading","--output","/app/tmp"]
