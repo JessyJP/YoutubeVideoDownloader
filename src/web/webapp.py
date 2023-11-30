@@ -30,6 +30,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import sys
 import os
 from flask import Flask
+from flask_cors import CORS
 from web.routes import router
 from types import SimpleNamespace
 
@@ -80,7 +81,8 @@ def create_web_app(port: int = default.PORT, output_dir: str = default.OUTDIR,
 def run_from_dispatcher(port,output_dir,use_multithreading_analysis,process_via_multithreading):
     app = create_web_app(port,output_dir,use_multithreading_analysis,process_via_multithreading)
     debugON = not getattr(sys, 'frozen', False)# If not frozen then the debug mode is on
-    app.run(debug=debugON, port=port)
+    CORS(app)
+    app.run(debug=debugON, host='0.0.0.0', port=port)
 
 def getEnvironmentalParameters():
     """Retrieve configuration from environment variables and return as a SimpleNamespace."""
