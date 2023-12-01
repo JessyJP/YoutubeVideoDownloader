@@ -121,7 +121,6 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
     # Save the configuration file is used to preserve and import configuration variables
     def save_config(self):
-
         # Check if config has been loaded, otherwise create a new one with defaults
         if not hasattr(self, "config"):
             raise ValueError(f"Configuration file has not been loaded yet of there is a problem with the {self.config_file}!")
@@ -182,7 +181,6 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
                     else:
                         d2[k] = v
                     #end
-                #end
                 else:
                     d2[k] = v
                 #end
@@ -202,6 +200,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             self.tk.call('wm', 'iconphoto', self._w, img)
         else:
             self.iconbitmap(application_window_icon_path)
+        #end
 
         self.title(self.theme["window_title"])
         self.configure(bg=self.theme["global"]["colors"]["background"])
