@@ -239,6 +239,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         frame = ttk.Frame(self)
         frame.grid(column=0, row=0, sticky=(tk.N, tk.S, tk.E, tk.W), padx=window_padding, pady=window_padding)
 
+        # First row -----------------
         # Get tree view column headings
         self.columns = tuple(self.theme["tree_view"]["heading"].keys())
 
@@ -307,7 +308,8 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.settings_button = ttk.Button(frame, image=self.settings_icon)
         self.settings_button.grid(column=0, row=2, sticky=tk.W)
 
-        #TODO: implement a help button here.
+        # Create a play item selection locally button. This sends the items to the local video player.
+        # NOTE: this currently works only with PotPlayer installed
         self.playSelectionLocal_button = ttk.Button(frame, text="   Play Preview \n Selection Locally",command=self.play_selected_watch_urls_locally)
         self.playSelectionLocal_button.grid(column=0, row=2, sticky=tk.W, padx=(45, 0))
 
@@ -331,6 +333,7 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.dropdown_audio_limiter.grid(row=2, column=1, padx=(0, 0), pady=5, sticky="w")
         self.dropdown_video_limiter.grid(row=2, column=2, padx=(0, 0), pady=5, sticky="w")
         self.dropdown_fps_limiter.grid(row=2, column=3, padx=(0, 0), pady=5, sticky="w")
+        # TODO:NOTE: on change callbacks could be implemented for the dropdowns. Thus updating the and correctly showing the actual download size. 
 
         # Create the "Select Download Location" button
         self.select_location_button = ttk.Button(frame, text=self.theme["texts"]["select_location_button"], command=self.open_select_location_dialog)
