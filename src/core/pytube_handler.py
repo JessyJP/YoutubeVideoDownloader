@@ -30,6 +30,10 @@ import requests
 import shutil
 from datetime import datetime
 
+# For image handling
+from PIL import Image
+from io import BytesIO
+
 from core.validation_methods import check_for_disallowed_filename_chars
 from core.download_options import setOutputKeepsStr
 from core.download_options import * # TODO: list them one by one
@@ -150,6 +154,32 @@ class VideoInfo(YouTube):
 
         # Fallback to the first available stream if none match the format priority
         return video_streams_to_check[0]
+    #end
+    
+    def wget_thumbnail(self, format='pil'):
+        """
+        Download the thumbnail and return it in the specified format.
+        format: 'blob' (return binary data), 'pil' (return PIL image), 'raw' (return raw response content)
+        """
+        try:
+            response = requests.get(self.thumbnail_url)
+            response.raise_for_status()
+
+            if format == 'blob':
+                return response.content  # Binary blob (byte data)
+            elif format == 'raw':
+                return BytesIO(response.content)  # Raw data as a BytesIO object
+            elif format == 'pil':
+                image = Image.open(BytesIO(response.content))  # PIL Image object
+                return image
+            else:
+                raise ValueError("Invalid format specified")
+            #end
+            
+        except requests.RequestException as e:
+            print(f"Error downloading image: {e}")
+            return None
+        #end
     #end
 
     def download_audio(self,audio_stream, output):
