@@ -49,9 +49,61 @@ import configparser
 import inspect
 # TODO: check the imports for redundancy or unused ones
 
+# ---------------------------------------------------------------------------
+# Refactor the item display container
+class VideoItemDisplayContainer():
+
+    def createVideoItemDisplayContainer(self, frame,TC):
+        # Get tree view column headings
+        self.columns = tuple(self.theme["tree_view"]["heading"].keys())
+
+        # Custom style for the tree view widget
+        style = ttk.Style()
+        style.configure("Treeview", background=self.theme["tree_view"]["colors"]["background"])
+        style.map("Treeview", background=[("selected", self.theme["tree_view"]["colors"]["selected"])])
+        style.configure("Treeview", foreground=self.theme["global"]["colors"]["button_text"])
+        style.map("Treeview", foreground=[("selected", self.theme["tree_view"]["colors"]["selected_text"])])
+
+        # Creating the Tree view widget (table)
+        self.tree = ttk.Treeview(frame, columns=self.columns, show="headings", height=25, style="Treeview")
+        self.tree.grid(row=0, column=0, columnspan=TC, sticky=(tk.N, tk.S, tk.E, tk.W))
+        self.tree.bind('<<TreeviewSelect>>', self.on_treeview_selection)
+
+        # Assign labels and widths to the tree view columns
+        for col in self.columns:
+            self.tree.heading(col, text=self.theme["tree_view"]["heading"][col],anchor="center")#,anchor=self.theme["tree_view"]["alignment"][col]
+            self.tree.column(col, width=self.theme["tree_view"]["column_width"][col],anchor=self.theme["tree_view"]["alignment"][col])# stretch=tk.NO
+        #end
+
+        # Add the right-click binding
+        self.tree.bind("<Button-3>", self.show_tree_popup_menu_callback)
+
+        # Create the column visibility variables
+        self.column_visible = {col: tk.BooleanVar(value=self.theme["tree_view"]["column_visibility"][col]) for col in self.columns}
+
+        # Load default visibility settings for columns from configuration
+        for col in self.tree["columns"]:
+            self.column_visible[col] = tk.BooleanVar(value=self.config.getboolean('ColumnsVisibility', col))
+            self.toggle_column_visibility(col)# Update the columns
+        #end
+
+        # Column Sorting
+        for col in self.columns:
+            self.tree.heading(col, text=self.theme["tree_view"]["heading"][col], command=lambda col=col: self.sort_column(col))
+        #end
+        self.sortColumn = ""
+        self.sortDirection = ""
+
+        # Vertical scrollbar column -----------------
+        # Create a scrollbar for the tree view widget (table) :TODO make it automatic
+        self.tree_scrollbar = ttk.Scrollbar(frame, orient="vertical", command=self.tree.yview)
+        self.tree_scrollbar.grid(row=0, column=TC, sticky=(tk.N, tk.S))
+        self.tree.configure(yscrollcommand=self.tree_scrollbar.set)
+
+# ---------------------------------------------------------------------------
 
 ## Main Application window
-class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
+class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
 # === Application Stage 1: Initialization functions ===
 
     # Class Constructor: Creates the application, loads theme and configuration also adds global keybindings
@@ -229,53 +281,6 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
             #end
         #end
     #end
-
-    def createVideoItemDisplayContainer(self,frame,TC):
-                # Get tree view column headings
-        self.columns = tuple(self.theme["tree_view"]["heading"].keys())
-
-        # Custom style for the tree view widget
-        style = ttk.Style()
-        style.configure("Treeview", background=self.theme["tree_view"]["colors"]["background"])
-        style.map("Treeview", background=[("selected", self.theme["tree_view"]["colors"]["selected"])])
-        style.configure("Treeview", foreground=self.theme["global"]["colors"]["button_text"])
-        style.map("Treeview", foreground=[("selected", self.theme["tree_view"]["colors"]["selected_text"])])
-
-        # Creating the Tree view widget (table)
-        self.tree = ttk.Treeview(frame, columns=self.columns, show="headings", height=25, style="Treeview")
-        self.tree.grid(row=0, column=0, columnspan=TC, sticky=(tk.N, tk.S, tk.E, tk.W))
-        self.tree.bind('<<TreeviewSelect>>', self.on_treeview_selection)
-
-        # Assign labels and widths to the tree view columns
-        for col in self.columns:
-            self.tree.heading(col, text=self.theme["tree_view"]["heading"][col],anchor="center")#,anchor=self.theme["tree_view"]["alignment"][col]
-            self.tree.column(col, width=self.theme["tree_view"]["column_width"][col],anchor=self.theme["tree_view"]["alignment"][col])# stretch=tk.NO
-        #end
-
-        # Add the right-click binding
-        self.tree.bind("<Button-3>", self.show_tree_popup_menu_callback)
-
-        # Create the column visibility variables
-        self.column_visible = {col: tk.BooleanVar(value=self.theme["tree_view"]["column_visibility"][col]) for col in self.columns}
-
-        # Load default visibility settings for columns from configuration
-        for col in self.tree["columns"]:
-            self.column_visible[col] = tk.BooleanVar(value=self.config.getboolean('ColumnsVisibility', col))
-            self.toggle_column_visibility(col)# Update the columns
-        #end
-
-        # Column Sorting
-        for col in self.columns:
-            self.tree.heading(col, text=self.theme["tree_view"]["heading"][col], command=lambda col=col: self.sort_column(col))
-        #end
-        self.sortColumn = ""
-        self.sortDirection = ""
-
-        # Vertical scrollbar column -----------------
-        # Create a scrollbar for the tree view widget (table) :TODO make it automatic
-        self.tree_scrollbar = ttk.Scrollbar(frame, orient="vertical", command=self.tree.yview)
-        self.tree_scrollbar.grid(row=0, column=TC, sticky=(tk.N, tk.S))
-        self.tree.configure(yscrollcommand=self.tree_scrollbar.set)
 
     # Create the window and all widgets
     def create_widgets(self):
