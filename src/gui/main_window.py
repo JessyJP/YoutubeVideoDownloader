@@ -230,17 +230,8 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
     #end
 
-    # Create the window and all widgets
-    def create_widgets(self):
-        window_padding = self.theme['global']['window']['padding']
-        TC = 50;# Total number of columns
-
-        # Create the window frame
-        frame = ttk.Frame(self)
-        frame.grid(column=0, row=0, sticky=(tk.N, tk.S, tk.E, tk.W), padx=window_padding, pady=window_padding)
-
-        # First row -----------------
-        # Get tree view column headings
+    def createVideoItemDisplayContainer(self,frame,TC):
+                # Get tree view column headings
         self.columns = tuple(self.theme["tree_view"]["heading"].keys())
 
         # Custom style for the tree view widget
@@ -285,6 +276,18 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         self.tree_scrollbar = ttk.Scrollbar(frame, orient="vertical", command=self.tree.yview)
         self.tree_scrollbar.grid(row=0, column=TC, sticky=(tk.N, tk.S))
         self.tree.configure(yscrollcommand=self.tree_scrollbar.set)
+
+    # Create the window and all widgets
+    def create_widgets(self):
+        window_padding = self.theme['global']['window']['padding']
+        TC = 50;# Total number of columns
+
+        # Create the window frame
+        frame = ttk.Frame(self)
+        frame.grid(column=0, row=0, sticky=(tk.N, tk.S, tk.E, tk.W), padx=window_padding, pady=window_padding)
+
+        # First row -----------------
+        self.createVideoItemDisplayContainer(frame,TC)
 
         # Second row -----------------
         # Add a label for the input text field
