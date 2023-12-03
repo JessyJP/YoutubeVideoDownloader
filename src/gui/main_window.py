@@ -425,6 +425,64 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
         #end
     #end
 
+    # ------ Callback for handling hotkey press callbacks -------
+    def number_key_context_menu_shortcut_callback(self, event):
+        # Only use the shortcut key if no process is running
+        if self.active_process_flag:
+            return
+        #end
+        from functools import partial
+        # Extract the key symbol (number) from the event
+        pressed_number = event.keysym
+
+        def dummy_case():
+            pass
+        #end
+        def call_switch_case(switch_group, case):
+            return switch_group.get(case, dummy_case)()
+        #end
+
+        # Check for modifier keys
+        modifiers = ""
+        switch_group = {}
+        if event.state & 0x0001:  # Shift key
+            modifiers += "Shift+"
+        #end
+
+        if event.state & 0x0004:  # Control key
+            modifiers += "Ctrl+"
+        #end
+
+        if (event.state & 0x0008 or event.state & 0x0080 or 
+            event.state & 0x20000 or event.state & 0x20004 ):  # Alt key (different codes on different systems)
+            modifiers += "Alt+"
+        #end
+
+        if modifiers == '':  # No modifier case
+            switch_group = {
+                '1': partial(self.change_download_status, COMBINED_SYMBOL, "on"),
+                '2': partial(self.change_download_status, COMBINED_SYMBOL, "off"),
+                '3': partial(self.change_download_status, AUDIO_ONLY_SYMBOL),
+                '4': partial(self.change_download_status, VIDEO_ONLY_SYMBOL),
+                '5': partial(self.change_download_status, SUBTITLES_ONLY_SYMBOL),
+                '6': partial(self.change_download_status, THUMBNAIL_SYMBOL),
+                '7': partial(self.change_download_status, INFO_SYMBOL),
+                '8': partial(self.change_download_status, COMMENTS_SYMBOL),
+                '0': partial(self.change_download_status_clearall)
+            }
+        #end
+
+        call_switch_case(switch_group,pressed_number)
+
+        # def print_hex(value):
+        #     hex_value = hex(value)
+        #     print(f"The hexadecimal representation of {value} is: {hex_value}")
+        # #end
+
+        # print_hex(event.state)
+        print(f"{modifiers}Number {pressed_number} pressed")
+    #end
+
 # === Application Stage 4: Youtube Video table Info user manipulation ===
     # ------ Callbacks and companion functions for the tree view columns Context menu -------
     # Add a show popup menu method callback
@@ -579,63 +637,6 @@ class YouTubeDownloaderGUI(tk.Tk,VideoListManager):
 
         # Keep track of the sorting column
         self.sortColumn = col
-    #end
-
-    def number_key_context_menu_shortcut_callback(self, event):
-        # Only use the shortcut key if no process is running
-        if self.active_process_flag:
-            return
-        #end
-        from functools import partial
-        # Extract the key symbol (number) from the event
-        pressed_number = event.keysym
-
-        def dummy_case():
-            pass
-        #end
-        def call_switch_case(switch_group, case):
-            return switch_group.get(case, dummy_case)()
-        #end
-
-        # Check for modifier keys
-        modifiers = ""
-        switch_group = {}
-        if event.state & 0x0001:  # Shift key
-            modifiers += "Shift+"
-        #end
-
-        if event.state & 0x0004:  # Control key
-            modifiers += "Ctrl+"
-        #end
-
-        if (event.state & 0x0008 or event.state & 0x0080 or 
-            event.state & 0x20000 or event.state & 0x20004 ):  # Alt key (different codes on different systems)
-            modifiers += "Alt+"
-        #end
-
-        if modifiers == '':  # No modifier case
-            switch_group = {
-                '1': partial(self.change_download_status, COMBINED_SYMBOL, "on"),
-                '2': partial(self.change_download_status, COMBINED_SYMBOL, "off"),
-                '3': partial(self.change_download_status, AUDIO_ONLY_SYMBOL),
-                '4': partial(self.change_download_status, VIDEO_ONLY_SYMBOL),
-                '5': partial(self.change_download_status, SUBTITLES_ONLY_SYMBOL),
-                '6': partial(self.change_download_status, THUMBNAIL_SYMBOL),
-                '7': partial(self.change_download_status, INFO_SYMBOL),
-                '8': partial(self.change_download_status, COMMENTS_SYMBOL),
-                '0': partial(self.change_download_status_clearall)
-            }
-        #end
-
-        call_switch_case(switch_group,pressed_number)
-
-        # def print_hex(value):
-        #     hex_value = hex(value)
-        #     print(f"The hexadecimal representation of {value} is: {hex_value}")
-        # #end
-
-        # print_hex(event.state)
-        print(f"{modifiers}Number {pressed_number} pressed")
     #end
 
     # ------ Callbacks and companion functions for the tree view rows selection and deselection -------
