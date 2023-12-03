@@ -156,20 +156,6 @@ class VideoItemDisplayContainer():
         popup.tk_popup(event.x_root, event.y_root)
     #end
 
-    def show_context_menu(self, event):
-        widget = event.widget
-        context_menu = tk.Menu(self, tearoff=0)
-        context_menu.add_command(label="Undo", command=lambda: widget.event_generate("<<Undo>>"))
-        context_menu.add_command(label="Redo", command=lambda: widget.event_generate("<<Redo>>"))
-        context_menu.add_separator()
-        context_menu.add_command(label="Cut", command=lambda: widget.event_generate("<<Cut>>"))
-        context_menu.add_command(label="Copy", command=lambda: widget.event_generate("<<Copy>>"))
-        context_menu.add_command(label="Paste", command=lambda: widget.event_generate("<<Paste>>"))
-        context_menu.add_separator()
-        context_menu.add_command(label="Select All", command=lambda: widget.select_range(0, tk.END))
-        context_menu.tk.call("tk_popup", context_menu, event.x_root, event.y_root)
-    #end
-
     # A method to toggle the column visibility
     def toggle_column_visibility(self, col):
         visibility = self.column_visible[col].get()
@@ -755,6 +741,20 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
 
         # print_hex(event.state)
         print(f"{modifiers}Number {pressed_number} pressed")
+    #end
+
+    def show_context_menu(self, event):
+        widget = event.widget
+        context_menu = tk.Menu(self, tearoff=0)
+        context_menu.add_command(label="Undo", command=lambda: widget.event_generate("<<Undo>>"))
+        context_menu.add_command(label="Redo", command=lambda: widget.event_generate("<<Redo>>"))
+        context_menu.add_separator()
+        context_menu.add_command(label="Cut", command=lambda: widget.event_generate("<<Cut>>"))
+        context_menu.add_command(label="Copy", command=lambda: widget.event_generate("<<Copy>>"))
+        context_menu.add_command(label="Paste", command=lambda: widget.event_generate("<<Paste>>"))
+        context_menu.add_separator()
+        context_menu.add_command(label="Select All", command=lambda: widget.select_range(0, tk.END))
+        context_menu.tk.call("tk_popup", context_menu, event.x_root, event.y_root)
     #end
 
     # --- get methods for the association between the GUI table and the info list
