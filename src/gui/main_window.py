@@ -554,7 +554,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         # Create an input text field
         self.url_entry = tk.Entry(frame)
         self.url_entry.grid(column=1, row=1,columnspan=TC-2, sticky=(tk.W, tk.E), padx=(0, 0), pady=10)
-        self.url_entry.bind("<Button-3>", self.show_context_menu)
+        self.url_entry.bind("<Button-3>", self.show_text_edit_context_menu)
 
 
         # Create buttons
@@ -603,7 +603,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         self.download_location_entry = tk.Entry(frame)
         self.download_location_entry.grid(column=5, row=2,columnspan=TC-6, sticky=(tk.W, tk.E), padx=(0, 0))
         self.download_location_entry.insert(0, self.config.get("General", "last_download_location"))
-        self.download_location_entry.bind("<Button-3>", self.show_context_menu)
+        self.download_location_entry.bind("<Button-3>", self.show_text_edit_context_menu)
 
         # Bind the events to the button
         self.settings_button.bind("<Enter>", self.on_settings_button_hover)
@@ -743,7 +743,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         print(f"{modifiers}Number {pressed_number} pressed")
     #end
 
-    def show_context_menu(self, event):
+    def show_text_edit_context_menu(self, event):
         widget = event.widget
         context_menu = tk.Menu(self, tearoff=0)
         context_menu.add_command(label="Undo", command=lambda: widget.event_generate("<<Undo>>"))
