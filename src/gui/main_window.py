@@ -100,6 +100,9 @@ class VideoItemDisplayContainer():
         self.tree_scrollbar.grid(row=0, column=TC, sticky=(tk.N, tk.S))
         self.tree.configure(yscrollcommand=self.tree_scrollbar.set)
 
+        return self.tree
+    #end
+
 # === Application Stage 4: Youtube Video table Info user manipulation ===
     # ------ Callbacks and companion functions for the tree view columns Context menu -------
     # Add a show popup menu method callback
@@ -546,7 +549,9 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         # First row -----------------
         # Pre-initialize display container inherited fields that are used here and potentially in the sub-window(s)
         self.column_visible = {}
-        self.createVideoItemDisplayContainer(frame,TC)
+        self.dispTable = self.createVideoItemDisplayContainer(frame,TC)
+        # Self-reference because instead of inheritance the container may be instantiated instead # TODO: check
+        self.container = self
 
         # Second row -----------------
         # Add a label for the input text field
