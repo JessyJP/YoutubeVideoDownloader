@@ -544,6 +544,8 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         frame.grid(column=0, row=0, sticky=(tk.N, tk.S, tk.E, tk.W), padx=window_padding, pady=window_padding)
 
         # First row -----------------
+        # Pre-initialize display container inherited fields that are used here and potentially in the sub-window(s)
+        self.column_visible = {}
         self.createVideoItemDisplayContainer(frame,TC)
 
         # Second row -----------------
