@@ -146,9 +146,9 @@ class VideoItemDisplayContainer():
             popup.add_separator()
             popup.add_command(label="Remove Selected Entries",   command=lambda: self.remove_table_entry_selection(), state=_state)
 
-            # Add a separator and the copy_selected_entries section
+            # Add a separator and the copy_selected_entries_to_text_callback section
             popup.add_separator()
-            popup.add_command(label="Copy Selected Entries", command=self.copy_selected_entries)
+            popup.add_command(label="Copy Selected Entries as text", command=self.copy_selected_entries_to_text_callback)
             popup.add_command(label=f"Play Preview {selected_items_count} item(s) in Local player", command=self.play_selected_watch_urls_locally)
             popup.add_command(label=f"Show preview selected thumbnails", command=self.open_selected_thumbnails_urls_locally)
         #end
@@ -874,7 +874,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     #end
 
 
-    def copy_selected_entries(self, event=None):
+    def copy_selected_entries_to_text_callback(self, event=None):
         selected_items = self.tree.selection()
         text_to_copy = []
 
