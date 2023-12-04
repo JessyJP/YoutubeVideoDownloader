@@ -797,14 +797,14 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
 
     # --- get methods for the association between the GUI table and the info list
 
-    def get_video_info_by_entry(self, item) -> Union[VideoInfo, None]:
-        # Get the video_id associated with the selected tree view item
-        video_id = self.container.get_UiItmField(item, 'video_id')
-        # Get the index of the selected tree view item
-        item_index = self.dispTable.index(item)
+    def get_video_info_by_entry(self, ui_item_id) -> Union[VideoInfo, None]:
+        # Get the video_id associated with the selected tree view container index
+        video_id = self.container.get_UiItmField(ui_item_id, 'video_id')
+        # Get the video item list index of the selected tree container item index
+        item_container_index = self.dispTable.index(ui_item_id)
 
         # Use the getItemByIndexOrVideoID function to find the VideoInfo object
-        video_info = self.getItemByIndexOrVideoID(video_id, item_index)
+        video_info = self.getItemByIndexOrVideoID(video_id, item_container_index)
 
         return video_info
     #end
@@ -815,20 +815,20 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
             return None
         #end
 
-        # Try to find the tree view item by index first
+        # Try to find the tree view UI item by index first
         index = self.getItemIndex(video_info)
         if index != -1:
-            item = self.container.get_all_items()[index]
+            ui_item = self.container.get_all_items()[index]
             # Check if the video_id matches
-            if self.container.get_UiItmField(item, 'video_id') == video_info.video_id:
-                return item
+            if self.container.get_UiItmField(ui_item, 'video_id') == video_info.video_id:
+                return ui_item
             #end
         #end
 
         # If the index method fails or video_id doesn't match, search exhaustively
-        for item in self.container.get_all_items():
-            if self.container.get_UiItmField(item, 'video_id') == video_info.video_id:
-                return item
+        for ui_item in self.container.get_all_items():
+            if self.container.get_UiItmField(ui_item, 'video_id') == video_info.video_id:
+                return ui_item
             #end
         #end
 
@@ -842,8 +842,8 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         self.container.remove(*self.container.get_all_items())
 
         # Re-insert all entries from the table
-        for info in self.getVideoList():
-            self.container.add(info)
+        for videoInfoItem in self.getVideoList():
+            self.container.add(videoInfoItem)
         #end
     #end
 
@@ -853,9 +853,9 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         #end
         selected_items = self.container.get_selection()
 
-        for item in selected_items:
+        for sel_id in selected_items:
             # Find the corresponding VideoInfo object
-            video_info = self.get_video_info_by_entry(item)
+            video_info = self.get_video_info_by_entry(sel_id)
 
             if video_info is not None:
                 self.removeItem(video_info)
@@ -863,27 +863,27 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
                 raise ValueError("VideoInfo not found for the selected tree view item!")
             #end
 
-            self.container.remove(item)
+            self.container.remove(sel_id)
         #end
     #end
 
     def change_download_status(self, symbol, state="toggle"):
         selected_items = self.container.get_selection()
 
-        for item in selected_items:
-            new_status = updateOutputKeepsStr(self.container.get_UiItmField(item, 'download_status'), symbol, state)
+        for ui_item in selected_items:
+            new_status = updateOutputKeepsStr(self.container.get_UiItmField(ui_item, 'download_status'), symbol, state)
 
             # Find the corresponding VideoInfo object (handle) and update its download state
-            video_info = self.get_video_info_by_entry(item)
+            video_info = self.get_video_info_by_entry(ui_item)
             if video_info is None:
-                raise(f"Error: VideoInfo object not found for item '{item}'")
+                raise(f"Error: VideoInfo object not found for UI item '{ui_item}'")
             #end
 
             # Update download state of the video info in the handle table entry 
             video_info.download_status = new_status
 
-            # Update the download status of the selected item in the tree view
-            self.container.set_UiItmField(item, 'download_status', new_status)
+            # Update the download status of the selected UI item in the tree view
+            self.container.set_UiItmField(ui_item, 'download_status', new_status)
         #end
     #end
 
@@ -892,21 +892,21 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         symbol_list = MediaSymbols.get_all_symbol_values_as_list()
         state = "off"
 
-        for item in selected_items:
+        for ui_item in selected_items:
             for symbol in symbol_list:
-                new_status = updateOutputKeepsStr(self.container.get_UiItmField(item, 'download_status'), symbol, state)
+                new_status = updateOutputKeepsStr(self.container.get_UiItmField(ui_item, 'download_status'), symbol, state)
 
                 # Find the corresponding VideoInfo object (handle) and update its download state
-                video_info = self.get_video_info_by_entry(item)
+                video_info = self.get_video_info_by_entry(ui_item)
                 if video_info is None:
-                    raise(f"Error: VideoInfo object not found for item '{item}'")
+                    raise(f"Error: VideoInfo object not found for UI item '{ui_item}'")
                 #end
 
                 # Update download state of the video info in the handle table entry 
                 video_info.download_status = new_status
 
-                # Update the download status of the selected item in the tree view
-                self.container.set_UiItmField(item, 'download_status', new_status)
+                # Update the download status of the selected UI item in the tree view
+                self.container.set_UiItmField(ui_item, 'download_status', new_status)
             #end
         #end
     #end
@@ -1033,20 +1033,20 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     def getURL_videoIDList(self):# TODO it's best to extract that from the self.getVideoList()
         current_url_entries = set()
         current_video_ids = set()
-        for item in self.container.get_all_items():  # Update the urls and the entries
-            current_url_entries.add(self.container.get_UiItmField_byColInd(item,self.COLUMN_INDEX_URL))
-            current_video_ids.add(self.container.get_UiItmField_byColInd(item,self.COLUMN_INDEX_VIDEO_ID))
+        for ui_item in self.container.get_all_items():  # Update the urls and the entries
+            current_url_entries.add(self.container.get_UiItmField_byColInd(ui_item,self.COLUMN_INDEX_URL))
+            current_video_ids.add(self.container.get_UiItmField_byColInd(ui_item,self.COLUMN_INDEX_VIDEO_ID))
         #end
         return current_url_entries, current_video_ids
     #end
 
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
-    def addItem(self, vi_item):
-        super().addItem(vi_item)
-        self.container.add(vi_item)
+    def addItem(self, video_info_item):
+        super().addItem(video_info_item)
+        self.container.add(video_info_item)
         # # Add the URL and video ID to the current_url_entries and current_video_ids sets
-        # current_url_entries.add(vi_item.watch_url) # NOTE: effective placeholder because it's not inserted or  returned
-        # current_video_ids.add(vi_item.video_id) # NOTE: effective placeholder because it's not inserted or  returned
+        # current_url_entries.add(video_info_item.watch_url) # NOTE: effective placeholder because it's not inserted or  returned
+        # current_video_ids.add(video_info_item.video_id) # NOTE: effective placeholder because it's not inserted or  returned
     #end
 
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
