@@ -5,7 +5,14 @@
 
 **Youtube Downloader Deluxe** is a powerful and feature-rich software that allows you to easily download your favorite YouTube videos. With its user-friendly interface and advanced capabilities, it stands out as one of the best YouTube downloaders available today.
 
-![Screenshot](images/Preview.png)
+Desktop verion:
+![Screenshot](images/Preview_GUI.png)
+
+Web application/ Docker web-application version:
+![Screenshot](images/Preview_web_composite.png)
+
+Mobile application version:
+![Screenshot](images/Preview_mobile_app.png)
 
 ## Features
 
