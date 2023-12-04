@@ -799,9 +799,9 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
 
     def get_video_info_by_entry(self, item) -> Union[VideoInfo, None]:
         # Get the video_id associated with the selected tree view item
-        video_id = self.tree.set(item, 'video_id')
+        video_id = self.container.get_UiItmField(item, 'video_id')
         # Get the index of the selected tree view item
-        item_index = self.tree.index(item)
+        item_index = self.dispTable.index(item)
 
         # Use the getItemByIndexOrVideoID function to find the VideoInfo object
         video_info = self.getItemByIndexOrVideoID(video_id, item_index)
@@ -818,16 +818,16 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         # Try to find the tree view item by index first
         index = self.getItemIndex(video_info)
         if index != -1:
-            item = self.tree.get_children()[index]
+            item = self.container.get_all_items()[index]
             # Check if the video_id matches
-            if self.tree.set(item, 'video_id') == video_info.video_id:
+            if self.container.get_UiItmField(item, 'video_id') == video_info.video_id:
                 return item
             #end
         #end
 
         # If the index method fails or video_id doesn't match, search exhaustively
-        for item in self.tree.get_children():
-            if self.tree.set(item, 'video_id') == video_info.video_id:
+        for item in self.container.get_all_items():
+            if self.container.get_UiItmField(item, 'video_id') == video_info.video_id:
                 return item
             #end
         #end
@@ -839,11 +839,11 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     # ------ Callbacks and companion functions for the tree view rows operations Context menu or Key Bindings -------
     def updateTreeViewFromVideoInfoTable(self):
         # Clear the tree view
-        self.tree.delete(*self.tree.get_children())
+        self.container.remove(*self.container.get_all_items())
 
         # Re-insert all entries from the table
         for info in self.getVideoList():
-            self.tree.insert("", "end", values=info.as_tuple())
+            self.container.add(info)
         #end
     #end
 
@@ -851,7 +851,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         if self.active_process_flag:
             return
         #end
-        selected_items = self.tree.selection()
+        selected_items = self.container.get_selection()
 
         for item in selected_items:
             # Find the corresponding VideoInfo object
@@ -863,15 +863,15 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
                 raise ValueError("VideoInfo not found for the selected tree view item!")
             #end
 
-            self.tree.delete(item)
+            self.container.remove(item)
         #end
     #end
 
     def change_download_status(self, symbol, state="toggle"):
-        selected_items = self.tree.selection()
+        selected_items = self.container.get_selection()
 
         for item in selected_items:
-            new_status = updateOutputKeepsStr(self.tree.set(item, 'download_status'), symbol, state)
+            new_status = updateOutputKeepsStr(self.container.get_UiItmField(item, 'download_status'), symbol, state)
 
             # Find the corresponding VideoInfo object (handle) and update its download state
             video_info = self.get_video_info_by_entry(item)
@@ -883,18 +883,18 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
             video_info.download_status = new_status
 
             # Update the download status of the selected item in the tree view
-            self.tree.set(item, 'download_status', new_status)
+            self.container.set_UiItmField(item, 'download_status', new_status)
         #end
     #end
 
     def change_download_status_clearall(self):
-        selected_items = self.tree.selection()
+        selected_items = self.container.get_selection()
         symbol_list = MediaSymbols.get_all_symbol_values_as_list()
         state = "off"
 
         for item in selected_items:
             for symbol in symbol_list:
-                new_status = updateOutputKeepsStr(self.tree.set(item, 'download_status'), symbol, state)
+                new_status = updateOutputKeepsStr(self.container.get_UiItmField(item, 'download_status'), symbol, state)
 
                 # Find the corresponding VideoInfo object (handle) and update its download state
                 video_info = self.get_video_info_by_entry(item)
@@ -906,7 +906,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
                 video_info.download_status = new_status
 
                 # Update the download status of the selected item in the tree view
-                self.tree.set(item, 'download_status', new_status)
+                self.container.set_UiItmField(item, 'download_status', new_status)
             #end
         #end
     #end
@@ -935,7 +935,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     # ------ Callback for calling external player to open the selected watch URLs -------
     def play_selected_watch_urls_locally(self, event=None) -> None:
         # Get the currently selected items
-        selected_items = self.tree.selection()
+        selected_items = self.container.get_selection()
 
         # Get the list of watch URLs from the selected items
         watch_urls = [self.get_video_info_by_entry(item).watch_url for item in selected_items]
@@ -955,7 +955,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
 
     def open_selected_thumbnails_urls_locally(self, event=None) -> None:
         # Get the currently selected items
-        selected_items = self.tree.selection()
+        selected_items = self.container.get_selection()
 
         # Get the list of watch URLs from the selected items
         thumbnail_url = [self.get_video_info_by_entry(item).thumbnail_url for item in selected_items]
@@ -1033,9 +1033,9 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     def getURL_videoIDList(self):# TODO it's best to extract that from the self.getVideoList()
         current_url_entries = set()
         current_video_ids = set()
-        for item in self.tree.get_children():  # Update the urls and the entries
-            current_url_entries.add(self.tree.item(item)["values"][self.COLUMN_INDEX_URL])
-            current_video_ids.add(self.tree.item(item)["values"][self.COLUMN_INDEX_VIDEO_ID])
+        for item in self.container.get_all_items():  # Update the urls and the entries
+            current_url_entries.add(self.container.get_UiItmField_byColInd(item,self.COLUMN_INDEX_URL))
+            current_video_ids.add(self.container.get_UiItmField_byColInd(item,self.COLUMN_INDEX_VIDEO_ID))
         #end
         return current_url_entries, current_video_ids
     #end
@@ -1043,7 +1043,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def addItem(self, vi_item):
         super().addItem(vi_item)
-        self.tree.insert("", "end", values=vi_item.as_tuple())
+        self.container.add(vi_item)
         # # Add the URL and video ID to the current_url_entries and current_video_ids sets
         # current_url_entries.add(vi_item.watch_url) # NOTE: effective placeholder because it's not inserted or  returned
         # current_video_ids.add(vi_item.video_id) # NOTE: effective placeholder because it's not inserted or  returned
@@ -1054,17 +1054,17 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         super().remove_duplicate_items()
         # Get the current video IDs in the tree view
         current_video_ids = set()
-        for item in self.tree.get_children():
-            current_video_ids.add(self.tree.item(item)["values"][self.COLUMN_INDEX_VIDEO_ID])
+        for item in self.container.get_all_items():
+            current_video_ids.add(self.container.get_UiItmField_byColInd(item, self.COLUMN_INDEX_VIDEO_ID))
         #end
         
         # Check each row in the tree view and remove duplicates
-        for item in self.tree.get_children():
-            video_id = self.tree.item(item)["values"][self.COLUMN_INDEX_VIDEO_ID]
+        for item in self.container.get_all_items():
+            video_id = self.container.get_UiItmField_byColInd(item,self.COLUMN_INDEX_VIDEO_ID)
             if video_id in current_video_ids:
                 current_video_ids.remove(video_id)
             else:
-                self.tree.delete(item)
+                self.container.remove(item)
             #end
         #end
     #end
@@ -1166,7 +1166,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         self.status_bar_label.config(text=msg)
         self.progress_bar_msg.set(msg)# TODO: may be redundant 
         self.update_idletasks();# Update the GUI
-        self.tree.update_idletasks();# Update the GUI
+        self.container.update_idletasks();#NOTE: Update the GUI with a specific for the implementation method
     #end
 
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
@@ -1189,9 +1189,9 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         # Update the download status. Sometimes the download status contains download flags.
         # Therefore, in some situations the download status is updated only for the UI. 
         if download_status is None:
-            self.tree.set(ui_item, 'download_status', videoItem.download_status)
+            self.container.set_UiItmField(ui_item, 'download_status', videoItem.download_status)
         else:
-            self.tree.set(ui_item, 'download_status', download_status)
+            self.container.set_UiItmField(ui_item, 'download_status', download_status)
 
         # Also update the global download progress
         self.update_download_progress()
