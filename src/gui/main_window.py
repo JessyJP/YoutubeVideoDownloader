@@ -915,15 +915,14 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
 
 
     def copy_selected_entries_to_text_callback(self, event=None):
-        selected_items = self.tree.selection()
         text_to_copy = []
 
         # Get the list of visible columns
-        visible_columns = [col for col in self.tree["columns"] if self.tree.column(col, "width") > 0]
+        visible_columns = [col for col in self.dispTable["columns"] if self.column_visible[col].get()]# self.dispTable.column(col, "width") > 0
 
-        for item in selected_items:
-            item_values = self.tree.item(item)['values']
-            visible_item_values = [str(item_values[i]) for i, col in enumerate(self.tree["columns"]) if col in visible_columns]
+        for item in self.container.get_selection():
+            item_values = self.dispTable.item(item)['values']
+            visible_item_values = [str(item_values[i]) for i, col in enumerate(self.dispTable["columns"]) if col in visible_columns]
             item_text = "\t".join(visible_item_values)
             text_to_copy.append(item_text)
         #end
