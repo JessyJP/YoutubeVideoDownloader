@@ -103,6 +103,35 @@ class VideoItemDisplayContainer():
         return self.tree
     #end
 
+    # ------ The basic get/set/add/remove interfacing methods with the container -------
+    def get_all_items(self):
+        return self.tree.get_children()
+    #end
+
+    def get_selection(self):
+        return self.tree.selection()
+    #end
+
+    def add(self,item):
+        self.tree.insert("", "end", values=item.as_tuple())
+        
+
+    def remove(self, items):
+        self.tree.delete(items)
+    #end
+
+    def get_UiItmField(self, ui_item_id, field):
+        return self.tree.set(ui_item_id, field)
+    #end
+    
+    def set_UiItmField(self, ui_item_id, field, value):
+        self.tree.set(ui_item_id, field, value)
+    #end
+
+    def get_UiItmField_byColInd(self, ui_item, col_index):
+        return self.tree.item(ui_item)["values"][col_index]
+    #end
+        
 # === Application Stage 4: Youtube Video table Info user manipulation ===
     # ------ Callbacks and companion functions for the tree view columns Context menu -------
     # Add a show popup menu method callback
@@ -121,7 +150,7 @@ class VideoItemDisplayContainer():
             #end
         else:
             # Get the number of selected items
-            selected_items_count = len(self.tree.selection())
+            selected_items_count = len(self.get_selection())
 
             # Create the popup menu
             popup = tk.Menu(self, tearoff=0)
@@ -164,7 +193,7 @@ class VideoItemDisplayContainer():
         visibility = self.column_visible[col].get()
 
         if visibility:
-            width_ = self.theme["tree_view"]["column_width"][col]
+            width_ = self.theme["tree_view"]["column_width"][col]#NOTE:_EXTERNAL_METHOD_
             stretch_ = True
         else:
             width_ = 0
@@ -174,7 +203,7 @@ class VideoItemDisplayContainer():
         self.tree.column(col, width=width_, minwidth=0,stretch=stretch_)
     #end
 
-    # Add a sort_column method
+    # Add a sort column method
     def sort_column(self, col):
         # Sorting variables
         sortDirections = ["asc", "desc"]
@@ -182,7 +211,7 @@ class VideoItemDisplayContainer():
 
         # First remove the symbol from the heading
         if self.sortColumn != "":
-            self.tree.heading(self.sortColumn, text=self.theme["tree_view"]["heading"][self.sortColumn])
+            self.tree.heading(self.sortColumn, text=self.theme["tree_view"]["heading"][self.sortColumn])#NOTE:_EXTERNAL_METHOD_
         #end
 
         # If the same column is selected, alternate the sorting direction
@@ -235,27 +264,28 @@ class VideoItemDisplayContainer():
         #end
 
         # Update the status message to indicate the sorting column
-        self.setUiDispStatus( f"Sorting by: {col} in "+heading_symbol+" direction")
+        self.setUiDispStatus( f"Sorting by: {col} in "+heading_symbol+" direction")#NOTE:_EXTERNAL_METHOD_
 
         # Include a sorting direction symbol to the heading
         heading_text = self.theme["tree_view"]["heading"][col]
-        self.tree.heading(col,  text=heading_text +" "+ heading_symbol)
+        self.tree.heading(col,  text=heading_text +" "+ heading_symbol)#NOTE:_EXTERNAL_METHOD_
 
         # Keep track of the sorting column
         self.sortColumn = col
     #end
 
     # ------ Callbacks and companion functions for the tree view rows selection and deselection -------
+
     def select_all_entries(self, event=None):
-        items = self.tree.get_children()
+        items = self.get_all_items()
         for item in items:
             self.tree.selection_add(item)
         #end
     #end
 
     def on_treeview_selection(self, event):
-        selected_items = self.tree.selection()
-        total_items = len(self.tree.get_children())
+        selected_items = self.get_selection()
+        total_items = len(self.get_all_items())
 
         if len(selected_items) == 1:
             item = selected_items[0]
@@ -265,7 +295,7 @@ class VideoItemDisplayContainer():
             msg = f"Selected {len(selected_items)} of {total_items} items"
         #end
 
-        self.setUiDispStatus( msg)
+        self.setUiDispStatus( msg)#NOTE:_EXTERNAL_METHOD_
     #end
 
     def extend_selection(self, event):
@@ -273,7 +303,7 @@ class VideoItemDisplayContainer():
             return
         #end
         #TODO function needs to be fixed
-        cur_selection = self.tree.selection()
+        cur_selection = self.get_selection()
 
         if event.keysym == 'Up':
             first_selected = cur_selection[0]
@@ -315,7 +345,7 @@ class VideoItemDisplayContainer():
             self.selection_direction = None
         #end
 
-        cur_selection = self.tree.selection()
+        cur_selection = self.get_selection()
         if cur_selection:
             if not self.selection_anchor:
                 self.selection_anchor = cur_selection[0]
@@ -331,7 +361,7 @@ class VideoItemDisplayContainer():
 
     def move_selection(self, direction: str, event=None):
         # TODO: this needs to be fixed, it skips one entry
-        selected_items = self.tree.selection()
+        selected_items = self.get_selection()
         if selected_items:
             if direction == 'up':
                 target_item = self.tree.prev(selected_items[0])
@@ -355,6 +385,7 @@ class VideoItemDisplayContainer():
         self.move_selection('down', event)
     #end
 
+#end
 # ---------------------------------------------------------------------------
 
 ## Main Application window
