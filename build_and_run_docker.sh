@@ -9,4 +9,4 @@ fi
 sudo docker build -t youtube-downloader .
 
 # Run the Docker container
-sudo docker run -p 8080:8080 -v /home/jp/youtube_download_tmp:/app/tmp --name youtube-downloader-container youtube-downloader
+sudo docker run -p 8080:8080 -v ~/youtube_download_tmp:/app/tmp --name youtube-downloader-container youtube-downloader
