@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  youtube-downloader:
+    build: .
+    container_name: youtube-downloader-container
+    ports:
+      - "8080:8080"
+    volumes:
+      - ~/youtube_download_tmp:/app/tmp
+    restart: always # "no" 
