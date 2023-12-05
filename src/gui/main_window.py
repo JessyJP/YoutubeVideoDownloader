@@ -149,40 +149,7 @@ class VideoItemDisplayContainer():
                 popup.add_checkbutton(label=text, variable=self.column_visible[col], command=lambda col=col: self.toggle_column_visibility(col))
             #end
         else:
-            # Get the number of selected items
-            selected_items_count = len(self.get_selection())
-
-            # Create the popup menu
-            popup = tk.Menu(self, tearoff=0)
-
-            # Add the message about the selected items count
-            popup.add_command(label=f"{selected_items_count} item(s) selected", state='disabled')
-            popup.add_separator()
-
-            if self.active_process_flag:
-                _state="disabled"
-            else:
-                _state="normal"
-            #end
-            # Add download status options
-            popup.add_command(label="Download Status: Pending "+COMBINED_SYMBOL, command=lambda: self.change_download_status(COMBINED_SYMBOL,"on"), state=_state)
-            popup.add_command(label="Download Status: Skip ", command=lambda: self.change_download_status(COMBINED_SYMBOL,"off"), state=_state)
-            popup.add_separator()
-            popup.add_command(label="Keep Audio Only: Toggle Add/Remove "+AUDIO_ONLY_SYMBOL,  command=lambda: self.change_download_status(AUDIO_ONLY_SYMBOL), state=_state)
-            popup.add_command(label="Keep Video Only: Toggle Add/Remove "+VIDEO_ONLY_SYMBOL,  command=lambda: self.change_download_status(VIDEO_ONLY_SYMBOL), state=_state)
-            popup.add_command(label="Keep All Subtitles Only: Toggle Add/Remove "+SUBTITLES_ONLY_SYMBOL,  command=lambda: self.change_download_status(SUBTITLES_ONLY_SYMBOL), state=_state)
-            popup.add_command(label="Keep Thumbnail:   Toggle Add/Remove "+THUMBNAIL_SYMBOL,   command=lambda: self.change_download_status(THUMBNAIL_SYMBOL), state=_state)
-            popup.add_command(label="Keep Info:       Toggle Add/Remove "+INFO_SYMBOL,        command=lambda: self.change_download_status(INFO_SYMBOL), state=_state)
-            popup.add_command(label="Keep Comments:   Toggle Add/Remove "+COMMENTS_SYMBOL,    command=lambda: self.change_download_status(COMMENTS_SYMBOL), state=_state)
-            popup.add_command(label="Clear All Keeps",   command=lambda: self.change_download_status_clearall(), state=_state)
-            popup.add_separator()
-            popup.add_command(label="Remove Selected Entries",   command=lambda: self.remove_table_entry_selection(), state=_state)
-
-            # Add a separator and the copy_selected_entries_to_text_callback section
-            popup.add_separator()
-            popup.add_command(label="Copy Selected Entries as text", command=self.copy_selected_entries_to_text_callback)
-            popup.add_command(label=f"Play Preview {selected_items_count} item(s) in Local player", command=self.play_selected_watch_urls_locally)
-            popup.add_command(label=f"Show preview selected thumbnails", command=self.open_selected_thumbnails_urls_locally)
+            popup = self.show_container_item_context_menu()#NOTE:_EXTERNAL_METHOD_
         #end
 
         popup.tk_popup(event.x_root, event.y_root)
@@ -793,6 +760,45 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         context_menu.add_separator()
         context_menu.add_command(label="Select All", command=lambda: widget.select_range(0, tk.END))
         context_menu.tk.call("tk_popup", context_menu, event.x_root, event.y_root)
+    #end
+
+    def show_container_item_context_menu(self):
+        # Get the number of selected items
+        selected_items_count = len(self.get_selection())
+
+        # Create the popup menu
+        popup = tk.Menu(self, tearoff=0)
+
+        # Add the message about the selected items count
+        popup.add_command(label=f"{selected_items_count} item(s) selected", state='disabled')
+        popup.add_separator()
+
+        if self.active_process_flag:
+            _state="disabled"
+        else:
+            _state="normal"
+        #end
+        # Add download status options
+        popup.add_command(label="Download Status: Pending "+COMBINED_SYMBOL, command=lambda: self.change_download_status(COMBINED_SYMBOL,"on"), state=_state)
+        popup.add_command(label="Download Status: Skip ", command=lambda: self.change_download_status(COMBINED_SYMBOL,"off"), state=_state)
+        popup.add_separator()
+        popup.add_command(label="Keep Audio Only: Toggle Add/Remove "+AUDIO_ONLY_SYMBOL,  command=lambda: self.change_download_status(AUDIO_ONLY_SYMBOL), state=_state)
+        popup.add_command(label="Keep Video Only: Toggle Add/Remove "+VIDEO_ONLY_SYMBOL,  command=lambda: self.change_download_status(VIDEO_ONLY_SYMBOL), state=_state)
+        popup.add_command(label="Keep All Subtitles Only: Toggle Add/Remove "+SUBTITLES_ONLY_SYMBOL,  command=lambda: self.change_download_status(SUBTITLES_ONLY_SYMBOL), state=_state)
+        popup.add_command(label="Keep Thumbnail:   Toggle Add/Remove "+THUMBNAIL_SYMBOL,   command=lambda: self.change_download_status(THUMBNAIL_SYMBOL), state=_state)
+        popup.add_command(label="Keep Info:       Toggle Add/Remove "+INFO_SYMBOL,        command=lambda: self.change_download_status(INFO_SYMBOL), state=_state)
+        popup.add_command(label="Keep Comments:   Toggle Add/Remove "+COMMENTS_SYMBOL,    command=lambda: self.change_download_status(COMMENTS_SYMBOL), state=_state)
+        popup.add_command(label="Clear All Keeps",   command=lambda: self.change_download_status_clearall(), state=_state)
+        popup.add_separator()
+        popup.add_command(label="Remove Selected Entries",   command=lambda: self.remove_table_entry_selection(), state=_state)
+
+        # Add a separator and the copy_selected_entries_to_text_callback section
+        popup.add_separator()
+        popup.add_command(label="Copy Selected Entries as text", command=self.copy_selected_entries_to_text_callback)
+        popup.add_command(label=f"Play Preview {selected_items_count} item(s) in Local player", command=self.play_selected_watch_urls_locally)
+        popup.add_command(label=f"Show preview selected thumbnails", command=self.open_selected_thumbnails_urls_locally)
+
+        return popup
     #end
 
     # --- get methods for the association between the GUI table and the info list
