@@ -14,6 +14,8 @@ Web application/ Docker web-application version:
 Mobile application version:
 ![Screenshot](images/Preview_mobile_app.png)
 
++++ TODO: put an image here of the mobile application
+
 ## Features
 
 - Intuitive and easy-to-use graphical interface
@@ -71,7 +73,13 @@ With the virtual environment activated, install all the required dependencies li
 ```bash
 pip install -r versioned_requirements.txt
 ```
-This command will install the exact versions of the dependencies required for the project.
+This command will install the exact versions of the dependencies required for the project.\
+It may also be ncessary to install FFMPEG. 
+In **Linux** you can run the command:
+```bash
+sudo apt-get update && apt-get install -y ffmpeg
+```
+or download the binaries for your system from http://ffmpeg.org.
 
 ### Step 3: Making an executable package on your platform
 Once all dependencies are installed, you can run the `make.py` script:
@@ -96,12 +104,11 @@ This will execute the script and perform the make and packaging tasks defined in
   * You can also use it as a web application or cloud application and serve it via a webpage.
 * You can also run all those options directly from python without "Step 3" from terminal or IDE. For easy quick start run:
   ```bash
-  python run_app.py # will run the GUI by default.
+  python run_app_gui.py # will run the GUI by default.
   ```
   You can also run the actual starting point from inside src.
   ```bash
-  cd src
-  python YouTubeDownloader.py
+  python ./src/YouTubeDownloader.py
   ```
 ### Additional Notes
 
@@ -124,8 +131,54 @@ Alternativley you can use the docker compose file with with optionally detached 
 ```bash
 docker-compose up --build -d
 ```
+# Installation Guide for Compiling Kivy Application for Android
 
-### Step 6: Mobile app deployment
+This guide provides detailed instructions on setting up your environment to compile a Kivy application for Android.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Python**: Python 3.x is required. Download and install from [python.org](https://www.python.org/downloads/).
+- **Kivy**: Install Kivy following the instructions on the [Kivy website](https://kivy.org/doc/stable/gettingstarted/installation.html).
+- **Java Development Kit (JDK)**: JDK 8 is required. You can install it on Ubuntu using `sudo apt install openjdk-8-jre-headless`.
+- **Android SDK and NDK**: These will be downloaded automatically by Buildozer, but you can also install them manually if preferred.
+- **Cython**: Required for compiling Python into C. Install via pip with `pip install Cython`.
+- **Buildozer**: Install Buildozer via pip with `pip install buildozer`.
+
+
+## Mobile app deployment
+
+### Setting Up the Environment
+1. **Install Java Development Kit (JDK)**:
+    ```bash
+    sudo apt install openjdk-17-jre-headless
+    ```
+2. **Install Additional Dependencies in the Virtual Environment**:
+    ```bash
+    pip install kivy
+    pip install buildozer
+    pip install Cython
+    ```
+3. **Configure Buildozer**:
+  * Navigate to your project directory.
+  * Run buildozer init to create a buildozer.spec file.
+  * Edit the buildozer.spec file to configure your build.
+4. **Compile the Application**:
+   ```bash
+   buildozer -v android debug
+   ```
+### Troubleshooting
+
+- If you encounter any issues with installation, check the official documentation of each tool or consult their respective communities.
+- Ensure your `PATH` variable includes Python and Java paths.
+- For common issues with Kivy or Buildozer, refer to their FAQs or community forums.
+
+### Additional Resources
+
+- [Kivy Documentation](https://kivy.org/doc/stable/)
+- [Buildozer GitHub Repository](https://github.com/kivy/buildozer)
+
 
 ## Current State of Development TODO(s)
 
