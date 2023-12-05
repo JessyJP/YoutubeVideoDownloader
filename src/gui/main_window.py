@@ -862,7 +862,9 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
             else:
                 raise ValueError("VideoInfo not found for the selected tree view item!")
             #end
+        #end
 
+        for sel_id in selected_items:
             self.container.remove(sel_id)
         #end
     #end
