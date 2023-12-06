@@ -47,6 +47,7 @@ import shutil
 import pyperclip
 import configparser
 import inspect
+import warnings
 # TODO: check the imports for redundancy or unused ones
 
 # ---------------------------------------------------------------------------
@@ -875,6 +876,36 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         #end
     #end
 
+    def consistency_check(self):
+        # Consistency check to see if the number of entries in the container is the same as the number of video info items
+        while (not (len(self.container.get_all_items()) == len(self.infoList)) ):
+            # Inform the consistency check has been performed
+            warningStr = f" Consistency check found mismatch - the UI container has {len(self.container.get_all_items())} items and video item list has {len(self.infoList)} items!"
+            warnings.warn(warningStr, RuntimeWarning)
+            
+            # Get the current video IDs from the tree view container
+            current_video_ids_from_container = {self.container.get_UiItmField_byColInd(ui_item, self.COLUMN_INDEX_VIDEO_ID) for ui_item in self.container.get_all_items()}
+
+            # Get the current video IDs in the video info list
+            current_video_ids_from_item_list = {item.video_id for item in self.getVideoList()}
+            # Check if the two sets of IDs match. The 2 sets, current_video_ids_from_container and current_video_ids_from_item_list, have to be identical
+
+            if current_video_ids_from_container != current_video_ids_from_item_list:
+                raise ValueError("Consistency check failed: The list of video IDs in the container does not match the list in the video info list.")
+            #end
+        
+            # This will independently remove the duplicates in the UI container and the video list 
+            self.remove_duplicate_items()
+
+            # TODO: (Unused) Update the container from the video info table
+            # self.updateTreeViewFromVideoInfoTable()
+
+            # Inform the consistency check has been performed
+            warningStr = f" After - Consistency check performed a pass container UI has {len(self.container.get_all_items())} items and video item list has {len(self.infoList)} items!"
+            warnings.warn(warningStr, RuntimeWarning)
+        #end
+    #end
+
     def change_download_status(self, symbol, state="toggle"):
         selected_items = self.container.get_selection()
 
@@ -1246,6 +1277,9 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     #end
 
     def enable_UI_elements_after_download(self):
+        # Before reenabling the UI do a container - video list consistency check
+        self.consistency_check()
+
         self.active_process_flag = False
         self.reset_cancel_flag()
 
