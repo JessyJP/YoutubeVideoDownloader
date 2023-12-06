@@ -32,6 +32,7 @@ from core.download_options import DownloadProgress
 from core.pytube_handler import LimitsAndPriority, VideoInfo
 import shutil
 from time import sleep
+import warnings
 
 from core.custom_thread import CustomThread # TODO:NOTE could be named "CustomThreading" too
 from core.validation_methods import checkForValidYoutubeURLs, is_valid_youtube_channel, is_valid_youtube_playlist
@@ -74,12 +75,19 @@ class VideoListManager:
             return self.infoList[index]
         #end
 
+        # Warning if the first check fails
+        warnings.warn(f"Initial search by index {index} failed, performing exhaustive search.", RuntimeWarning)
+
         # If the index is not valid or the video_id doesn't match, search exhaustively
-        for video_info in self.infoList:
+        for idx, video_info in enumerate(self.infoList):
             if video_info.video_id == video_id:
+                warnings.warn(f"Found video at index {idx} instead of {index}.", RuntimeWarning)
                 return video_info
             #end
         #end
+
+        # Warning if the first check fails
+        warnings.warn("Initial search by index failed, performing exhaustive search.", RuntimeWarning)
 
         # If no match is found, return None
         return None
