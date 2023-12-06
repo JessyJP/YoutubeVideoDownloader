@@ -90,35 +90,40 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         # super().__init__()
         # print(YouTubeDownloaderGUI.__mro__)
 
-        tk.Tk.__init__(self)
+        KivyApp.__init__(self)
         VideoListManager.__init__(self)
 
         # First Load configuration file 
         self.config_file = 'config.ini'
         self.load_config()
 
-        # Do further configuration
-        self.columnconfigure(0, weight=1)
-        self.rowconfigure(0, weight=1)
-
         # Load the theme from the configuration file 
         self.load_theme()
-        # Create the main window
-        self.create_widgets()
 
         # Bind various key combinations
         self.bind_keys_from_config()
-
-        # At the end also add main window closing callback
-        self.protocol("WM_DELETE_WINDOW", self.close_application_window)
-
+        
         # Flagging variable
         self.cancel_flag = False #TODO: check if this is needed in the download manager
         self.active_process_flag = False# TODO: maybe have to rename this flag to process_running flag instead
 
         # Some settings
-        self.COLUMN_INDEX_URL = 1  # Assuming the URL is the 2nd -1 column in the tree view
-        self.COLUMN_INDEX_VIDEO_ID = 10  # Assuming the video ID is the 11th -1 column in the tree view
+        # TODO: this reference might have to be reworked and the get by column id removed
+        self.COLUMN_INDEX_URL = "watch_url"  # Assuming the URL is the 2nd -1 column in the tree view
+        self.COLUMN_INDEX_VIDEO_ID = "video_id"  # Assuming the video ID is the 11th -1 column in the tree view
+    #end
+
+    def build(self):
+        # self.geometry(f"{self.theme['global']['window']['width']}x{self.theme['global']['window']['height']}") # TODO: move those to the build function  
+
+        # Create the main window
+        UI = self.create_widgets()
+
+        # TODO: is that needed
+        # At the end also add main window closing callback
+        # self.protocol("WM_DELETE_WINDOW", self.close_application_window)
+
+        return UI
     #end
 
     # Handle window closing
@@ -136,7 +141,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
 
         # Save configuration and close the window
         self.save_config()
-        self.destroy()
+        self.destroy() # TODO: check if this method is in KIVY
     #end
 
     # Load configuration which is used to preserve and import configuration variables
