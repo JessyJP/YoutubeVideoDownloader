@@ -345,106 +345,153 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     # Create the window and all widgets
     def create_widgets(self):
         window_padding = self.theme['global']['window']['padding']
-        TC = 50;# Total number of columns
+        TC = 50  # Total number of columns
+        elH = 50 # Element height
 
-        # Create the window frame
-        frame = ttk.Frame(self)
-        frame.grid(column=0, row=0, sticky=(tk.N, tk.S, tk.E, tk.W), padx=window_padding, pady=window_padding)
+        # Main vertical layout
+        main_layout = BoxLayout(orientation='vertical', spacing=10, padding=window_padding, size_hint_x=1)# size_hint_y=1
+        
+        # Main window layout adjustments -----------------
+        
+        # Initialize the main window layout and background color properties
+        with main_layout.canvas.before:
+            Color(rgba=hex_to_rgba(self.theme["global"]["colors"]["background"]))
+            self.rect = Rectangle(size=main_layout.size, pos=main_layout.pos)
+        
+        # Update size and position of rectangle on layout updates
+        def update_main_rect(instance, value):
+            if self.rect:
+                self.rect.pos = instance.pos
+                self.rect.size = instance.size
+        main_layout.bind(pos=update_main_rect, size=update_main_rect)
+        
+
+        # TODO: is that needed
+        def on_window_resize(self, instance, new_size):
+            # Method called when window is resized
+            self.container.update_container_layout()
+            # TODO adjustment for all other elements 
+
+        # # Bind method to window resize event
+        # Window.bind(size=on_window_resize)
+        
+            
 
         # First row -----------------
+        self.columns = tuple(self.theme["container"]["heading"].keys())# TODO: or initialize here ???
         # Pre-initialize display container inherited fields that are used here and potentially in the sub-window(s)
-        self.column_visible = {}
-        self.dispTable = self.createVideoItemDisplayContainer(frame,TC)
+        self.column_visible = {}# TODO Check for consistency in the rest of the code
+        self.container_layout = self.createVideoItemDisplayContainer(TC, self.theme)# TODO Check for consistency in the rest of the code
         # Self-reference because instead of inheritance the container may be instantiated instead # TODO: check
         self.container = self
 
+        # Add treeview to the main layout
+        main_layout.add_widget(self.container_layout)# TODO check to rename maybe, instead of "dispTable" we could say recycler view or scroll view 
+
+        # Adjust container size based on window size
+        self.container.update_container_layout(None, Window.size)# TODO initial resize
+
         # Second row -----------------
-        # Add a label for the input text field
-        url_label = ttk.Label(frame,  text=self.theme["texts"]["url_label"])
-        url_label.grid(column=0, row=1, sticky=tk.W, pady=10)
+        # URL input and Analyse button in a horizontal layout
+        analysis_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=elH, size_hint_x=1)
+
+        # Add a label for the URL input field
+        self.url_label = Label(text=self.theme["texts"]["url_label"], size_hint_x=None, width=150, color=self.theme["global"]["colors"]["labels"])
+        analysis_layout.add_widget(self.url_label)
 
         # Create an input text field
-        self.url_entry = tk.Entry(frame)
-        self.url_entry.grid(column=1, row=1,columnspan=TC-2, sticky=(tk.W, tk.E), padx=(0, 0), pady=10)
-        self.url_entry.bind("<Button-3>", self.show_text_edit_context_menu)
+        self.url_input = TextInput(size_hint_x=1)  # Takes the remaining space
+        self.url_input.bind(on_text_validate=self.show_text_edit_context_menu) #TODO: this need to be reimplemented
+        analysis_layout.add_widget(self.url_input)
 
+        # Create Analyse button
+        self.analyse_button = Button(text=self.theme["texts"]["analyse_button"], size_hint_x=None, width=150)
+        self.analyse_button.bind(on_press=self.process_input_text_callback)
+        analysis_layout.add_widget(self.analyse_button)
 
-        # Create buttons
-        self.analyse_button = ttk.Button(frame, text=self.theme["texts"]["analyse_button"], command=self.process_input_text_callback)
-        self.analyse_button.grid(column=TC-1, row=1, sticky=tk.E, padx=(0, 0))
+        main_layout.add_widget(analysis_layout)
 
         # Third row -----------------
-        # Create settings button with a gear icon (existing code)
-        icon_path = f"{self.theme['global']['directories']['icons']}{self.theme['icons']['settings_button']}"
-        self.settings_icon = tk.PhotoImage(file=icon_path)
-        self.settings_button = ttk.Button(frame, image=self.settings_icon)
-        self.settings_button.grid(column=0, row=2, sticky=tk.W)
+        # Settings, limiters and download location and button in a horizontal layout
+        download_layoutA = BoxLayout(orientation='horizontal', size_hint_y=None, height=elH, size_hint_x=1)
+        download_layoutB = BoxLayout(orientation='horizontal', size_hint_y=None, height=elH, size_hint_x=1)
+        #### TODO: single line layout hack !
+        download_layoutB = download_layoutA
+        main_layout.add_widget(download_layoutA)
+        ####
+
+        # Settings button
+        self.settings_button = Button(text='Settings', size_hint_y=None, height=elH , size_hint_x=None, width=100)
+        self.settings_button.bind(on_press=self.open_settings)
+        download_layoutA.add_widget(self.settings_button)
 
         # Create a play item selection locally button. This sends the items to the local video player.
         # NOTE: this currently works only with PotPlayer installed
-        self.playSelectionLocal_button = ttk.Button(frame, text="   Play Preview \n Selection Locally",command=self.play_selected_watch_urls_locally)
-        self.playSelectionLocal_button.grid(column=0, row=2, sticky=tk.W, padx=(45, 0))
+        self.playSelectionLocal_button = Button( text="   Play Preview \n Selection Locally" , size_hint_y=None, height=elH, size_hint_x=None, width=150)
+        self.playSelectionLocal_button.bind(on_press=self.play_selected_watch_urls_locally)
+        download_layoutA.add_widget(self.playSelectionLocal_button)
 
         # Add dropdown boxes for quality limiters
+        # Dropdowns for Quality Limiters in a horizontal layout
+        limiters_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=elH, size_hint_x=None, width=330)
+        
+        # Initialize Spinners with values from lists
+        self.audio_spinner = Spinner(values=BitrateList, text=self.config.get("DownloadSettings", "audio_bitrate"), size_hint=(None, 1), width=100)
+        self.video_spinner = Spinner(values=ResolutionList, text=self.config.get("DownloadSettings", "video_bitrate"), size_hint=(None, 1), width=100)
+        self.fps_spinner = Spinner(values=FPSList, text=self.config.get("DownloadSettings", "fps"), size_hint=(None, 1), width=100)
 
-        # self.download_limiter_label = ttk.Label(frame, text="Download limiters:")
-        # self.download_limiter_label.grid(column=0, row=2, sticky=(tk.W, tk.E), padx=(60, 0))
-
-        audio_bitrate_list = [self.config.get("DownloadSettings", "audio_bitrate")]+ BitrateList
-        video_resolution_list = [self.config.get("DownloadSettings", "video_bitrate")] + ResolutionList
-        fps_value_list = [self.config.get("DownloadSettings", "fps")] + FPSList
-
-        self.dropdown_audio_limiter_selection = tk.StringVar(value=audio_bitrate_list[0])
-        self.dropdown_video_limiter_selection = tk.StringVar(value=video_resolution_list[0])
-        self.dropdown_fps_limiter_selection = tk.StringVar(value=fps_value_list[0])
-
-        self.dropdown_audio_limiter = ttk.OptionMenu(frame, self.dropdown_audio_limiter_selection, *audio_bitrate_list)
-        self.dropdown_video_limiter = ttk.OptionMenu(frame, self.dropdown_video_limiter_selection, *video_resolution_list)
-        self.dropdown_fps_limiter = ttk.OptionMenu(frame, self.dropdown_fps_limiter_selection, *fps_value_list)
-
-        self.dropdown_audio_limiter.grid(row=2, column=1, padx=(0, 0), pady=5, sticky="w")
-        self.dropdown_video_limiter.grid(row=2, column=2, padx=(0, 0), pady=5, sticky="w")
-        self.dropdown_fps_limiter.grid(row=2, column=3, padx=(0, 0), pady=5, sticky="w")
-        # TODO:NOTE: on change callbacks could be implemented for the dropdowns. Thus updating the and correctly showing the actual download size. 
+        # Add Spinners to the layout
+        limiters_layout.add_widget(self.audio_spinner)
+        limiters_layout.add_widget(self.video_spinner)
+        limiters_layout.add_widget(self.fps_spinner)
+        download_layoutA.add_widget(limiters_layout)
 
         # Create the "Select Download Location" button
-        self.select_location_button = ttk.Button(frame, text=self.theme["texts"]["select_location_button"], command=self.open_select_location_dialog)
-        self.select_location_button.grid(column=4, row=2, sticky=tk.W, padx=(0, 0))
+        self.select_location_button = Button( text=self.theme["texts"]["select_location_button"] , size_hint_y=None, height=elH, size_hint_x=None, width=220)
+        self.select_location_button.bind(on_press=self.open_select_location_dialog)
+        download_layoutB.add_widget(self.select_location_button)
 
         # Create the "Selected Download Location" text field
-        self.download_location_entry = tk.Entry(frame)
-        self.download_location_entry.grid(column=5, row=2,columnspan=TC-6, sticky=(tk.W, tk.E), padx=(0, 0))
-        self.download_location_entry.insert(0, self.config.get("General", "last_download_location"))
-        self.download_location_entry.bind("<Button-3>", self.show_text_edit_context_menu)
-
-        # Bind the events to the button
-        self.settings_button.bind("<Enter>", self.on_settings_button_hover)
-        self.settings_button.bind("<Leave>", self.on_settings_button_leave)
-        self.settings_button.bind("<Button-1>", self.on_settings_button_click)
+        self.download_location_input = TextInput(size_hint_y=None, height=elH, text=self.config.get("General", "last_download_location"))
+        download_layoutB.add_widget(self.download_location_input)
 
         # Create the "Download" button
-        self.download_button = ttk.Button(frame, text=self.theme["texts"]["download_button"], command=self.download_all_entries_callback)
-        self.download_button.grid(column=TC-1, row=2, sticky=tk.E, padx=(0, 0))
+        self.download_button = Button( text=self.theme["texts"]["download_button"], size_hint_y=None, height=elH, width=150)
+        self.download_button.bind(on_press=self.download_all_entries_callback)
+        download_layoutB.add_widget(self.download_button)
+
+        #### TODO: single line layout hack disables this!
+        # download_layout_Mix = BoxLayout(orientation='horizontal', size_hint_y=None, height=elH, size_hint_x=1)
+        # download_layout_Mix.add_widget(download_layoutA)
+        # download_layout_Mix.add_widget(download_layoutB)
+        # main_layout.add_widget(download_layout_Mix)
+        ####
 
         # Forth row -----------------
-        # Create a progress bar widget
-        self.progress_bar_msg = tk.StringVar()#TODO: may be redundant
-        self.progress_bar = ttk.Progressbar(self, orient="horizontal", length=200, mode="determinate",variable=self.progress_bar_msg)
-        self.progress_bar.grid(column=0, row=3, columnspan=TC, sticky=(tk.W, tk.E))
+        # Use a BoxLayout for each widget with padding and background color
+        # Progress bar container
+        progress_bar_container = BoxLayout(size_hint_y=None, height=elH, padding=[10, 5], size_hint_x=1)
+        with progress_bar_container.canvas.before:
+            Color(rgba=hex_to_rgba("#FF0000"))  # Red background for progress bar
+            Rectangle(size=progress_bar_container.size, pos=progress_bar_container.pos)
 
-        # Create the "Diagnostic out label" label and text field
-        self.status_bar_label = ttk.Label(frame, text="")
-        self.status_bar_label.grid(column=0, row=3, columnspan=TC, sticky=(tk.W, tk.E))
+        self.progress_bar = ProgressBar(max=100)
+        progress_bar_container.add_widget(self.progress_bar)
+        main_layout.add_widget(progress_bar_container)
 
-        # self.view_button = ttk.Button(self, text="Switch View", command=self.toggle_view)
-        # self.view_button.grid(column=1, row=2, sticky=tk.E, padx=(0, 0))
-        # TODO: experimental option to change the viewing table to a card based or alternative
+        # Status label container
+        status_label_container = BoxLayout(size_hint_y=None, height=elH, padding=[10, 5], size_hint_x=1)
+        with status_label_container.canvas.before:
+            Color(rgba=hex_to_rgba("#00FF00"))  # Green background for status label
+            Rectangle(size=status_label_container.size, pos=status_label_container.pos)
 
-        # Configure column and row weights
-        for i in range(TC):
-            frame.columnconfigure(i, weight=1)
-        #end
-        frame.rowconfigure(0, weight=1)
+        self.status_bar_label = Label(text='', color=self.theme["global"]["colors"]["labels"])
+        status_label_container.add_widget(self.status_bar_label)
+        main_layout.add_widget(status_label_container)
+
+        # Return -----------------
+
+        return main_layout
     #end
 
 # === Application Stage 2: Settings & Configuration setup window functions & dialogs  ===
