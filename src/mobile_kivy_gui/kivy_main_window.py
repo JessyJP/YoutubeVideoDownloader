@@ -230,16 +230,14 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         self.theme["filename"] = theme_file
 
         application_window_icon_path = f"{self.theme['global']['directories']['icons']}{self.theme['icons']['application_window']}"
-        if sys.platform != "win32":
-            img = tk.PhotoImage(file=application_window_icon_path.replace(".ico", ".png"))
-            self.tk.call('wm', 'iconphoto', self._w, img)
-        else:
-            self.iconbitmap(application_window_icon_path)
+        # if sys.platform != "win32":
+        application_window_icon_path = application_window_icon_path.replace(".ico", ".png")
         #end
+        # Set the icon
+        Window.icon = application_window_icon_path
 
-        self.title(self.theme["window_title"])
-        self.configure(bg=self.theme["global"]["colors"]["background"])
-        self.geometry(f"{self.theme['global']['window']['width']}x{self.theme['global']['window']['height']}")  
+        # Set the window title
+        Window.title = self.theme["window_title"]
     #end
 
     # Bind keys according to the configuration file
@@ -249,6 +247,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
             self.load_config()
         #end
 
+        self.keybindings_map = {}
         # Load key bindings from config file
         keybindings = self.config["KeyBindings"]
         for key, value in keybindings.items():
@@ -260,9 +259,87 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
                     raise AttributeError(f"{callbackName.strip()} is not a valid callback function name in {self.config_file}.")
                 #end
                 # Add key binding to application
-                self.bind(keybindingCombo, getattr(self, callbackName))
+                self.keybindings_map[keybindingCombo] = getattr(self, callbackName)
             #end
         #end
+        Window.bind(on_keyboard=self.key_press_event_handler)
+    #end
+
+    def key_press_event_handler(self, window, keycode, keyname , character, modifier_tuple):
+        # Internal formatting function
+        def format_key_combo(keycode, keyname , character, modifier_tuple):
+            modifiers = [*modifier_tuple]
+            # ------------------------------------------------------
+            def debugKeyPressMessage(keycode, keyname , character, modifiers, formatted_key_command):
+                print('--------------------------------------')
+                print('The key', keycode, 'have been pressed')
+                print(' - keyname is %r' % keyname)
+                print(' - character are %r' % character)
+                try:
+                    prstr = f' - modifier is  {modifiers}'  
+                    print(prstr)
+                except: 
+                    pass
+                print('=>>> - key command are %r' % formatted_key_command)
+                # TODO: this function needs to be revised and fixed for all cases
+                # TODO: the print diagnostic section is temporary
+            # ------------------------------------------------------
+            
+            # Make a standard event #TODO might be needed potentially
+            # event.keysym = character
+            # Use simple namespace here        
+
+            if 'capslock' in modifiers:
+                try:
+                    character = character.capitalize()
+                except:
+                    pass
+            #end
+
+            # Convert special keys to pseudo-character strings, such as used in Tk, or otherwise in the config file
+            if keycode == 127:# Delete key
+                character = "Delete"
+            elif keycode == 27:# Escape key # TODO: mapped to exiting/closing the application in Kivy
+                character = "Escape"
+            elif keycode == 283:# F1 key # TODO: mapped to Kivy device configuration, use F2 substitute mapping
+                character = "F1"
+            elif keycode == 273:# Up key
+                character = "Up"
+            elif keycode == 274:# Down key
+                character = "Down"
+            elif keycode == 0:# KeyPress mouse key # TODO: not used in this callback
+                character = ""
+            elif keycode == 0:# KeyRelease mouse key # TODO: not used in this callback
+                character = ""
+            elif keyname == 101:# Menu key #NOTE: using keyname instead of code
+                character = "Menu"
+            elif keycode == 9:# Tab key
+                character = "Tab"
+            #end
+
+            formatted_key_command = f"<{character}>" # Will always return a string (something)
+            if 'ctrl' in modifiers:
+                formatted_key_command = f"<Control-{character}>"
+            elif 'shift' in modifiers:
+                formatted_key_command = f"<Shift-{character}>"
+            elif 'alt' in modifiers:
+                formatted_key_command = f"<Alt-{character}>"
+            #end
+
+            debugKeyPressMessage(keycode, keyname , character, modifiers, formatted_key_command)
+            # Return the key/key-combo
+            return formatted_key_command
+        #end
+        
+        key_combo = format_key_combo(keycode, keyname , character, modifier_tuple)
+        if key_combo and key_combo in self.keybindings_map:
+            callback = self.keybindings_map[key_combo]
+            if callback:
+                callback(None)
+                return True
+            #end
+        #end
+        return False
     #end
 
     # Create the window and all widgets
