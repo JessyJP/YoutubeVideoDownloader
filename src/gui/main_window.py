@@ -1256,19 +1256,19 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         # Disable the analyze button
         self.analyse_button.config(state='disabled')
 
-        # Disable the select download location button
-        self.select_location_button.config(state='disabled')
-
-        # Disable the download location text field
-        self.download_location_entry.config(state='disabled')
+        # Disable the settings button
+        self.settings_button.config(state='disabled')
 
         # Disable the limiter dropdowns
         self.dropdown_audio_limiter.config(state='disabled')
         self.dropdown_video_limiter.config(state='disabled')
         self.dropdown_fps_limiter.config(state='disabled')
 
-        # Disable the settings button
-        self.settings_button.config(state='disabled')
+        # Disable the select download location button
+        self.select_location_button.config(state='disabled')
+
+        # Disable the download location text field
+        self.download_location_entry.config(state='disabled')
 
         # Change the download button text to cancel
         self.download_button.config(text=self.theme["texts"]["download_cancel_button"])
@@ -1289,19 +1289,19 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         # Enable the analyze button
         self.analyse_button.config(state='normal')
 
-        # Enable the select download location button
-        self.select_location_button.config(state='normal')
-
-        # Enable the download location text field
-        self.download_location_entry.config(state='normal')
-
+        # Enable the settings button
+        self.settings_button.config(state='normal')
+        
         # Enable the limiter dropdowns
         self.dropdown_audio_limiter.config(state='normal')
         self.dropdown_video_limiter.config(state='normal')
         self.dropdown_fps_limiter.config(state='normal')
 
-        # Enable the settings button
-        self.settings_button.config(state='normal')
+        # Enable the select download location button
+        self.select_location_button.config(state='normal')
+
+        # Enable the download location text field
+        self.download_location_entry.config(state='normal')
 
         # Revert the download button text to the original
         self.download_button.config(text=self.theme["texts"]["download_button"])
