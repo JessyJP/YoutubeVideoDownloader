@@ -563,7 +563,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         self.url_input.bind("<Button-3>", self.show_text_edit_context_menu)
 
 
-        # Create buttons
+        # Create Analyse button
         self.analyse_button = ttk.Button(frame, text=self.theme["texts"]["analyse_button"], command=self.process_input_text_callback)
         self.analyse_button.grid(column=TC-1, row=1, sticky=tk.E, padx=(0, 0))
 
@@ -846,7 +846,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     # ------ Callbacks and companion functions for the tree view rows operations Context menu or Key Bindings -------
     def updateTreeViewFromVideoInfoTable(self):
         # Clear the tree view
-        self.container.remove(*self.container.get_all_items())
+        self.container.remove(*self.container.get_all_items())#  TODO throws an error to fix. Currently unsued
 
         # Re-insert all entries from the table
         for videoInfoItem in self.getVideoList():
@@ -1090,13 +1090,13 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def remove_duplicate_items(self):
         super().remove_duplicate_items()
-        # Get the current video IDs in the tree view
+        # Get the current video IDs in the tree view container
         current_video_ids = set()
         for item in self.container.get_all_items():
             current_video_ids.add(self.container.get_UiItmField_byColInd(item, self.COLUMN_INDEX_VIDEO_ID))
         #end
         
-        # Check each row in the tree view and remove duplicates
+        # Check each row in the tree view container and remove duplicates
         for item in self.container.get_all_items():
             video_id = self.container.get_UiItmField_byColInd(item,self.COLUMN_INDEX_VIDEO_ID)
             if video_id in current_video_ids:
@@ -1137,14 +1137,14 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         # Get video fps
         limits_and_priority.fps = self.dropdown_fps_limiter_selection.get().replace("fps","").strip()
         
-        # Parse audio format priority into a list
+        # Parse audio format priority into a list from config
         audio_format_priority_str = self.config.get("DownloadSettings", "audio_format_priority")
         limits_and_priority.audio_format_priority = [format.strip() for format in audio_format_priority_str.split(",")]
-        
-        # Parse video format priority into a list
+
+        # Parse video format priority into a list from config
         video_format_priority_str = self.config.get("DownloadSettings", "video_format_priority")
         limits_and_priority.video_format_priority = [format.strip() for format in video_format_priority_str.split(",")]
-        
+
         limits_and_priority.to_numeric()
         return limits_and_priority
     #end
