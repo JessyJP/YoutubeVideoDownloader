@@ -437,7 +437,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         theme_directory = self.config.get(section, 'theme_directory')
         self.config.set(section, 'theme_directory', theme_directory)
         self.config.set(section, 'theme', self.theme["filename"])
-        self.config.set(section, "last_download_location",self.download_location_entry.get())
+        self.config.set(section, "last_download_location",self.download_location_input.get())
     
         # Save default and current settings
         section =  "DownloadSettings"
@@ -558,9 +558,9 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         url_label.grid(column=0, row=1, sticky=tk.W, pady=10)
 
         # Create an input text field
-        self.url_entry = tk.Entry(frame)
-        self.url_entry.grid(column=1, row=1,columnspan=TC-2, sticky=(tk.W, tk.E), padx=(0, 0), pady=10)
-        self.url_entry.bind("<Button-3>", self.show_text_edit_context_menu)
+        self.url_input = tk.Entry(frame)
+        self.url_input.grid(column=1, row=1,columnspan=TC-2, sticky=(tk.W, tk.E), padx=(0, 0), pady=10)
+        self.url_input.bind("<Button-3>", self.show_text_edit_context_menu)
 
 
         # Create buttons
@@ -606,10 +606,10 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         self.select_location_button.grid(column=4, row=2, sticky=tk.W, padx=(0, 0))
 
         # Create the "Selected Download Location" text field
-        self.download_location_entry = tk.Entry(frame)
-        self.download_location_entry.grid(column=5, row=2,columnspan=TC-6, sticky=(tk.W, tk.E), padx=(0, 0))
-        self.download_location_entry.insert(0, self.config.get("General", "last_download_location"))
-        self.download_location_entry.bind("<Button-3>", self.show_text_edit_context_menu)
+        self.download_location_input = tk.Entry(frame)
+        self.download_location_input.grid(column=5, row=2,columnspan=TC-6, sticky=(tk.W, tk.E), padx=(0, 0))
+        self.download_location_input.insert(0, self.config.get("General", "last_download_location"))
+        self.download_location_input.bind("<Button-3>", self.show_text_edit_context_menu)
 
         # Bind the events to the button
         self.settings_button.bind("<Enter>", self.on_settings_button_hover)
@@ -685,8 +685,8 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     def open_select_location_dialog(self, event=None):
         download_location_here = filedialog.askdirectory()
         if download_location_here:
-            self.download_location_entry.delete(0, tk.END)
-            self.download_location_entry.insert(0, download_location_here)
+            self.download_location_input.delete(0, tk.END)
+            self.download_location_input.insert(0, download_location_here)
             self.update_idletasks()
         #end
     #end
@@ -1021,9 +1021,9 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     #end
 
     def process_input_text_callback(self, event=None):
-        input_text = self.url_entry.get()
+        input_text = self.url_input.get()
         self.import_youtube_videos_threaded(input_text)
-        self.url_entry.delete(0, tk.END)
+        self.url_input.delete(0, tk.END)
     #end
 
     # Intermediate method to run the import operation in a separate thread
@@ -1111,10 +1111,10 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
     # ------ Callbacks and companion functions for Download, location and properties handling   -------
 
     def get_download_location(self):
-        outputdir = os.path.abspath( self.download_location_entry.get() )
+        outputdir = os.path.abspath( self.download_location_input.get() )
         if not os.path.isdir(outputdir):
             self.open_select_location_dialog()
-            outputdir = os.path.abspath( self.download_location_entry.get() )
+            outputdir = os.path.abspath( self.download_location_input.get() )
             if outputdir == "":
                 self.setUiDispStatus("Please select download location!")
                 return None
@@ -1251,7 +1251,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         self.setUiDispStatus(f"Starting Download of {len(self.getVideoList())} item(s) now!")
 
         # Disable the input URL text field
-        self.url_entry.config(state='disabled')
+        self.url_input.config(state='disabled')
 
         # Disable the analyze button
         self.analyse_button.config(state='disabled')
@@ -1268,7 +1268,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         self.select_location_button.config(state='disabled')
 
         # Disable the download location text field
-        self.download_location_entry.config(state='disabled')
+        self.download_location_input.config(state='disabled')
 
         # Change the download button text to cancel
         self.download_button.config(text=self.theme["texts"]["download_cancel_button"])
@@ -1284,7 +1284,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         self.reset_cancel_flag()
 
         # Enable the input URL text field
-        self.url_entry.config(state='normal')
+        self.url_input.config(state='normal')
 
         # Enable the analyze button
         self.analyse_button.config(state='normal')
@@ -1301,7 +1301,7 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
         self.select_location_button.config(state='normal')
 
         # Enable the download location text field
-        self.download_location_entry.config(state='normal')
+        self.download_location_input.config(state='normal')
 
         # Revert the download button text to the original
         self.download_button.config(text=self.theme["texts"]["download_button"])
