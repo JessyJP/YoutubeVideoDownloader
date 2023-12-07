@@ -1055,15 +1055,12 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     # Set/get pair functions for diagnostic output in above the progress bar
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def getUiDispStatus(self):
-        return self.status_bar_label.cget("text")
+        return self.status_bar_label.text
     #end
     
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def setUiDispStatus(self, msg: str = ""):# TODO: funcCall may be obsolete in the future
-        self.status_bar_label.config(text=msg)
-        self.progress_bar_msg.set(msg)# TODO: may be redundant 
-        self.update_idletasks();# Update the GUI
-        self.container.update_idletasks();#NOTE: Update the GUI with a specific for the implementation method
+        self.status_bar_label.text = msg
     #end
 
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
