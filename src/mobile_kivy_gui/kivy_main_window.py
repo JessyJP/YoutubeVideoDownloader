@@ -1066,14 +1066,10 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def update_progressbar(self, index_in: int, total_in :int, task_level):
         # Call the parent to compute the progress value
-        progressValue = super().update_progressbar(index_in, total_in, task_level)
+        # progressValue = super().update_progressbar(index_in, total_in, task_level)
+        progressValue = VideoListManager.update_progressbar(self, index_in, total_in, task_level)
         # Assign the value
-        self.progress_bar["value"]  = progressValue
-
-        # TODO: a bit redundant
-        self.progress_bar.update()  # Refresh the window to show the progress
-        self.progress_bar.update_idletasks()  # Refresh the window to show the progress
-        self.update()  # Refresh the window to show the progress
+        self.progress_bar.value = progressValue
     #end
 
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
