@@ -988,12 +988,12 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     def getLimitsAndPriorityFromUI(self):
         limits_and_priority = LimitsAndPriority()
 
-        # Get the audio bitrate
-        limits_and_priority.bitrate = self.dropdown_audio_limiter_selection.get().replace("kbps","").strip()
-        # Get video resolution 
-        limits_and_priority.resolution = self.dropdown_video_limiter_selection.get().replace("p","").strip()
-        # Get video fps
-        limits_and_priority.fps = self.dropdown_fps_limiter_selection.get().replace("fps","").strip()
+        # Get the audio bitrate from the Spinner
+        limits_and_priority.bitrate = self.audio_spinner.text.replace("kbps", "").strip()
+        # Get video resolution from the Spinner
+        limits_and_priority.resolution = self.video_spinner.text.replace("p", "").strip()
+        # Get video fps from the Spinner
+        limits_and_priority.fps = self.fps_spinner.text.replace("fps", "").strip()
 
         # Parse audio format priority into a list from config
         audio_format_priority_str = self.config.get("DownloadSettings", "audio_format_priority")
