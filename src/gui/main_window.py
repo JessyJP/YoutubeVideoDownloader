@@ -1132,14 +1132,15 @@ class YouTubeDownloaderGUI(tk.Tk, VideoListManager, VideoItemDisplayContainer):
 
         # Get the audio bitrate
         limits_and_priority.bitrate = self.dropdown_audio_limiter_selection.get().replace("kbps","").strip()
-        # Parse audio format priority into a list
-        audio_format_priority_str = self.config.get("DownloadSettings", "audio_format_priority")
-        limits_and_priority.audio_format_priority = [format.strip() for format in audio_format_priority_str.split(",")]
-
         # Get video resolution 
         limits_and_priority.resolution = self.dropdown_video_limiter_selection.get().replace("p","").strip()
         # Get video fps
         limits_and_priority.fps = self.dropdown_fps_limiter_selection.get().replace("fps","").strip()
+        
+        # Parse audio format priority into a list
+        audio_format_priority_str = self.config.get("DownloadSettings", "audio_format_priority")
+        limits_and_priority.audio_format_priority = [format.strip() for format in audio_format_priority_str.split(",")]
+        
         # Parse video format priority into a list
         video_format_priority_str = self.config.get("DownloadSettings", "video_format_priority")
         limits_and_priority.video_format_priority = [format.strip() for format in video_format_priority_str.split(",")]
