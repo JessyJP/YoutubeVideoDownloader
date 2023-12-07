@@ -88,3 +88,25 @@ def add_module_paths(root_dir):
         #end
     #end
 #end
+
+## ================================= Conversion  functions =================================
+def hex_to_rgba(color, default_alpha=1.0):
+    if color.startswith("rgba"):
+        # Extract numbers from rgba string
+        rgba = color.strip("rgba()").replace(" ", "").split(",")
+        r, g, b = [int(x) for x in rgba[:3]]
+        a = float(rgba[3]) if len(rgba) > 3 else default_alpha
+    elif color.startswith("#"):
+        # Strip the '#' character if it's there
+        color = color.lstrip('#')
+
+        # Convert the hex values to RGB
+        r, g, b = tuple(int(color[i:i+2], 16) for i in (0, 2, 4))
+        a = default_alpha
+    else:
+        # Handle invalid input format
+        raise ValueError("Invalid color format")
+
+    # Normalize RGB values to [0.0, 1.0] and return with alpha
+    return r / 255.0, g / 255.0, b / 255.0, a
+
