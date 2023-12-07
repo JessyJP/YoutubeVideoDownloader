@@ -873,15 +873,15 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     # ------ Callbacks and companion functions for URL insertion and analysis  -------
 
     # User Actions Callbacks
-    def paste_input_text_callback(self, event):
-        clipboard_data = self.clipboard_get()
+    def paste_input_text_callback(self, event=None):
+        clipboard_data = Clipboard.paste()
         self.import_youtube_videos_threaded(clipboard_data)
     #end
 
     def process_input_text_callback(self, event=None):
-        input_text = self.url_entry.get()
+        input_text = self.url_input.text
         self.import_youtube_videos_threaded(input_text)
-        self.url_entry.delete(0, tk.END)
+        self.url_input.text = ''
     #end
 
     # Intermediate method to run the import operation in a separate thread
