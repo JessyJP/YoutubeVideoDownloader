@@ -907,7 +907,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         # To finish up, enable the UIelements after the analysis
         if recursiveCheckOfURLcontent_mode == 0:  # This checks the recursion mode
             # Enable any ui elements
-            self.download_button.config(state='normal')# TODO: if this is removed from this class and only implemented in the child
+            self.download_button.disabled = False# TODO: if this is removed from this class and only implemented in the child
             self.enable_UI_elements_after_download()
         #end
     #end
@@ -916,7 +916,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     def process_url(self, url, use_analysis_multithreading, recursiveCheckOfURLcontent_mode):
         # Add this an interrupt that can be activated from the gui
         if self.cancel_flag:
-            self.download_button.config(state='normal')
+            self.download_button.disabled = False
             return
         #end
         
