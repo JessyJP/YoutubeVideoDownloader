@@ -81,7 +81,7 @@ import warnings
 
 
 ## Main Application window
-class YouTubeDownloaderMobile(tk.Tk, VideoListManager, VideoItemDisplayContainer):
+class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContainer):
 # === Application Stage 1: Initialization functions ===
 
     # Class Constructor: Creates the application, loads theme and configuration also adds global keybindings
@@ -1035,8 +1035,7 @@ class YouTubeDownloaderMobile(tk.Tk, VideoListManager, VideoItemDisplayContainer
 #end:class
 
 def main_runGUI():
-    app = YouTubeDownloaderGUI()
-    app.mainloop()
+    YouTubeDownloaderMobile().run()
 #end
 
 # === Application run Main window GUI  ===
