@@ -969,10 +969,10 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     # ------ Callbacks and companion functions for Download, location and properties handling   -------
 
     def get_download_location(self):
-        outputdir = os.path.abspath( self.download_location_input.get() )
+        outputdir = os.path.abspath( self.download_location_input.text )
         if not os.path.isdir(outputdir):
             self.open_select_location_dialog()
-            outputdir = os.path.abspath( self.download_location_input.get() )
+            outputdir = os.path.abspath( self.download_location_input.text )
             if outputdir == "":
                 self.setUiDispStatus("Please select download location!")
                 return None
