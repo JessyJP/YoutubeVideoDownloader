@@ -534,13 +534,18 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         #end
     #end
 
-    # Add the function to open a dialog for location selection
+    # Open a dialog for location selection
     def open_select_location_dialog(self, event=None):
-        download_location_here = filedialog.askdirectory()
-        if download_location_here:
-            self.download_location_entry.delete(0, tk.END)
-            self.download_location_entry.insert(0, download_location_here)
-            self.update_idletasks()
+        content = FileChooserListView(on_submit=self.select_location)
+        self._popup = Popup(title="Select Download Location", content=content, size_hint=(0.9, 0.9))
+        self._popup.open()
+    #end
+
+    def select_location(self, chooser, selection):
+        if selection:
+            download_location_here = selection[0]
+            self.download_location_input.text = download_location_here
+            self._popup.dismiss()
         #end
     #end
 
