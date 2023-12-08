@@ -1099,31 +1099,32 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
 
     def disable_UI_elements_during_download(self):
         self.active_process_flag = True
-        self.update_progressbar(0,len(self.getVideoList()),0)
+        # Assuming you have a method to update the progress bar and set UI status
+        self.update_progressbar(0, len(self.getVideoList()), 0)
         self.setUiDispStatus(f"Starting Download of {len(self.getVideoList())} item(s) now!")
 
         # Disable the input URL text field
-        self.url_input.config(state='disabled')
+        self.url_input.disabled = True
 
         # Disable the analyze button
-        self.analyse_button.config(state='disabled')
+        self.analyse_button.disabled = True
 
         # Disable the settings button
-        self.settings_button.config(state='disabled')
+        self.settings_button.disabled = True
 
-        # Disable the limiter dropdowns
-        self.dropdown_audio_limiter.config(state='disabled')
-        self.dropdown_video_limiter.config(state='disabled')
-        self.dropdown_fps_limiter.config(state='disabled')
+        # Disable the limiter dropdowns (Spinners)
+        self.audio_spinner.disabled = True
+        self.video_spinner.disabled = True
+        self.fps_spinner.disabled = True
 
-        # Disable the select download location button
-        self.select_location_button.config(state='disabled')
+        # Disable the select download location button and other buttons
+        self.select_location_button.disabled = True
 
         # Disable the download location text field
-        self.download_location_input.config(state='disabled')
+        self.download_location_input.disabled = True        
 
-        # Change the download button text to cancel
-        self.download_button.config(text=self.theme["texts"]["download_cancel_button"])
+        # Change the download button text to 'Cancel'
+        self.download_button.text = self.theme["texts"]["download_cancel_button"]        
         #TODO:NOTE: maybe it would be good for this pair of functions to be more general and have a 3rd button that will be the cancel button
         # ... this way the cancel, analysis and download button will always have easy and predictable enable/disable switching pattern 
     #end
@@ -1136,27 +1137,27 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         self.reset_cancel_flag()
 
         # Enable the input URL text field
-        self.url_input.config(state='normal')
+        self.url_input.disabled = False
 
         # Enable the analyze button
-        self.analyse_button.config(state='normal')
+        self.analyse_button.disabled = False
 
         # Enable the settings button
-        self.settings_button.config(state='normal')
-        
+        self.settings_button.disabled = False
+
         # Enable the limiter dropdowns
-        self.dropdown_audio_limiter.config(state='normal')
-        self.dropdown_video_limiter.config(state='normal')
-        self.dropdown_fps_limiter.config(state='normal')
+        self.audio_spinner.disabled = False
+        self.video_spinner.disabled = False
+        self.fps_spinner.disabled = False
 
         # Enable the select download location button
-        self.select_location_button.config(state='normal')
+        self.select_location_button.disabled = False
 
         # Enable the download location text field
-        self.download_location_input.config(state='normal')
+        self.download_location_input.disabled = False
 
         # Revert the download button text to the original
-        self.download_button.config(text=self.theme["texts"]["download_button"])
+        self.download_button.text = self.theme["texts"]["download_button"]
     #end
 
 #end:class
