@@ -36,10 +36,39 @@ from core.pytube_handler import LimitsAndPriority, VideoInfo
 from core.video_list_manager import VideoListManager
 from core.download_options import * # updateOutputKeepsStr, MediaSymbols # NOTE:imports the symbol list as well
 from core.common import audio_bitrate_list as BitrateList, video_resolution_list as ResolutionList, fps_value_list as FPSList
+# GUI custom imports
+from mobile_kivy_gui.display_container import VideoItemDisplayContainer
+# from  mobile_kivy_gui.video_item_card_row import VideoItemRowCard as VideoItemCard
+from  mobile_kivy_gui.video_item_text_row import VideoItemTextRow as VideoItemCard
 # GUI imports
-import tkinter as tk
-from tkinter import ttk, filedialog
-from gui.settings_window import SettingsWindow
+from kivy.app import App as KivyApp
+from kivy.core.window import Window
+from kivy.core.clipboard import Clipboard
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+from kivy.uix.progressbar import ProgressBar
+from kivy.uix.dropdown import DropDown
+from kivy.uix.spinner import Spinner
+from kivy.uix.recycleview import RecycleView
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
+from kivy.uix.recyclegridlayout import RecycleGridLayout
+from kivy.uix.behaviors import FocusBehavior
+from kivy.uix.recycleview.layout import LayoutSelectionBehavior
+from kivy.properties import BooleanProperty
+from kivy.uix.popup import Popup
+from kivy.uix.filechooser import FileChooserListView
+from kivy.clock import Clock
+import uuid
+from core.common import hex_to_rgba
+
+import random
+from kivy.graphics import Color, Rectangle
+
+# from gui.settings_window import SettingsWindow # TODO: reimplement the settings window
 # Other imports
 from typing import Union
 import json
