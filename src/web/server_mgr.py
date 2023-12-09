@@ -232,7 +232,9 @@ class WebServerVideoManager(VideoListManager):
 # Function to convert VideoInfo data to JSON
 def video_info_to_dict(vItem: VideoInfo) -> dict:
     video_info_tuple = vItem.as_tuple()
-    
+    # -------------------
+    # TODO: this is now redundant because it's integrated into the item
+    # call: vItem.as_dict()
     video_info_dict = {
         "download_status": video_info_tuple[0],
         "watch_url": video_info_tuple[1],
@@ -248,6 +250,8 @@ def video_info_to_dict(vItem: VideoInfo) -> dict:
         "quality_str": video_info_tuple[11],
         "video_size_mb": video_info_tuple[12]
     }
+    # video_info_dict = vItem.as_dict() # TODO currently the last field doesn't match in key
+    # -------------------
 
     # Loop over all fields and ensure they can be converted to a string
     for key, value in video_info_dict.items():
