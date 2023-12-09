@@ -36,7 +36,7 @@
             "thumbnail_url": 50,
             "rating": 50,
             "video_id": 50,
-            "quality": 50,
+            "quality_str": 50,
             "download_size": 50
         },
         "alignment": {
@@ -51,7 +51,7 @@
             "thumbnail_url": "w",
             "rating": "e",
             "video_id": "w",
-            "quality": "w",
+            "quality_str": "w",
             "download_size": "e"
         },
         "column_visibility": {
@@ -66,7 +66,7 @@
             "thumbnail_url": false,
             "rating": false,
             "video_id": false,
-            "quality": true,
+            "quality_str": true,
             "download_size": true
         }
     },

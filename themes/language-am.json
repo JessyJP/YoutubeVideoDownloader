@@ -14,7 +14,7 @@
             "thumbnail_url": "ማየር መስመር URL",
             "rating": "ስምምነት",
             "video_id": "ቪዶ መለያ",
-            "quality": "ማስተካከል"
+            "quality_str": "ማስተካከል"
 			"download_size": "Download Size" ?????
         }
     },

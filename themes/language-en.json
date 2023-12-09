@@ -14,7 +14,7 @@
             "thumbnail_url": "Thumbnail URL",
             "rating": "Rating",
             "video_id": "Video ID",
-            "quality": "Quality",
+            "quality_str": "Quality",
             "download_size": "Download Size"
         }
     },

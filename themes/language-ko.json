@@ -38,7 +38,7 @@
             "thumbnail_url": "썸네일 URL",
             "rating": "평점",
             "video_id": "동영상 ID",
-            "quality": "품질"
+            "quality_str": "품질"
         },
         "column_width": {
             "download_status": 60,
@@ -52,7 +52,7 @@
             "thumbnail_url": 50,
             "rating": 50,
             "video_id": 50,
-            "quality": 50
+            "quality_str": 50
         },
         "column_visibility": {
             "download_status": true,
@@ -66,7 +66,7 @@
             "thumbnail_url": false,
             "rating": false,
             "video_id": false,
-            "quality": false
+            "quality_str": false
         }
     },
     "texts": {

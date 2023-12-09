@@ -38,7 +38,7 @@
             "thumbnail_url": "URL адрес на миниатюрата",
             "rating": "Рейтинг",
             "video_id": "ID на видеоклипа",
-            "quality": "Качество"
+            "quality_str": "Качество"
         },
         "column_width": {
             "download_status": 60,
@@ -52,7 +52,7 @@
             "thumbnail_url": 50,
             "rating": 50,
             "video_id": 50,
-            "quality": 50
+            "quality_str": 50
         },
         "column_visibility": {
             "download_status": true,
@@ -66,7 +66,7 @@
             "thumbnail_url": false,
             "rating": false,
             "video_id": false,
-            "quality": false
+            "quality_str": false
         }
     },
     "texts": {
