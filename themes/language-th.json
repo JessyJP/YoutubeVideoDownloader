@@ -28,7 +28,7 @@
         },
         "heading": {
             "download_status": "สถานะการดาวน์โหลด",
-            "url": "URL",
+            "watch_url": "URL",
             "title": "ชื่อเรื่อง",
             "author": "ผู้เขียน",
             "length": "ระยะเวลา",
@@ -42,7 +42,7 @@
         },
         "column_width": {
             "download_status": 60,
-            "url": 100,
+            "watch_url": 100,
             "title": 100,
             "author": 50,
             "length": 50,
@@ -56,7 +56,7 @@
         },
         "column_visibility": {
             "download_status": true,
-            "url": true,
+            "watch_url": true,
             "title": true,
             "author": true,
             "length": true,
