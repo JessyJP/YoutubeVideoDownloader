@@ -101,6 +101,23 @@ class VideoInfo(YouTube):
         )
     #end
 
+    def as_dict(self) -> dict:
+        return {
+            "download_status": self.download_status,
+            "watch_url": self.watch_url,
+            "title": self.title,
+            "author": self.author,
+            "length": self.length,
+            "description": self.description,
+            "publish_date": self.publish_date,
+            "views": self.views,
+            "thumbnail_url": self.thumbnail_url,
+            "rating": self.rating,
+            "video_id": self.video_id,
+            "quality_str": self.quality_str,
+            "download_size": str(self.video_size_mb) + " MB"
+        }
+
     # ----- Steam Selection functions and download from stream
     def select_audio_stream(self, max_audio_bitrate, formatPriority=[]):
         audio_streams_to_check = self.streams.filter(only_audio=True).order_by('abr').desc()
