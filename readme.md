@@ -116,9 +116,16 @@ docker build -t youtube-downloader .
 ```
 When built to execute the docker container, you can run:
 ```bash
-docker run -p 8080:8080 --name youtube-downloader-container youtube-downloader
+docker run -p 8080:8080 -v ~/youtube_download_tmp:/app/tmp --name youtube-downloader-container youtube-downloader
 ```
 
+---
+Alternativley you can use the docker compose file with with optionally detached mode "-d"
+```bash
+docker-compose up --build -d
+```
+
+### Step 6: Mobile app deployment
 
 ## Current State of Development TODO(s)
 
