@@ -1007,7 +1007,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         return limits_and_priority
     #end
 
-    def download_all_entries_callback(self):
+    def download_all_entries_callback(self, event=None):# TODO check again if we need the event var being added
         if self.active_process_flag == False:
             t = threading.Thread(target=self.download_all_entries_thread, args=())
             t.start()
