@@ -36,14 +36,14 @@ class VideoItemDisplayContainer():
 
     def createVideoItemDisplayContainer(self, frame,TC):
         # Get tree view column headings
-        self.columns = tuple(self.theme["tree_view"]["heading"].keys())
+        self.columns = tuple(self.theme["container"]["heading"].keys())
 
         # Custom style for the tree view widget
         style = ttk.Style()
-        style.configure("Treeview", background=self.theme["tree_view"]["colors"]["background"])
-        style.map("Treeview", background=[("selected", self.theme["tree_view"]["colors"]["selected"])])
+        style.configure("Treeview", background=self.theme["container"]["colors"]["background"])
+        style.map("Treeview", background=[("selected", self.theme["container"]["colors"]["selected"])])
         style.configure("Treeview", foreground=self.theme["global"]["colors"]["button_text"])
-        style.map("Treeview", foreground=[("selected", self.theme["tree_view"]["colors"]["selected_text"])])
+        style.map("Treeview", foreground=[("selected", self.theme["container"]["colors"]["selected_text"])])
 
         # Creating the Tree view widget (table)
         self.tree = ttk.Treeview(frame, columns=self.columns, show="headings", height=25, style="Treeview")
@@ -52,15 +52,15 @@ class VideoItemDisplayContainer():
 
         # Assign labels and widths to the tree view columns
         for col in self.columns:
-            self.tree.heading(col, text=self.theme["tree_view"]["heading"][col],anchor="center")#,anchor=self.theme["tree_view"]["alignment"][col]
-            self.tree.column(col, width=self.theme["tree_view"]["column_width"][col],anchor=self.theme["tree_view"]["alignment"][col])# stretch=tk.NO
+            self.tree.heading(col, text=self.theme["container"]["heading"][col],anchor="center")#,anchor=self.theme["container"]["alignment"][col]
+            self.tree.column(col, width=self.theme["container"]["column_width"][col],anchor=self.theme["container"]["alignment"][col])# stretch=tk.NO
         #end
 
         # Add the right-click binding
         self.tree.bind("<Button-3>", self.show_tree_popup_menu_callback)
 
         # Create the column visibility variables
-        self.column_visible = {col: tk.BooleanVar(value=self.theme["tree_view"]["column_visibility"][col]) for col in self.columns}
+        self.column_visible = {col: tk.BooleanVar(value=self.theme["container"]["column_visibility"][col]) for col in self.columns}
 
         # Load default visibility settings for columns from configuration
         for col in self.tree["columns"]:
@@ -70,7 +70,7 @@ class VideoItemDisplayContainer():
 
         # Column Sorting
         for col in self.columns:
-            self.tree.heading(col, text=self.theme["tree_view"]["heading"][col], command=lambda col=col: self.sort_column(col))
+            self.tree.heading(col, text=self.theme["container"]["heading"][col], command=lambda col=col: self.sort_column(col))
         #end
         self.sortColumn = ""
         self.sortDirection = ""
@@ -141,7 +141,7 @@ class VideoItemDisplayContainer():
         visibility = self.column_visible[col].get()
 
         if visibility:
-            width_ = self.theme["tree_view"]["column_width"][col]#NOTE:_EXTERNAL_METHOD_
+            width_ = self.theme["container"]["column_width"][col]#NOTE:_EXTERNAL_METHOD_
             stretch_ = True
         else:
             width_ = 0
@@ -159,7 +159,7 @@ class VideoItemDisplayContainer():
 
         # First remove the symbol from the heading
         if self.sortColumn != "":
-            self.tree.heading(self.sortColumn, text=self.theme["tree_view"]["heading"][self.sortColumn])#NOTE:_EXTERNAL_METHOD_
+            self.tree.heading(self.sortColumn, text=self.theme["container"]["heading"][self.sortColumn])#NOTE:_EXTERNAL_METHOD_
         #end
 
         # If the same column is selected, alternate the sorting direction
@@ -215,7 +215,7 @@ class VideoItemDisplayContainer():
         self.setUiDispStatus( f"Sorting by: {col} in "+heading_symbol+" direction")#NOTE:_EXTERNAL_METHOD_
 
         # Include a sorting direction symbol to the heading
-        heading_text = self.theme["tree_view"]["heading"][col]
+        heading_text = self.theme["container"]["heading"][col]
         self.tree.heading(col,  text=heading_text +" "+ heading_symbol)#NOTE:_EXTERNAL_METHOD_
 
         # Keep track of the sorting column
