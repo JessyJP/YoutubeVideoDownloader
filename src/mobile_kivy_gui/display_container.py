@@ -379,6 +379,7 @@ class VideoItemDisplayContainer():
     #end
 
     def extend_selection(self, event):
+        return#TODO: temporary disabled
         if self.selection_anchor is None:
             return
         #end
@@ -417,6 +418,7 @@ class VideoItemDisplayContainer():
     #end
 
     def set_selection_anchor(self, event=None):
+        return#TODO: temporary disabled
         if not hasattr(self, 'selection_anchor'):
             self.selection_anchor = None
         #end
@@ -441,6 +443,7 @@ class VideoItemDisplayContainer():
     #end
 
     def move_selection(self, direction: str, event=None):
+        return #TODO: temporary disabled
         # TODO: this needs to be fixed, it skips one entry
         selected_items = self.get_selection()
         if selected_items:
