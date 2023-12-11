@@ -20,7 +20,7 @@
         },
         "window_title": "YouTube 동영상 다운로더"
     },
-    "tree_view": {
+    "container": {
         "colors": {
             "background": "rgba(0,0,0,0)",
             "selected": "#3399ff",

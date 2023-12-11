@@ -20,7 +20,7 @@
         },
         "window_title": "Téléchargeur de vidéos YouTube"
     },
-    "tree_view": {
+    "container": {
         "colors": {
             "background": "rgba(0,0,0,0)",
             "selected": "#3399ff",

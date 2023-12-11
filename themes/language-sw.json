@@ -20,7 +20,7 @@
         },
         "window_title": "Kupakua Video za YouTube"
     },
-    "tree_view": {
+    "container": {
         "colors": {
             "background": "rgba(0,0,0,0)",
             "selected": "#3399ff",

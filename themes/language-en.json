@@ -1,7 +1,7 @@
 {
     "language": "English",
     "window_title": "YouTube Video Downloader",
-    "tree_view": {
+    "container": {
         "heading": {
             "download_status": "Download Status",
             "watch_url": "URL",

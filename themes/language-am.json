@@ -1,7 +1,7 @@
 {
     "language": "አማርኛ",
 	"window_title": "YouTube ቪዶ ማውጫ ማድረግ"
-    "tree_view": {
+    "container": {
         "heading": {
             "download_status": "ስርጭት መስመር",
             "watch_url": "URL",
