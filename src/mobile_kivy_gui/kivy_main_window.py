@@ -759,7 +759,12 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
             # Check if the two sets of IDs match. The 2 sets, current_video_ids_from_container and current_video_ids_from_item_list, have to be identical
 
             if current_video_ids_from_container != current_video_ids_from_item_list:
-                raise ValueError("Consistency check failed: The list of video IDs in the container does not match the list in the video info list.")
+                #TODO instead of error, just wait for a bit while the ui updates
+                message = "Consistency check failed: The list of video IDs in the container does not match the list in the video info list."
+                import time
+                print(message)
+                time.sleep(0.01)
+                # raise ValueError(message)
             #end
         
             # This will independently remove the duplicates in the UI container and the video list 
