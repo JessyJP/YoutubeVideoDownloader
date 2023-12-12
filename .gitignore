@@ -2,6 +2,7 @@
 .vscode/
 *.pyc
 .venv/
+venv/
 
 # Ignore build directories
 build/
@@ -23,3 +24,7 @@ YouTubeDownloader.zip
 YouTubeDownloader.spec
 YouTubeDownloaderGUI.exe
 YouTubeDownloaderGUI.spec
+
+# Buildozer ignores
+.buildozer/
+build_android/
