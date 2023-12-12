@@ -30,7 +30,8 @@ from core.pytube_handler import LimitsAndPriority, VideoInfo
 from core.download_options import * # updateOutputKeepsStr, MediaSymbols # NOTE:imports the symbol list as well
 # GUI custom imports
 # from  mobile_kivy_gui.video_item_card_row import VideoItemRowCard as VideoItemCard
-from  mobile_kivy_gui.video_item_text_row import VideoItemTextRow as VideoItemCard
+from  mobile_kivy_gui.video_item_card import VideoItemCard as VideoItemCard
+# from  mobile_kivy_gui.video_item_text_row import VideoItemTextRow as VideoItemCard
 # GUI imports
 from kivy.core.window import Window
 from kivy.uix.gridlayout import GridLayout
@@ -63,10 +64,10 @@ class VideoItemDisplayContainer():
 
         # ---------- Create a horizontal layout for column headers ----------
         self.headers_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, size_hint_x=1)
-        with self.headers_layout.canvas.before:
-            Color(rgba=hex_to_rgba(self.theme["container"]["colors"]["heading-bg"]))  # Set background color for headers
-            Rectangle(size=self.headers_layout.size, pos=self.headers_layout.pos)
-        #end
+        # with self.headers_layout.canvas.before:
+        #     Color(rgba=hex_to_rgba(self.theme["container"]["colors"]["heading-bg"]))  # Set background color for headers
+        #     Rectangle(size=self.headers_layout.size, pos=self.headers_layout.pos)
+        # #end
 
         # Calculate the width for each column
         self.column_width = self.update_column_width(Window.width)
@@ -146,8 +147,8 @@ class VideoItemDisplayContainer():
         elH = 50 # Element height # TODO: this is currently hardcoded here but should be inserted from the main method or global definition var/const
 
         # Adjust the height of the scroll_view to fill available space
-        remaining_height = Window.height - self.headers_layout.height - sum([elH for _ in range(4+1)])
-        self.scroll_view.size_hint_y = None
+        remaining_height = Window.height - self.headers_layout.height - sum([elH for _ in range(4+1+1)])
+        # self.scroll_view.size_hint_y = None
         self.scroll_view.height = max(remaining_height, self.grid_layout.minimum_height)
     #end
 
@@ -184,7 +185,7 @@ class VideoItemDisplayContainer():
     def add(self, item):
         # Assuming 'item' is an instance of VideoInfo
         def scheduled_execution(self, item, dt):  # dt is required as Clock passes the delta time
-            card = VideoItemCard(item, self.column_visible)
+            card = VideoItemCard(item, self.column_visible, self.theme)
             self.grid_layout.add_widget(card)
         Clock.schedule_once(lambda dt:  scheduled_execution(self, item, dt))
 
@@ -355,9 +356,10 @@ class VideoItemDisplayContainer():
         for item in items:
             item.update_selection(True)
         #end
+        self.on_container_selection()
     #end
 
-    def on_treeview_selection(self, event):
+    def on_container_selection(self):
         selected_items = self.get_selection()
         total_items = len(self.get_all_items())
 
@@ -431,6 +433,7 @@ class VideoItemDisplayContainer():
     def clear_selection_anchor(self, event=None):
         self.selection_anchor = None
         self.selection_direction = None
+        self.on_container_selection()
     #end
 
     def move_selection(self, direction: str, event=None):
@@ -453,10 +456,12 @@ class VideoItemDisplayContainer():
 
     def move_selection_up_callback(self, event=None):
         self.move_selection('up', event)
+        self.on_container_selection()
     #end
 
     def move_selection_down_callback(self, event=None):
         self.move_selection('down', event)
+        self.on_container_selection()
     #end
 
 #end
