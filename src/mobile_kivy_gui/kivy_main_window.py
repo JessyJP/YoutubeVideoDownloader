@@ -666,10 +666,10 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         # Get the video_id associated with the selected tree view container index
         video_id = self.container.get_UiItmField(ui_item_id, 'video_id')
         # Get the video item list index of the selected tree container item index
-        item_container_index = self.dispTable.index(ui_item_id)
+        # item_container_index = self.dispTable.index(ui_item_id)# TODO: debug and substitute this
 
         # Use the getItemByIndexOrVideoID function to find the VideoInfo object
-        video_info = self.getItemByIndexOrVideoID(video_id, item_container_index)
+        video_info = self.getItemByIndexOrVideoID(video_id)
 
         return video_info
     #end
@@ -730,7 +730,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         #end
 
         for sel_id in selected_items:
-            self.container.remove(sel_id)
+            self.container.remove(self.container.find_UI_item_by_id(sel_id))
         #end
     #end
 
