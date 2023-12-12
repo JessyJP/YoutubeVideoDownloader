@@ -509,6 +509,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
 
     # Configuration window button Icon callbacks
     def on_settings_button_hover(self, event):
+        return
         icon_path = f"{self.theme['global']['directories']['icons']}{self.theme['icons']['settings_button_hover']}"
         hover_icon = tk.PhotoImage(file=icon_path)
         self.settings_button.config(image=hover_icon)
@@ -516,6 +517,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     #end
 
     def on_settings_button_leave(self, event):
+        return
         icon_path = f"{self.theme['global']['directories']['icons']}{self.theme['icons']['settings_button']}"
         normal_icon = tk.PhotoImage(file=icon_path)
         self.settings_button.config(image=normal_icon)
@@ -523,6 +525,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     #end
 
     def on_settings_button_click(self, event):
+        return
         if self.active_process_flag:
             return
         #end
@@ -536,6 +539,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
 
     # Settings window behavior companion function for the callback
     def open_settings_window(self):
+        return
         if hasattr(self, "settings_window") and self.settings_window.winfo_exists():
             self.settings_window.destroy()
             del self.settings_window
@@ -618,6 +622,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     #end
 
     def show_text_edit_context_menu(self, event):
+        return
         widget = event.widget
         context_menu = tk.Menu(self, tearoff=0)
         context_menu.add_command(label="Undo", command=lambda: widget.event_generate("<<Undo>>"))
@@ -632,6 +637,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     #end
 
     def show_container_item_context_menu(self):
+        return
         # Get the number of selected items
         selected_items_count = len(self.get_selection())
 
@@ -825,6 +831,8 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
 
 
     def copy_selected_entries_to_text_callback(self, event=None):
+        #TODO: this function needs to be revaluated
+        return
         text_to_copy = []
 
         # Get the list of visible columns
@@ -845,6 +853,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
 
     # ------ Callback for calling external player to open the selected watch URLs -------
     def play_selected_watch_urls_locally(self, event=None) -> None:
+        # NOTE: TODO: this function most likely doesn't need to be implemented in the mobile version
         # Get the currently selected items
         selected_items = self.container.get_selection()
 
@@ -865,6 +874,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     #end
 
     def open_selected_thumbnails_urls_locally(self, event=None) -> None:
+        # NOTE: TODO: this function doesn't need to be implemented in the mobile version
         # Get the currently selected items
         selected_items = self.container.get_selection()
 
@@ -922,6 +932,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         # To finish up, enable the UIelements after the analysis
         if recursiveCheckOfURLcontent_mode == 0:  # This checks the recursion mode
             # Enable any ui elements
+            ## TODO: check FOR Redundancy
             self.download_button.disabled = False# TODO: if this is removed from this class and only implemented in the child
             self.enable_UI_elements_after_download()
         #end
@@ -953,7 +964,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
 
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def addItem(self, video_info_item):
-        super().addItem(video_info_item)
+        super().addItem(video_info_item)# TODO, the specific super class could be referenced here!
         self.container.add(video_info_item)
         # # Add the URL and video ID to the current_url_entries and current_video_ids sets
         # current_url_entries.add(video_info_item.watch_url) # NOTE: effective placeholder because it's not inserted or  returned
@@ -962,7 +973,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
 
     # NOTE: @OVERWRITE This function overwrites/overrides the parent implementation
     def remove_duplicate_items(self):
-        super().remove_duplicate_items()
+        super().remove_duplicate_items()# TODO, the specific super class could be referenced here!
         # Get the current video IDs in the tree view container
         current_video_ids = set()
         for item in self.container.get_all_items():
