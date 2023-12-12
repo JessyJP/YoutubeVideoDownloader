@@ -3,6 +3,7 @@
     "global": {
         "colors": {
             "background": "#FFFFFF",
+            "labels": 	  "#000000",
             "button_text": "#000000"
         },
         "fonts": {
@@ -21,6 +22,9 @@
     "container": {
         "colors": {
             "background": "rgba(0,0,0,0)",
+            "heading-bg":   "#03fcce",
+            "heading-text": "#4503fc",
+            "tile": "#cf2161",
             "selected": "#3399ff",
             "selected_text": "black"
         },
