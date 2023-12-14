@@ -416,8 +416,10 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         download_layoutA = BoxLayout(orientation='horizontal', size_hint_y=None, height=elH, size_hint_x=1)
         download_layoutB = BoxLayout(orientation='horizontal', size_hint_y=None, height=elH, size_hint_x=1)
         #### TODO: single line layout hack !
-        download_layoutB = download_layoutA
-        main_layout.add_widget(download_layoutA)
+        selectMODE = 3
+        if selectMODE ==1:
+            download_layoutB = download_layoutA
+            main_layout.add_widget(download_layoutA)
         ####
 
         # Settings button
@@ -461,19 +463,23 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         download_layoutB.add_widget(self.download_button)
 
         #### TODO: single line layout hack disables this!
-        # download_layout_Mix = BoxLayout(orientation='horizontal', size_hint_y=None, height=elH, size_hint_x=1)
-        # download_layout_Mix.add_widget(download_layoutA)
-        # download_layout_Mix.add_widget(download_layoutB)
-        # main_layout.add_widget(download_layout_Mix)
+        if selectMODE ==2:
+            download_layout_Mix = BoxLayout(orientation='horizontal', size_hint_y=None, height=elH, size_hint_x=1)
+            download_layout_Mix.add_widget(download_layoutA)
+            download_layout_Mix.add_widget(download_layoutB)
+            main_layout.add_widget(download_layout_Mix)
+        elif selectMODE ==3:
+            main_layout.add_widget(download_layoutA)
+            main_layout.add_widget(download_layoutB)
         ####
 
         # Forth row -----------------
         # Use a BoxLayout for each widget with padding and background color
         # Progress bar container
         progress_bar_container = BoxLayout(size_hint_y=None, height=elH, padding=[10, 5], size_hint_x=1)
-        with progress_bar_container.canvas.before:
-            Color(rgba=hex_to_rgba("#FF0000"))  # Red background for progress bar
-            Rectangle(size=progress_bar_container.size, pos=progress_bar_container.pos)
+        # with progress_bar_container.canvas.before:
+        #     Color(rgba=hex_to_rgba("#FF0000"))  # Red background for progress bar
+        #     Rectangle(size=progress_bar_container.size, pos=progress_bar_container.pos)
 
         self.progress_bar = ProgressBar(max=100)
         progress_bar_container.add_widget(self.progress_bar)
@@ -481,9 +487,9 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
 
         # Status label container
         status_label_container = BoxLayout(size_hint_y=None, height=elH, padding=[10, 5], size_hint_x=1)
-        with status_label_container.canvas.before:
-            Color(rgba=hex_to_rgba("#00FF00"))  # Green background for status label
-            Rectangle(size=status_label_container.size, pos=status_label_container.pos)
+        # with status_label_container.canvas.before:
+        #     Color(rgba=hex_to_rgba("#00FF00"))  # Green background for status label
+        #     Rectangle(size=status_label_container.size, pos=status_label_container.pos)
 
         # Add treeview to the main layout
         main_layout.add_widget(self.container_layout)# TODO check to rename maybe, instead of "dispTable" we could say recycler view or scroll view 
@@ -685,7 +691,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         #end
 
         # Try to find the tree view UI item by index first
-        index = self.getItemIndex(video_info)
+        index = -1#self.getItemIndex(video_info)
         if index != -1:
             ui_item = self.container.get_all_items()[index]
             # Check if the video_id matches
