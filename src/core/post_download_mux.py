@@ -32,7 +32,7 @@ SOFTWARE.
 # Imports
 import subprocess
 from typing import Union
-import ffmpeg as ffmpeg # Video Editing Module
+# import ffmpeg as ffmpeg # Video Editing Module
 
 # from core.common import isDeployed
 import sys
@@ -56,6 +56,7 @@ def combine_via_auto_selection(output_file, video_filename, audio_filenames, sub
 #end
 
 def combine_via_ffmpeg(output_file, video_filename, audio_filenames, subtitle_filenames):
+    return
     video = ffmpeg.input(video_filename)
     audio = ffmpeg.input(audio_filenames[0])
 
