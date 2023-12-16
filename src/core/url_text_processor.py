@@ -32,7 +32,7 @@ SOFTWARE.
 # Imports
 from typing import List, Union, Set, Any,  Optional
 # from typing import *
-from urlextract import URLExtract
+# from urlextract import URLExtract
 import re
 from pytube import Playlist, Channel # py/Youtube Classes
 import requests
@@ -88,7 +88,7 @@ def extract_URL_list_from_text(text: str) -> List[str]:
     try:
         # Create an instance of the urlextract library
         custom_cache_path = "./data/tlds-alpha-by-domain.txt"
-        url_extractor = URLExtract()
+        url_extractor = "URLExtract()"
         url_extractor.cache_file = custom_cache_path
         url_extractor.update()
 
