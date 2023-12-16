@@ -31,12 +31,12 @@ SOFTWARE.
 import os
 import sys
 import json
-import googleapiclient.discovery
-from googleapiclient.errors import HttpError
+# import googleapiclient.discovery
+# from googleapiclient.errors import HttpError
 from validation_methods import check_for_disallowed_filename_chars
 
 def download_comments(video_id, base_output_name, output_dir, api_key, output_format="json"):
-    youtube = googleapiclient.discovery.build("youtube", "v3", developerKey=api_key)
+    youtube = ""#googleapiclient.discovery.build("youtube", "v3", developerKey=api_key)
 
     # Create the output file path
     output_filename = check_for_disallowed_filename_chars(f"{base_output_name}.comments.{output_format}")
@@ -76,7 +76,7 @@ def download_comments(video_id, base_output_name, output_dir, api_key, output_fo
         else:
             raise ValueError(f"Unsupported output format: {output_format}")
 
-    except HttpError as e:
+    except:# HttpError as e:
         print(f"An HTTP error occurred: {e.resp.status} {e.content}")
         sys.exit(1)
 
