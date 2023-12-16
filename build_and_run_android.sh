@@ -8,12 +8,14 @@ APK_NAME="yddapp"
 
 RSYNC_OPTS="-av --exclude='*.pyc' --exclude='__pycache__/'"
 
+echo "Current user [$USER]."
+
 ## ===============================================================
 # Your build and run commands go here
 echo $SEPARARATOR
 echo "Remove previous directory [$DEST_DIR] if it exists."
 echo $SEPARARATOR
-rm -vr $DEST_DIR
+# rm -vr $DEST_DIR
 
 
 echo $SEPARARATOR
@@ -26,7 +28,7 @@ mkdir -p "$DEST_DIR"
 rsync -av --exclude='*.pyc' --exclude='__pycache__/' "$SRC_DIR/core" "$DEST_DIR/"
 rsync -av --exclude='*.pyc' --exclude='__pycache__/' "$SRC_DIR/mobile_kivy_gui" "$DEST_DIR/"
 rsync -av --exclude='*.pyc' --exclude='__pycache__/' "themes" "$DEST_DIR/"
-# rsync -av --exclude='*.pyc' --exclude='__pycache__/' "images" "$DEST_DIR/"
+rsync -av --exclude='*.pyc' --exclude='__pycache__/' "images" "$DEST_DIR/"
 rsync -av --exclude='*.pyc' --exclude='__pycache__/' "data" "$DEST_DIR/"
 
 # Copy the main file. Rename the file to main because buldozer expects that as a starting point
@@ -40,15 +42,26 @@ cp -v "config.ini"     "$DEST_DIR/"
 ## ===============================================================
 # Your build and run commands go here
 echo $SEPARARATOR
+echo "Apply the local python virtual environment"
+source .venv/bin/activate
+
 echo "Change working directory to [$DEST_DIR]."
 cd $DEST_DIR
+echo "Current working directory [${PWD}]."
+
+chown -R jp:jp ${PWD}
+echo "Change ownership of [${PWD}]."
 
 # Your build and run commands go here
 echo "Build and run via buildozer."
 echo $SEPARARATOR
 # buildozer -v android debug
-# buildozer -v android debug deploy run logcat
+# buildozer -v android debug deploy run logcat > log
+# buildozer -v android debug deploy run logcat | grep "python"
 # adb install $APK_NAME.apk
+
+# View python only logs
+# cat log | grep "python" > plog; kwrite plog
 
 echo $SEPARARATOR
 echo "Build and run script done."
