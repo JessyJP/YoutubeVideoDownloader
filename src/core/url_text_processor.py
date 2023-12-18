@@ -38,8 +38,8 @@ from pytube import Playlist, Channel # py/Youtube Classes
 import requests
 from bs4 import BeautifulSoup
 import google_auth_oauthlib.flow
-import googleapiclient.discovery
-import googleapiclient.errors
+# import googleapiclient.discovery
+# import googleapiclient.errors
 # Core Imports
 from core.pytube_handler import VideoInfo as VideoInfoPyTube
 from core.youtube_dl_handler import VideoInfo as VideoInfoDL
@@ -192,7 +192,7 @@ def get_channel_videos(channel_id): #TODO not tested THIS is alternative channel
     # Authenticate and construct the service object
     flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(client_secrets_file, scopes)
     credentials = flow.run_local_server(port=0)
-    youtube = googleapiclient.discovery.build(api_service_name, api_version, credentials=credentials)
+    youtube = "googleapiclient.discovery.build(api_service_name, api_version, credentials=credentials)"
 
     # Get the playlist ID for the channel's uploads playlist
     request = youtube.channels().list(part="contentDetails", id=channel_id)
