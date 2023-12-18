@@ -374,8 +374,7 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
 
         # # Bind method to window resize event
         # Window.bind(size=on_window_resize)
-        
-            
+                    
 
         # First row -----------------
         self.columns = tuple(self.theme["container"]["heading"].keys())# TODO: or initialize here ???
@@ -971,7 +970,10 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
     def get_download_location(self):
         outputdir = os.path.abspath( self.download_location_input.text )
         if not os.path.isdir(outputdir):
-            self.open_select_location_dialog()
+            self.dir_selection_event.clear()
+            Clock.schedule_once(self.open_select_location_dialog_threadsafe)
+            self.dir_selection_event.wait()  # Wait until the directory is selected
+
             outputdir = os.path.abspath( self.download_location_input.text )
             if outputdir == "":
                 self.setUiDispStatus("Please select download location!")
@@ -983,6 +985,18 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
             #end
         #end
         return outputdir
+    #end
+
+    def open_select_location_dialog_threadsafe(self, dt):
+        def on_directory_selected(path):
+            # Update the text input with the selected directory path
+            self.download_location_input.text = path
+            # Set the event to unblock the waiting thread
+            self.dir_selection_event.set()
+
+        # Open the directory selection dialog
+        # Pass 'on_directory_selected' as a callback function to be called when a directory is selected
+        self.open_select_location_dialog(on_directory_selected)
     #end
 
     def getLimitsAndPriorityFromUI(self):
