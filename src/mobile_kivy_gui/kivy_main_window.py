@@ -384,8 +384,6 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         # Self-reference because instead of inheritance the container may be instantiated instead # TODO: check
         self.container = self
 
-        # Add treeview to the main layout
-        main_layout.add_widget(self.container_layout)# TODO check to rename maybe, instead of "dispTable" we could say recycler view or scroll view 
 
         # Adjust container size based on window size
         self.container.update_container_layout(None, Window.size)# TODO initial resize
@@ -483,6 +481,10 @@ class YouTubeDownloaderMobile(KivyApp, VideoListManager, VideoItemDisplayContain
         with status_label_container.canvas.before:
             Color(rgba=hex_to_rgba("#00FF00"))  # Green background for status label
             Rectangle(size=status_label_container.size, pos=status_label_container.pos)
+
+        # Add treeview to the main layout
+        main_layout.add_widget(self.container_layout)# TODO check to rename maybe, instead of "dispTable" we could say recycler view or scroll view 
+
 
         self.status_bar_label = Label(text='', color=self.theme["global"]["colors"]["labels"])
         status_label_container.add_widget(self.status_bar_label)
