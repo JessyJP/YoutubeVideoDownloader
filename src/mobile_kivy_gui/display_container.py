@@ -64,6 +64,7 @@ class VideoItemDisplayContainer():
 
         # ---------- Create a horizontal layout for column headers ----------
         self.headers_layout = BoxLayout(orientation='horizontal', size_hint_y=None, height=50, size_hint_x=1)
+        # TODO: check why this was commented out
         # with self.headers_layout.canvas.before:
         #     Color(rgba=hex_to_rgba(self.theme["container"]["colors"]["heading-bg"]))  # Set background color for headers
         #     Rectangle(size=self.headers_layout.size, pos=self.headers_layout.pos)
