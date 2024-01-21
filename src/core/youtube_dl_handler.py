@@ -28,7 +28,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-import youtube_dl
+# import youtube_dl
 import os
 import requests
 from typing import Tuple
@@ -40,7 +40,7 @@ class VideoInfo:
         self.download_status = download_status
         self.inputOrderIndex = inputOrderIndex
         self.logger = []
-
+        youtube_dl = ""
         ydl_opts = {'format': 'bestaudio+bestvideo/best'}
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(self.url, download=False)
@@ -80,6 +80,7 @@ class VideoInfo:
                 'preferredquality': '192',
             }],
         }
+        youtube_dl = ""
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([self.url])
 
@@ -88,6 +89,7 @@ class VideoInfo:
             'format': 'bestvideo+bestaudio/best',
             'outtmpl': f'{output}/{self.title}.%(ext)s',
         }
+        youtube_dl=""
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             ydl.download([self.url])
 
