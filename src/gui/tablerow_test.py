@@ -4,7 +4,7 @@ Copyright (C) 2023 JessyJP
 
 Author: JessyJP
 Year: 2024
-Description: This script downloads YouTube videos in the specified quality or allows the user to select a quality from the available streams.
+Description: This is a python source script part of the YouTube Video Downloader Suit.
 
 MIT License
 
