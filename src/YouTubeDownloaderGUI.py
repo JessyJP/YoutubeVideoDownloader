@@ -34,7 +34,8 @@ def main():
 
     # The gui mode is called
     if isDeployed and os_name == 'Windows':
-        hide_console()
+        # hide_console()
+        pass
     #end    
     
     # GUI main function
