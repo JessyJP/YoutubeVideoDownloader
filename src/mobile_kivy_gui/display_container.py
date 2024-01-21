@@ -363,7 +363,7 @@ class VideoItemDisplayContainer():
 
         if len(selected_items) == 1:
             item = selected_items[0]
-            video_title = self.tree.item(item)["values"][2]
+            video_title = self.find_UI_item_by_id(item).title
             msg = f"Selected 1 item: {video_title}"
         else:
             msg = f"Selected {len(selected_items)} of {total_items} items"
