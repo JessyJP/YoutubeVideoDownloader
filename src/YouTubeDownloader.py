@@ -37,7 +37,7 @@ import ctypes
 from cli.CLI_VideoListManager import VideoListManagerCLI
 from core.common import audio_bitrate_list, video_resolution_list, fps_value_list
 from core.download_options import setOutputKeepsStr
-from web.webapp import default as DefaultCFG
+from web.default_config import default as DefaultCFG
 
 def hide_console():
     try:

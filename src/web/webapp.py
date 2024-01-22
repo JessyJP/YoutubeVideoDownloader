@@ -36,14 +36,8 @@ from flask import Flask
 from flask_cors import CORS
 from web.routes import router
 from types import SimpleNamespace
+from web.default_config import default
 
-# Default configuration directly as a SimpleNamespace
-default = SimpleNamespace(
-    PORT=8080,
-    OUTDIR='./tmp',
-    MT_ANALYSIS=True,
-    MT_DOWNLOAD=True
-)
 
 def create_web_app(port: int = default.PORT, output_dir: str = default.OUTDIR,
          use_multithreading_analysis: bool = default.MT_ANALYSIS,
