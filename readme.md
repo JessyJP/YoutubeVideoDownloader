@@ -16,6 +16,11 @@ Mobile application version:
 
 +++ TODO: put an image here of the mobile application
 
+## Requirements
+The application requires the ffmpeg binary to be available on the system path. 
+This is necessary for muxing the audio and video streams into one file.
+The package can be downloaded from https://ffmpeg.org/ 
+
 ## Features
 
 - Intuitive and easy-to-use graphical interface
