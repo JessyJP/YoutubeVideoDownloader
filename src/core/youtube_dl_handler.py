@@ -34,7 +34,7 @@ import requests
 from typing import Tuple
 
 
-class VideoInfo_alternative:
+class VideoInfo:
     def __init__(self, url: str, download_status: str = "☑", inputOrderIndex: int = None):
         self.url = url
         self.download_status = download_status
