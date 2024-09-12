@@ -43,6 +43,8 @@ from core.validation_methods import check_for_disallowed_filename_chars
 from core.download_options import setOutputKeepsStr
 from core.post_download_mux import combine_via_auto_selection
 
+from core.limiters import LimitsAndPriority , propToInt
+
 
 ## ================================= Video Info class =================================
 class VideoInfo:
@@ -160,26 +162,33 @@ class VideoInfo:
     # ----- Stream Selection functions and download from stream -----
     def select_audio_stream(self, max_audio_bitrate, formatPriority=[]):
         audio_streams = self.info['formats']
-        audio_streams_to_check = [f for f in audio_streams if f['acodec'] != 'none']
+        audio_streams_to_check = [f for f in audio_streams if f.get('acodec') != 'none' and f.get('abr') is not None]
+
+        # Sort by audio bitrate descending
         audio_streams_to_check.sort(key=lambda x: x['abr'], reverse=True)
 
+        # Filter based on max_audio_bitrate if provided
         if max_audio_bitrate != "max":
-            audio_streams_to_check = [s for s in audio_streams_to_check if int(s['abr']) <= max_audio_bitrate]
+            audio_streams_to_check = [s for s in audio_streams_to_check if int(s['abr']) <= int(max_audio_bitrate)]
 
-        return audio_streams_to_check[0]
+        return audio_streams_to_check[0] if audio_streams_to_check else None
 
     def select_video_stream(self, max_resolution, max_fps, formatPriority=[]):
         video_streams = self.info['formats']
-        video_streams_to_check = [f for f in video_streams if f['vcodec'] != 'none']
+        video_streams_to_check = [f for f in video_streams if f.get('vcodec') != 'none' and f.get('height') is not None]
+
+        # Sort by resolution descending
         video_streams_to_check.sort(key=lambda x: x['height'], reverse=True)
 
+        # Filter based on max_resolution
         if max_resolution != "max":
-            video_streams_to_check = [s for s in video_streams_to_check if int(s['height']) <= max_resolution]
+            video_streams_to_check = [s for s in video_streams_to_check if int(s['height']) <= int(max_resolution)]
 
+        # Filter based on max_fps
         if max_fps != "max":
-            video_streams_to_check = [s for s in video_streams_to_check if s['fps'] <= max_fps]
+            video_streams_to_check = [s for s in video_streams_to_check if s.get('fps', 0) <= int(max_fps)]
 
-        return video_streams_to_check[0]
+        return video_streams_to_check[0] if video_streams_to_check else None
 
     def wget_thumbnail(self, format='pil'):
         """
