@@ -48,6 +48,9 @@ from core.download_options import setOutputKeepsStr
 from core.download_options import * # TODO: list them one by one
 from core.post_download_mux import combine_via_auto_selection
 
+from core.limiters import LimitsAndPriority, propToInt
+
+
 ## ================================= Video Info class =================================
 class VideoInfo(YouTube):
     def __init__(
@@ -131,7 +134,7 @@ class VideoInfo(YouTube):
     def select_audio_stream(self, max_audio_bitrate, formatPriority=[]):
         audio_streams_to_check = self.streams.filter(only_audio=True).order_by('abr').desc()
         if not max_audio_bitrate == "max":
-            audio_streams_to_check = [s for s in audio_streams_to_check if propToInt(s.abr,"kbps") <= max_audio_bitrate]
+            audio_streams_to_check = [s for s in audio_streams_to_check if propToInt(s.abr, "kbps") <= max_audio_bitrate]
         #end
 
         # TODO:NOTE for now disable format priority. It may not be useful. 
@@ -396,51 +399,4 @@ class VideoInfo(YouTube):
         """
         return "☑" in self.download_status
     #end
-#end
-
-## ================================= Limit and Priority class =================================
-class LimitsAndPriority:
-    def __init__(self):
-        self.bitrate = None
-        self.audio_format_priority = None
-        self.resolution = None
-        self.fps = None
-        self.video_format_priority = None
-    #end
-
-    def setLimitsToMax(self):
-        # Internal conversion method
-        self.bitrate = "max kbps"
-        self.resolution = "max p"
-        self.fps = propToInt(self.fps,"max fps")
-    #end
-
-    def to_numeric(self):
-        # Internal conversion method
-        self.bitrate = propToInt(self.bitrate,"kbps")
-        self.resolution = propToInt(self.resolution,"p")
-        self.fps = propToInt(self.fps,"fps")
-    #end
-#end
-
-
-## ================================= Helper functions =================================
-
-def propToInt(prop,str):
-    intProp = prop.split(str)[0].strip()
-    try:
-        intProp = int(intProp)
-        return intProp
-    except (TypeError, ValueError):
-        pass
-    #end
-    return prop
-#end
-
-def get_variable_names(cls):
-    return list(cls.__annotations__.keys())
-#end
-
-def get_variable_types(cls):
-    return list(cls.__annotations__.values())
 #end

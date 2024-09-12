@@ -31,7 +31,7 @@ SOFTWARE.
 
 from cli.ConsoleProgressbar import ConsoleProgressbarChecker, make_progress_bar_str
 from core.video_list_manager import VideoListManager
-from core.pytube_handler import LimitsAndPriority
+from core.limiters import LimitsAndPriority
 
 class VideoListManagerCLI(VideoListManager):
     def __init__(self):        
