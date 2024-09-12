@@ -72,23 +72,56 @@ class VideoInfo:
             self.video_id = info_dict.get('id', None)
 
             # Extract video and audio information
-            formats = info_dict['formats']
-            audio_stream = max((f for f in formats if f['acodec'] != 'none'), key=lambda f: f['abr'], default=None)
-            video_stream = max((f for f in formats if f['vcodec'] != 'none'), key=lambda f: f['height'], default=None)
+            audio_stream = self.get_best_audio_stream(info_dict['formats'])
+            video_stream = self.get_best_video_stream(info_dict['formats'])
 
             # Quality string
-            self.quality_str = f"{video_stream['height']}p@{video_stream.get('fps', 0)}fps/{audio_stream['abr']}kbps" if audio_stream and video_stream else "Unknown"
+            if audio_stream and video_stream:
+                self.quality_str = f"{video_stream['height']}p@{video_stream.get('fps', 0)}fps/{audio_stream['abr']}kbps"
+            else:
+                self.quality_str = "Unknown"
+
             self.audio_bitrate = audio_stream.get('abr', 0) if audio_stream else None
             self.video_resolution = video_stream.get('height', None) if video_stream else None
             self.video_fps = video_stream.get('fps', 0) if video_stream else None
 
             # Filesize
-            self.video_size_bytes = (video_stream['filesize'] or 0) + (audio_stream['filesize'] or 0) if video_stream and audio_stream else 0
+            self.video_size_bytes = (video_stream.get('filesize', 0) or 0) + (audio_stream.get('filesize', 0) or 0) if video_stream and audio_stream else 0
             self.video_size_mb = round(self.video_size_bytes / (1024 * 1024), 2) if self.video_size_bytes else 0
 
             self.base_output_name = check_for_disallowed_filename_chars(self.title)
 
             self.creationTimestamp = datetime.now()
+
+    def get_best_audio_stream(self, formats):
+        """ Get the best audio stream from the list of formats. """
+        try:
+            audio_streams = [f for f in formats if f.get('acodec') != 'none' and f.get('abr') is not None]
+            if audio_streams:
+                best_audio_stream = max(audio_streams, key=lambda f: f['abr'], default=None)
+                self.log(f"Best audio stream found: {best_audio_stream}")
+                return best_audio_stream
+            else:
+                self.log("No valid audio streams found.")
+                return None
+        except Exception as e:
+            self.log(f"Error selecting best audio stream: {e}")
+            return None
+
+    def get_best_video_stream(self, formats):
+        """ Get the best video stream from the list of formats. """
+        try:
+            video_streams = [f for f in formats if f.get('vcodec') != 'none' and f.get('height') is not None]
+            if video_streams:
+                best_video_stream = max(video_streams, key=lambda f: f['height'], default=None)
+                self.log(f"Best video stream found: {best_video_stream}")
+                return best_video_stream
+            else:
+                self.log("No valid video streams found.")
+                return None
+        except Exception as e:
+            self.log(f"Error selecting best video stream: {e}")
+            return None
 
     def as_tuple(self) -> Tuple:
         return (
@@ -171,6 +204,7 @@ class VideoInfo:
             return None
 
     def download_audio(self, audio_stream, output):
+        """ Download the audio stream. """
         audio_filename = f"{self.base_output_name}.aac"
         audio_filename = check_for_disallowed_filename_chars(audio_filename)
         print(f"Downloading audio for [{self.title}] ...")
@@ -187,6 +221,7 @@ class VideoInfo:
         return audio_file
 
     def download_video(self, video_stream, output):
+        """ Download the video stream. """
         video_filename = f"{self.base_output_name}.mp4"
         video_filename = check_for_disallowed_filename_chars(video_filename)
         print(f"Downloading video ({video_stream['height']}p) for [{self.title}] ...")
@@ -203,6 +238,7 @@ class VideoInfo:
         return video_file
 
     def process_downloads_combine_keep(self, limits, output_dir, outputExt=".mkv"):
+        """ Process audio and video downloads and combine them. """
         output_dir = os.path.abspath(output_dir)
         temp_path = self.make_tmp_dir(output_dir)
 
@@ -223,6 +259,7 @@ class VideoInfo:
         return output_filepath
 
     def download_thumbnail(self, output_dir: str, format="jpg") -> str:
+        """ Download the thumbnail image. """
         thumbnail_url = self.thumbnail_url
         thumbnail_filename = os.path.join(output_dir, f"{self.base_output_name}_thumbnail.{format}")
         thumbnail_data = requests.get(thumbnail_url).content
@@ -231,6 +268,7 @@ class VideoInfo:
         return thumbnail_filename
 
     def download_video_info(self, output_dir: str) -> str:
+        """ Download video information into a text file. """
         video_info_filename = os.path.join(output_dir, f"{self.base_output_name}_info.txt")
         with open(video_info_filename, 'w') as f:
             f.write(f"Title: {self.title}\n")
@@ -247,10 +285,7 @@ class VideoInfo:
         return video_info_filename
 
     def download_comments(self, output_dir: str, output_format: str = "json") -> str:
-        """
-        Download the comments for the video (this functionality will need to be implemented).
-        """
-        # Create the output file path
+        """ Download the comments for the video (to be implemented). """
         output_filename = check_for_disallowed_filename_chars(f"{self.base_output_name}.comments.{output_format}")
         output_file_path = os.path.join(output_dir, output_filename)
 
@@ -267,9 +302,11 @@ class VideoInfo:
 
     # Helper methods
     def log(self, message: str) -> None:
+        """ Log a message by appending it to the logger list. """
         self.logger.append(message)
 
     def make_tmp_dir(self, output_dir):
+        """ Create a temporary directory for download storage. """
         dir_prefix = "."
         temp_dir = check_for_disallowed_filename_chars(self.video_id)
         temp_path = os.path.join(output_dir, f"{dir_prefix}{temp_dir}")
@@ -277,4 +314,5 @@ class VideoInfo:
         return temp_path
 
     def checkIfDownloadIsPending(self) -> bool:
+        """ Check if the download is pending. """
         return "☑" in self.download_status
