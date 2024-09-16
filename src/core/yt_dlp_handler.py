@@ -248,25 +248,63 @@ class VideoInfo:
         return video_file
 
     def process_downloads_combine_keep(self, limits, output_dir, outputExt=".mkv"):
-        """ Process audio and video downloads and combine them. """
+        """ Process audio and video downloads and combine them based on the download flags. """
+        strOut = f"Process Entry Download: "
         output_dir = os.path.abspath(output_dir)
         temp_path = self.make_tmp_dir(output_dir)
+        self.log("Create temporary directory: " + temp_path)
 
-        # Download audio and video
-        audio_stream = self.select_audio_stream(limits.bitrate, limits.audio_format_priority)
-        video_stream = self.select_video_stream(limits.resolution, limits.fps, limits.video_format_priority)
+        # Initialize variables to hold the file paths
+        audio_filename, video_filename = None, None
 
-        audio_filename = self.download_audio(audio_stream, temp_path)
-        video_filename = self.download_video(video_stream, temp_path)
+        # Check flags and download audio if needed
+        if COMBINED_SYMBOL in self.download_status or AUDIO_ONLY_SYMBOL in self.download_status:
+            audio_stream = self.select_audio_stream(limits.bitrate, limits.audio_format_priority)
+            audio_filename = self.download_audio(audio_stream, temp_path)
+            self.log(strOut + "Audio: " + audio_filename + " ...")
 
-        output_filename = f"{self.base_output_name}{outputExt}"
-        output_filename = check_for_disallowed_filename_chars(output_filename)
-        output_filepath = os.path.join(output_dir, output_filename)
+        # Check flags and download video if needed
+        if COMBINED_SYMBOL in self.download_status or VIDEO_ONLY_SYMBOL in self.download_status:
+            video_stream = self.select_video_stream(limits.resolution, limits.fps, limits.video_format_priority)
+            video_filename = self.download_video(video_stream, temp_path)
+            self.log(strOut + "Video: " + video_filename + " ...")
 
-        combine_via_auto_selection(output_filepath, video_filename, [audio_filename], [])
+        # TODO: download all subtitles and integrate them
 
+        # If combined download is needed, combine the audio and video files
+        if COMBINED_SYMBOL in self.download_status:
+            output_filename = self.base_output_name + outputExt
+            output_filename = os.path.join(output_dir, check_for_disallowed_filename_chars(output_filename))
+            audio_filenames = [audio_filename] if audio_filename else []
+            subtitle_filenames = []  # Assuming no subtitles for now
+            self.log(strOut + "Combining Audio and Video: " + output_filename)
+            combine_via_auto_selection(output_filename, video_filename, audio_filenames, subtitle_filenames)
+            self.outputFilepaths[COMBINED_SYMBOL] = output_filename
+
+        # Move audio-only files to the output directory
+        if AUDIO_ONLY_SYMBOL in self.download_status and audio_filename:
+            self.outputFilepaths[AUDIO_ONLY_SYMBOL] = shutil.move(audio_filename, output_dir)
+
+        # Move video-only files to the output directory
+        if VIDEO_ONLY_SYMBOL in self.download_status and video_filename:
+            self.outputFilepaths[VIDEO_ONLY_SYMBOL] = shutil.move(video_filename, output_dir)
+
+        # Subtitles, thumbnails, video info, comments
+        if SUBTITLES_ONLY_SYMBOL in self.download_status:
+            self.download_subtitles(output_dir, any)  # TODO: implement subtitle download and move
+
+        if THUMBNAIL_SYMBOL in self.download_status:
+            self.outputFilepaths[THUMBNAIL_SYMBOL] = self.download_thumbnail(output_dir)
+
+        if INFO_SYMBOL in self.download_status:
+            self.outputFilepaths[INFO_SYMBOL] = self.download_video_info(output_dir)
+
+        if COMMENTS_SYMBOL in self.download_status:
+            self.outputFilepaths[COMMENTS_SYMBOL] = self.download_comments(output_dir)
+
+        # Clean up the temporary directory and delete it
+        self.log("Clean: " + temp_path)
         shutil.rmtree(temp_path)
-        return output_filepath
 
     def download_thumbnail(self, output_dir: str, format="jpg") -> str:
         """ Download the thumbnail image. """
