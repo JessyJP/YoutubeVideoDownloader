@@ -287,11 +287,11 @@ class VideoInfo:
 
         # Move audio-only files to the output directory
         if AUDIO_ONLY_SYMBOL in self.download_status and audio_filename:
-            self.outputFilepaths[AUDIO_ONLY_SYMBOL] = shutil.move(audio_filename, output_dir)
+             self.outputFilepaths[AUDIO_ONLY_SYMBOL] = move_file_with_handling(audio_filename, output_dir)
 
         # Move video-only files to the output directory
         if VIDEO_ONLY_SYMBOL in self.download_status and video_filename:
-            self.outputFilepaths[VIDEO_ONLY_SYMBOL] = shutil.move(video_filename, output_dir)
+            self.outputFilepaths[VIDEO_ONLY_SYMBOL] = move_file_with_handling(video_filename, output_dir)
 
         # Subtitles, thumbnails, video info, comments
         if SUBTITLES_ONLY_SYMBOL in self.download_status:
@@ -368,3 +368,27 @@ class VideoInfo:
     def checkIfDownloadIsPending(self) -> bool:
         """ Check if the download is pending. """
         return "☑" in self.download_status
+
+
+def move_file_with_handling(src, dst_dir):
+    """
+    Move a file to the destination directory. If a file with the same name
+    already exists, append a number to the filename to avoid overwriting.
+    """
+    # Get the base name of the file (filename + extension)
+    base_name = os.path.basename(src)
+    dst = os.path.join(dst_dir, base_name)
+
+    # If the file already exists, append a number to the filename
+    if os.path.exists(dst):
+        base_name_without_ext, ext = os.path.splitext(base_name)
+        counter = 1
+
+        # Keep generating new filenames until one is available
+        while os.path.exists(dst):
+            dst = os.path.join(dst_dir, f"{base_name_without_ext}_{counter}{ext}")
+            counter += 1
+
+    # Move the file to the new destination
+    shutil.move(src, dst)
+    return dst
