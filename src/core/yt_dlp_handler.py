@@ -94,6 +94,10 @@ class VideoInfo:
 
             self.base_output_name = check_for_disallowed_filename_chars(self.title)
 
+            # Output filepaths dictionary which stores the paths for each download symbol
+            self.outputFilepaths = {symbol: None for symbol in MediaSymbols.get_all_symbol_values_as_list()}
+            # self.outputFilepaths = SimpleNamespace(**self.outputFilepaths)
+            # Creation timestamp, which can be used for sorting
             self.creationTimestamp = datetime.now()
 
     def get_best_audio_stream(self, formats):
