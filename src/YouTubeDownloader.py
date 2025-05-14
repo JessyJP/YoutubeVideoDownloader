@@ -114,7 +114,7 @@ def main():
 
     # First stage parser for mode selection for the mode switch options
     mode_parser = argparse.ArgumentParser(description="YouTube video downloader Mode selection",add_help=False)
-    mode_parser.add_argument('--version', action='version', version='%(prog)s 1.0.0')
+    mode_parser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')
     mode_parser.add_argument("--gui", action="store_true", help="Run GUI")
     mode_parser.add_argument("--web", action="store_true", help="Run as web service")
     mode_parser.add_argument("--cli", action="store_true", help="Run in CLI (command line interface) mode")
