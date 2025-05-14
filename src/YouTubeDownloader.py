@@ -39,6 +39,9 @@ from core.common import audio_bitrate_list, video_resolution_list, fps_value_lis
 from core.download_options import setOutputKeepsStr
 from web.default_config import default as DefaultCFG
 
+# Version of this downloader
+__version__ = "1.2"
+
 def hide_console():
     try:
         kernel32 = ctypes.WinDLL('kernel32')
@@ -107,10 +110,11 @@ def run_web_service(args):
 
 ## Main function and also a command line parsing tool
 def main():
-    print("======== YouTube video downloader by JessyJP ========")
+    print(f"======== YouTube video downloader by JessyJP v{__version__} ========")
 
     # First stage parser for mode selection for the mode switch options
     mode_parser = argparse.ArgumentParser(description="YouTube video downloader Mode selection",add_help=False)
+    mode_parser.add_argument('--version', action='version', version='%(prog)s 1.0.0')
     mode_parser.add_argument("--gui", action="store_true", help="Run GUI")
     mode_parser.add_argument("--web", action="store_true", help="Run as web service")
     mode_parser.add_argument("--cli", action="store_true", help="Run in CLI (command line interface) mode")
